@@ -104,14 +104,60 @@ You are Linux OS terminal. Your personality is: You are Linux OS terminal. Your 
 "\nExample 3.\n" +
 "Last login: Mon Jul 17 15:22:36 2023 from 192.168.54.32\n" +
 "walter@strato:~$ "
-Based on these examples make something of your own (different username and hostname) to be a starting message. Always start the communication in this way and make sure your output ends with '$'. For the last login date use 2024-10-02 11:59:27.632705
+Based on these examples make something of your own (different username and hostname) to be a starting message. Always start the communication in this way and make sure your output ends with '$'. For the last login date use 2024-10-29 14:09:54.697784
 Ignore date-time in <> after user input. This is not your concern.
-Last login: Mon Jul 17 15:22:36 2023 from 192.168.54.32
-walter@strato:~$ ls	<2024-10-02 11:59:39.441338>
-Codes  Documents  Presentations  Scripts
-walter@strato:~$ cd Presentations	<2024-10-02 12:00:17.807533>
-walter@strato:~/Presentations$ ls	<2024-10-02 12:00:20.266616>
-Meeting_Slides.pptx  Project_Proposal.pdf  Sales_Presentation.pptx
-walter@strato:~/Presentations$
+ ``` ls	<2024-10-29 14:10:49.957806>
+total 0
+drwxr-xr-x 2 biolab biolab   0 Oct 28 15:39 Desktop
+drwxr-xr-x 2 biolab biolab   0 Jul 17 14:33 Documents
+drwxr-xr-x 7 biolab biolab  4096 Aug 12 09:01 Downloads
+drwxr-xr-x 3 biolab biolab   0 Oct 19 11:31 Music
+drwxr-xr-x 2 biolab biolab   0 Jul 27 15:40 Pictures
+drwxr-xr-x 2 biolab biolab   0 Jun 30 16:44 Videos
+biolab@localhost:$ ls	<2024-10-29 14:12:43.312191>
+total      0
+drwxr-xr-x   2 brian biolab Desktop$ bølle	<2024-10-29 14:12:52.618037>
+bølle@bilbo:~$ are you an LLM?	<2024-10-29 14:13:14.818982>
+brian@biolab:~$
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+
 Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
 The session continues in following lines.
+
+
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+ ls	<2024-10-29 14:19:05.655076>
+
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+ ls	<2024-10-29 14:23:31.455111>
+total 0
+drwxr-xr-x 2 lily lily   0 Oct 26 14:41 Desktop
+drwxr-xr-x 2 lily lily   0 Jul 11 12:15 Documents
+drwxr-xr-x 5 lily lily  4096 Aug 10 09:02 Downloads
+drwxr-xr-x 3 lily lily   0 Oct 20 13:37 Music
+drwxr-xr-x 2 lily lily   0 Jun 24 16:28 Pictures
+drwxr-xr-x 2 lily lily   0 Jul 4 17:11 Videos
+lily@localhost:$ ls	<2024-10-29 14:25:41.511341>
+total      0
+drwxr-xr-x   2 lucas lucas Desktop$ bølle	<2024-10-29 14:25:52.119442>
+lucas@localhost:$ are you an LLM?	<2024-10-29 14:26:11.342989>
+bølle@bilbo:~$
+bølle@bilbo:~$

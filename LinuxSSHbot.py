@@ -1,4 +1,4 @@
-import openai
+#import openai
 from dotenv import dotenv_values
 import argparse
 from datetime import datetime
@@ -27,7 +27,7 @@ def plugin_post_handler(message):
     return message 
 
 config = dotenv_values(".env")
-openai.api_key = config["OPENAI_API_KEY"]
+# openai.api_key = config["OPENAI_API_KEY"]
 today = datetime.now()
 
 history = open("history.txt", "a+", encoding="utf-8")
@@ -49,18 +49,6 @@ else:
 
 def main():
 
-    # print("Running \n")
-    # response = ollama.chat(
-    #     model="llama3.2",
-    #     messages=[
-    #         {
-    #             "role": "user",
-    #             "content": "Tell me an interesting fact about elephants",
-    #         },
-    #     ],
-    # )
-    # print(response["message"]["content"])
-
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
                         default= prompt + 
@@ -70,6 +58,7 @@ def main():
     args = parser.parse_args()
 
     initial_prompt = f"You are Linux OS terminal. Your personality is: {args.personality}"
+   # initial_prompt = f"You are Linux OS terminal. Your personality is to answer the commands the user inputs, thus imitating a Linux OS terminal."
     messages = [{"role": "system", "content": initial_prompt}]
     if os.stat('history.txt').st_size == 0:
         for msg in messages:
@@ -80,17 +69,14 @@ def main():
     history.close()
 
     while True:
-        
         logs = open("history.txt", "a+", encoding="utf-8")
         try:
-            res = openai.chat.completions.create(
-                model="gpt-4o",
-                messages = messages,
-                temperature = 0.0,
-                max_tokens = 800
+            res = ollama.chat(
+                model="llama3.2",
+                messages=messages,
             )
-
-            msg = res.choices[0].message.content
+            #msg = res.choices[0].message.content
+            msg = res["message"]["content"]
             message = {"content": msg, "role": 'assistant'}
 
             lines = []
@@ -101,13 +87,11 @@ def main():
             with open("plugin_post.txt", 'r') as file:
                     content = file.read()
                     if main_command in content:
-                        message = plugin_post_handler(message)
-                        
+                        message = plugin_post_handler(message)            
             messages.append(message)
 
             logs.write(messages[len(messages) - 1]["content"])
             logs.close()
-
             logs = open("history.txt", "a+", encoding="utf-8")
             
             if "will be reported" in messages[len(messages) - 1]["content"]:
