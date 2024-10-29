@@ -31,6 +31,7 @@ config = dotenv_values(".env")
 today = datetime.now()
 
 history = open("history.txt", "a+", encoding="utf-8")
+history.truncate(0)
 
 
 if os.stat('history.txt').st_size == 0:
@@ -71,11 +72,12 @@ def main():
     while True:
         logs = open("history.txt", "a+", encoding="utf-8")
         try:
+            print("ollamaStart")
             res = ollama.chat(
                 model="llama3.2",
-                messages=messages,
+                messages=messages
             )
-            print("ollama")
+            print("ollamaDone")
             #msg = res.choices[0].message.content
             msg = res["message"]["content"]
             message = {"content": msg, "role": 'assistant'}

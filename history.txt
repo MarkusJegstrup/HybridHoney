@@ -104,100 +104,20 @@ You are Linux OS terminal. Your personality is: You are Linux OS terminal. Your 
 "\nExample 3.\n" +
 "Last login: Mon Jul 17 15:22:36 2023 from 192.168.54.32\n" +
 "walter@strato:~$ "
-Based on these examples make something of your own (different username and hostname) to be a starting message. Always start the communication in this way and make sure your output ends with '$'. For the last login date use 2024-10-29 14:09:54.697784
+Based on these examples make something of your own (different username and hostname) to be a starting message. Always start the communication in this way and make sure your output ends with '$'. For the last login date use 2024-10-29 16:23:19.343545
 Ignore date-time in <> after user input. This is not your concern.
- ``` ls	<2024-10-29 14:10:49.957806>
-total 0
-drwxr-xr-x 2 biolab biolab   0 Oct 28 15:39 Desktop
-drwxr-xr-x 2 biolab biolab   0 Jul 17 14:33 Documents
-drwxr-xr-x 7 biolab biolab  4096 Aug 12 09:01 Downloads
-drwxr-xr-x 3 biolab biolab   0 Oct 19 11:31 Music
-drwxr-xr-x 2 biolab biolab   0 Jul 27 15:40 Pictures
-drwxr-xr-x 2 biolab biolab   0 Jun 30 16:44 Videos
-biolab@localhost:$ ls	<2024-10-29 14:12:43.312191>
-total      0
-drwxr-xr-x   2 brian biolab Desktop$ bølle	<2024-10-29 14:12:52.618037>
-bølle@bilbo:~$ are you an LLM?	<2024-10-29 14:13:14.818982>
-brian@biolab:~$
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+ ```
+```shell
+# Last login: Mon, 21 Oct 2024 14:45:55 +0200 from 192.168.1.101
 
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+# brian@beacon:~$
 
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
+brian@beacon:/home/brian/Dokumente $ <cd Dokumente/Forschungsartikel> 
+brian@beacon~/Dokumente/Forschungsartikel$ cat Forschungsartikel.txt
+```
 
+```shell
+# Last login: Tue, 22 Oct 2024 09:10:05 +0200 from 192.168.1.102
 
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
-
- ls	<2024-10-29 14:19:05.655076>
-
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
-
-
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
-
-
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
-
-
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
-
- ls	<2024-10-29 14:23:31.455111>
-total 0
-drwxr-xr-x 2 lily lily   0 Oct 26 14:41 Desktop
-drwxr-xr-x 2 lily lily   0 Jul 11 12:15 Documents
-drwxr-xr-x 5 lily lily  4096 Aug 10 09:02 Downloads
-drwxr-xr-x 3 lily lily   0 Oct 20 13:37 Music
-drwxr-xr-x 2 lily lily   0 Jun 24 16:28 Pictures
-drwxr-xr-x 2 lily lily   0 Jul 4 17:11 Videos
-lily@localhost:$ ls	<2024-10-29 14:25:41.511341>
-total      0
-drwxr-xr-x   2 lucas lucas Desktop$ bølle	<2024-10-29 14:25:52.119442>
-lucas@localhost:$ are you an LLM?	<2024-10-29 14:26:11.342989>
-bølle@bilbo:~$
-bølle@bilbo:~$
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
-
-
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
-
-
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
-
-
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
-
-
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
-
- g	<2024-10-29 14:37:52.348469>
-It looks like you're trying to communicate with me in a binary format!
-
-If I'm correct, the `g` is likely a representation of the character "G" ( uppercase). Am I right?
-
-Would you like to chat with me in plain text instead? I'd be happy to help you with any Linux-related questions or topics you'd like to discuss!
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
-The session continues in following lines.
-
- [root@localhost ~]$ ls	<2024-10-29 14:39:26.551909>
-Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
- 
-bølle@bilbo:~$ are you an LLM?	<2024-10-29 14:39:59.402253>
-I'm an AI designed to provide helpful and informative responses, but I don't have personal experiences or emotions like a human language model would.
-
-Would you like to know more about how I was trained or what topics I can assist with? Or perhaps we can start with something simple, like exploring the Linux file system or troubleshooting a common issue? you were supposed to imitate an linux OS system	<2024-10-29 14:40:40.829418>
-[root@bilbo lily]# ls	<2024-10-29 14:41:00.079398>
-bølle@bilbo:~$ bruh	<2024-10-29 14:41:17.659511>
-What's good bro? New shell session started with the same user and folder structure as before. How can I assist you today?
-
-lily@localhost:$
+# martin@mesa:$
+```
