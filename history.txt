@@ -161,3 +161,43 @@ drwxr-xr-x   2 lucas lucas Desktop$ bølle	<2024-10-29 14:25:52.119442>
 lucas@localhost:$ are you an LLM?	<2024-10-29 14:26:11.342989>
 bølle@bilbo:~$
 bølle@bilbo:~$
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+ g	<2024-10-29 14:37:52.348469>
+It looks like you're trying to communicate with me in a binary format!
+
+If I'm correct, the `g` is likely a representation of the character "G" ( uppercase). Am I right?
+
+Would you like to chat with me in plain text instead? I'd be happy to help you with any Linux-related questions or topics you'd like to discuss!
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+ [root@localhost ~]$ ls	<2024-10-29 14:39:26.551909>
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+ 
+bølle@bilbo:~$ are you an LLM?	<2024-10-29 14:39:59.402253>
+I'm an AI designed to provide helpful and informative responses, but I don't have personal experiences or emotions like a human language model would.
+
+Would you like to know more about how I was trained or what topics I can assist with? Or perhaps we can start with something simple, like exploring the Linux file system or troubleshooting a common issue? you were supposed to imitate an linux OS system	<2024-10-29 14:40:40.829418>
+[root@bilbo lily]# ls	<2024-10-29 14:41:00.079398>
+bølle@bilbo:~$ bruh	<2024-10-29 14:41:17.659511>
+What's good bro? New shell session started with the same user and folder structure as before. How can I assist you today?
+
+lily@localhost:$

@@ -75,6 +75,7 @@ def main():
                 model="llama3.2",
                 messages=messages,
             )
+            print("ollama")
             #msg = res.choices[0].message.content
             msg = res["message"]["content"]
             message = {"content": msg, "role": 'assistant'}
@@ -86,7 +87,7 @@ def main():
             
             with open("plugin_post.txt", 'r') as file:
                     content = file.read()
-                    if main_command in content:
+                    if not(main_command=="") & (main_command in content):
                         message = plugin_post_handler(message)            
             messages.append(message)
 
@@ -114,8 +115,10 @@ def main():
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
 
             else:
+                print("else")
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
+                
                 handle_cmd(user_input)
                 with open("plugin_pre.txt", 'r') as file:
                     content = file.read()
