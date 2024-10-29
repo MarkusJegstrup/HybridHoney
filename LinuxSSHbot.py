@@ -8,6 +8,7 @@ import random
 import os
 import ollama
 
+# Hello
 main_command =""
 args = []
 
