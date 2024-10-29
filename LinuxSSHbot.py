@@ -6,6 +6,7 @@ import yaml
 from time import sleep
 import random
 import os
+import ollama
 
 main_command =""
 args = []
@@ -14,7 +15,7 @@ def handle_cmd(cmd):
     parts = cmd.split()
     global main_command
     main_command = parts[0]
-    global args 
+    global args
     args = parts[1:]
 
 def plugin_pre_handler():
