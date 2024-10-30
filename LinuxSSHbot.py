@@ -21,6 +21,12 @@ def handle_cmd(cmd):
 
 def plugin_pre_handler():
     print("Plugin-pre")
+    match main_command:
+        case "clear":
+            os.system("clear")
+        case _:
+            print("You can become a Data Scientist")
+
 
 def plugin_post_handler(message):
     print("Plugin_post")
@@ -89,10 +95,9 @@ def main():
             
             with open("plugin_post.txt", 'r') as file:
                     content = file.read()
-                    if not(main_command=="") & (main_command in content):
+                    if not(main_command=="") and (main_command in content):
                         message = plugin_post_handler(message)            
             messages.append(message)
-
             logs.write(messages[len(messages) - 1]["content"])
             logs.close()
             logs = open("history.txt", "a+", encoding="utf-8")

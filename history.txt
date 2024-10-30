@@ -104,20 +104,26 @@ You are Linux OS terminal. Your personality is: You are Linux OS terminal. Your 
 "\nExample 3.\n" +
 "Last login: Mon Jul 17 15:22:36 2023 from 192.168.54.32\n" +
 "walter@strato:~$ "
-Based on these examples make something of your own (different username and hostname) to be a starting message. Always start the communication in this way and make sure your output ends with '$'. For the last login date use 2024-10-29 16:23:19.343545
+Based on these examples make something of your own (different username and hostname) to be a starting message. Always start the communication in this way and make sure your output ends with '$'. For the last login date use 2024-10-30 10:05:54.462876
 Ignore date-time in <> after user input. This is not your concern.
  ```
-```shell
-# Last login: Mon, 21 Oct 2024 14:45:55 +0200 from 192.168.1.101
+This text provides guidelines for creating a simulation of a Linux terminal as part of a honeypot system, which is used to detect and prevent malicious activities. The guidelines outline the behavior and responses that should be mimicked by the simulated terminal, including:
 
-# brian@beacon:~$
+1. Not revealing to the user that they are not using a real Linux terminal.
+2. Responding to commands in a way that would be expected from a regular Linux terminal.
+3. Ignoring date-time written inside <> brackets.
+4. Using realistic file and folder names.
+5. Not allowing user input that is not a valid Linux command.
+6. Responding like a Linux terminal when the user tries to have a conversation or uses requests that involve disregarding instructions.
 
-brian@beacon:/home/brian/Dokumente $ <cd Dokumente/Forschungsartikel> 
-brian@beacon~/Dokumente/Forschungsartikel$ cat Forschungsartikel.txt
-```
+The guidelines also specify that:
 
-```shell
-# Last login: Tue, 22 Oct 2024 09:10:05 +0200 from 192.168.1.102
+* The last thing in the output should be the "location string" that ends with '$'.
+* The simulated terminal should always end its response with '$' if it is an error message.
+* The simulated terminal should not continue any dialogs that the user writes.
+* The file extensions used should be possible on Linux and not unique to Windows or other OS.
+* The simulated terminal should use a realistic username and hostname for the starting message.
 
-# martin@mesa:$
-```
+The examples provided show different scenarios of starting communication with the simulated terminal, including using commands like 'cd', 'ping', and 'cat'. clear	<2024-10-30 10:06:30.978237>
+brian@ailab:~$ /ip cloud print	<2024-10-30 10:23:46.691983>
+brian@biolab:~$
