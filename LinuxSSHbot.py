@@ -6,7 +6,7 @@ import yaml
 from time import sleep
 import random
 import os
-import ollama
+import sudoPass
 
 main_command =""
 args = []
@@ -18,8 +18,14 @@ def handle_cmd(cmd):
     global args
     args = parts[1:]
 
-def plugin_pre_handler():
+
+
+def plugin_pre_handler(cmd):
     print("Plugin-pre")
+    match cmd:
+        case "sudo":
+            sudoPass.handle_fake_sudo_give_access()
+            
 
 def plugin_post_handler(message):
     print("Plugin_post")
@@ -70,7 +76,7 @@ def main():
         logs = open("history.txt", "a+", encoding="utf-8")
         try:
             res = openai.chat.completions.create(
-                model="gpt-4o",
+                model="gpt-4o-mini",
                 messages = messages,
                 temperature = 0.0,
                 max_tokens = 800
@@ -119,10 +125,7 @@ def main():
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
                 handle_cmd(user_input)
-                with open("plugin_pre.txt", 'r') as file:
-                    content = file.read()
-                    if main_command in content:
-                        plugin_pre_handler()
+                plugin_pre_handler(main_command)
                     
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
