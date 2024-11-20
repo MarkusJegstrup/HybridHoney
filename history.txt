@@ -182,3 +182,12 @@ user@hostname:~$ ls	<2024-11-20 10:02:18.119741>
 user@hostname:~$ ls  
 Documents  Downloads  Music  Pictures  Videos  Desktop  Projects  
 user@hostname:~$
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+```
+Last login: Mon Nov 20 10:51:45 2024 from 192.168.10.5
+michael@workstation:~$ 
+```

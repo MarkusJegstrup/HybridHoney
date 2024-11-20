@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 
 main_command =""
 args = []
+cwd = os.getcwd()
 
 def handle_cmd(cmd):
     parts = cmd.split()
@@ -34,7 +35,7 @@ def plugin_post_handler(message):
     return message 
 
 # Load environment variables from the .env file
-load_dotenv(dotenv_path="/home/simon/LLMHoney/.env")
+load_dotenv(dotenv_path=cwd+"/.env")
 
 # Set the OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -46,11 +47,11 @@ if not openai.api_key:
 # openai.api_key = config["OPENAI_API_KEY"]
 today = datetime.now()
 
-history = open("history.txt", "a+", encoding="utf-8")
+history = open(cwd+"/history.txt", "a+", encoding="utf-8")
 
 
 if os.stat('history.txt').st_size == 0:
-    with open('/home/simon/LLMHoney/personalitySSH.yml', 'r', encoding="utf-8") as file:
+    with open(cwd+'/personalitySSH.yml', 'r', encoding="utf-8") as file:
         identity = yaml.safe_load(file)
 
     identity = identity['personality']
@@ -74,7 +75,7 @@ def main():
 
     initial_prompt = f"You are Linux OS terminal. Your personality is: {args.personality}"
     messages = [{"role": "system", "content": initial_prompt}]
-    if os.stat('/home/simon/LLMHoney/history.txt').st_size == 0:
+    if os.stat(cwd+'/history.txt').st_size == 0:
         for msg in messages:
                     history.write(msg["content"])
     else:
@@ -84,7 +85,7 @@ def main():
 
     while True:
         
-        logs = open("/home/simon/LLMHoney/history.txt", "a+", encoding="utf-8")
+        logs = open(cwd+"/history.txt", "a+", encoding="utf-8")
         try:
             res = openai.chat.completions.create(
                 model="gpt-4o-mini",
@@ -101,7 +102,7 @@ def main():
             if "$cd" in message["content"] or "$ cd" in message["content"]:
                 message["content"] = message["content"].split("\n")[1]
             
-            with open("/home/simon/LLMHoney/plugin_post.txt", 'r') as file:
+            with open(cwd+"/plugin_post.txt", 'r') as file:
                     content = file.read()
                     if main_command in content:
                         message = plugin_post_handler(message)
@@ -111,7 +112,7 @@ def main():
             logs.write(messages[len(messages) - 1]["content"])
             logs.close()
 
-            logs = open("/home/simon/LLMHoney/history.txt", "a+", encoding="utf-8")
+            logs = open(cwd+"/history.txt", "a+", encoding="utf-8")
             
             if "will be reported" in messages[len(messages) - 1]["content"]:
                 print(messages[len(messages) - 1]["content"])
