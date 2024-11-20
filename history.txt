@@ -120,3 +120,65 @@ alex@devmachine:~$
 rmdir: failed to remove 'documents': Directory not empty
 alex@devmachine:~$ 
 ```
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+```
+Last login: Tue Nov 20 09:33:33 2024 from 192.168.10.5
+alex@devmachine:~$ 
+``` hello	<2024-11-20 09:33:39.493659>
+```
+bash: hello: command not found
+alex@devmachine:~$ 
+``` exit	<2024-11-20 09:34:04.356720>
+```
+bash: exit: command not found
+alex@devmachine:~$ 
+```
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+```
+Last login: Tue Nov 20 09:41:43 2024 from 192.168.10.5
+jordan@devserver:~$ 
+``` hello	<2024-11-20 09:41:50.508054>
+```
+bash: hello: command not found
+jordan@devserver:~$ 
+``` exit	<2024-11-20 09:41:53.924818>
+```
+bash: exit: command not found
+jordan@devserver:~$ 
+``` ls	<2024-11-20 09:41:57.121053>
+```
+Documents  Projects  Scripts  .git  README.md
+jordan@devserver:~$ 
+```Last login: 2024-11-20 09:56:21.087750 on tty1  
+Welcome to Ubuntu 22.04 LTS (GNU/Linux 5.15.0-58-generic x86_64)  
+* Documentation: https://help.ubuntu.com  
+* Management: https://landscape.canonical.com  
+* Support: https://ubuntu.com/advantage  
+
+0 packages can be updated.  
+0 updates are security updates.  
+
+user@myhostname:~$ ls	<2024-11-20 09:56:28.938056>
+user@myhostname:~$ ls  
+Documents  Downloads  Music  Pictures  Videos  Desktop  Projects  
+$Last login: 2024-11-20 10:01:25.871569 from 192.168.1.10  
+user@hostname:~$ hello	<2024-11-20 10:01:34.898746>
+user@hostname:~$ hello ls	<2024-11-20 10:01:42.385743>
+user@hostname:~$ ls  
+Documents  Downloads  Music  Pictures  VideosLast login: 2024-11-20 10:02:10 on tty1  
+Welcome to Ubuntu 22.04 LTS (GNU/Linux 5.15.0-58-generic x86_64)  
+* Documentation: https://help.ubuntu.com  
+* Management: https://landscape.canonical.com  
+* Support: https://ubuntu.com/advantage  
+
+0 packages can be updated.  
+0 updates are security updates.  
+
+user@hostname:~$ ls	<2024-11-20 10:02:18.119741>
+user@hostname:~$ ls  
+Documents  Downloads  Music  Pictures  Videos  Desktop  Projects  
+user@hostname:~$
