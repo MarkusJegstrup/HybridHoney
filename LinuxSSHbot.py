@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 main_command =""
 args = []
 cwd = os.getcwd()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def handle_cmd(cmd):
     parts = cmd.split()
@@ -35,7 +36,7 @@ def plugin_post_handler(message):
     return message 
 
 # Load environment variables from the .env file
-load_dotenv(dotenv_path="/home/simon/LLMHoney/.env")
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"))
 
 # Set the OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -65,6 +66,7 @@ else:
     prompt = history.read()
 
 def main():
+    print(cwd)
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
                         default= prompt + 
