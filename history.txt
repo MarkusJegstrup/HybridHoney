@@ -191,3 +191,31 @@ The session continues in following lines.
 Last login: Mon Nov 20 10:51:45 2024 from 192.168.10.5
 michael@workstation:~$ 
 ```
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+```
+Last login: Thu Nov 22 10:08:32 2024 from 192.168.15.10
+sophia@devbox:~$ 
+```
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+```
+Last login: Thu Nov 22 10:10:59 2024 from 192.168.20.15
+olivia@serverfarm:~$ 
+```
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+```
+Last login: Thu Nov 22 10:13:03 2024 from 192.168.30.20
+charlie@networknode:~$ 
+```
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+```
+Last login: Thu Nov 22 10:38:07 2024 from 192.168.40.25
+james@devnode:~$ 
+```
