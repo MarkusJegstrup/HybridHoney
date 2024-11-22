@@ -9,6 +9,7 @@ import random
 import os
 import sudoPass
 from dotenv import load_dotenv
+import sys
 
 main_command =""
 args = []
@@ -27,6 +28,11 @@ def plugin_pre_handler(cmd):
     match cmd:
         case "sudo":
             sudoPass.handle_fake_sudo_give_access()
+        case "exit":
+            print("logout")
+            sys.exit()
+            # os.system("exit")
+
             
 
 def plugin_post_handler(message):
@@ -84,6 +90,7 @@ def main():
     while True:
         
         logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+        logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
         try:
             res = openai.chat.completions.create(
                 model="gpt-4o-mini",
@@ -93,8 +100,10 @@ def main():
             )
 
             msg = res.choices[0].message.content
-            message = {"content": msg, "role": 'assistant'}
+            if msg.startswith("```") and msg.endswith("```"):
+                msg = msg[3:-3].strip()
 
+            message = {"content": msg, "role": 'assistant'}
             lines = []
 
             if "$cd" in message["content"] or "$ cd" in message["content"]:
@@ -108,9 +117,12 @@ def main():
             messages.append(message)
 
             logs.write(messages[len(messages) - 1]["content"])
+            logcmd.write(messages[len(messages) - 1]["content"])
             logs.close()
+            logcmd.close()
 
             logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+            logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
             
             if "will be reported" in messages[len(messages) - 1]["content"]:
                 print(messages[len(messages) - 1]["content"])
@@ -130,15 +142,18 @@ def main():
                 user_input = input(f'{lines[len(lines)-1]}'.strip() + " ")
                 messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n" })
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                
 
             else:
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
                 handle_cmd(user_input)
+                print(main_command)
                 plugin_pre_handler(main_command)
                     
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
             
         except KeyboardInterrupt:
             messages.append({"role": "user", "content": "\n"})
@@ -146,6 +161,7 @@ def main():
             break
         
         logs.close()
+        logcmd.close()
     # print(res)
 
 
