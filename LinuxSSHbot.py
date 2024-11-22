@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 
 main_command =""
 args = []
+cwd = os.getcwd()
 
 def handle_cmd(cmd):
     parts = cmd.split()
@@ -46,7 +47,7 @@ if not openai.api_key:
 # openai.api_key = config["OPENAI_API_KEY"]
 today = datetime.now()
 
-history = open("history.txt", "a+", encoding="utf-8")
+history = open(cwd+"/history.txt", "a+", encoding="utf-8")
 
 
 if os.stat('history.txt').st_size == 0:
