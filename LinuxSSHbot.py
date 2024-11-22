@@ -12,7 +12,6 @@ from dotenv import load_dotenv
 
 main_command =""
 args = []
-cwd = os.getcwd()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def handle_cmd(cmd):
@@ -25,14 +24,12 @@ def handle_cmd(cmd):
 
 
 def plugin_pre_handler(cmd):
-    print("Plugin-pre")
     match cmd:
         case "sudo":
             sudoPass.handle_fake_sudo_give_access()
             
 
 def plugin_post_handler(message):
-    print("Plugin_post")
     return message 
 
 # Load environment variables from the .env file
@@ -48,11 +45,11 @@ if not openai.api_key:
 # openai.api_key = config["OPENAI_API_KEY"]
 today = datetime.now()
 
-history = open(cwd+"/history.txt", "a+", encoding="utf-8")
+history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
 
 
-if os.stat('history.txt').st_size == 0:
-    with open('/home/simon/LLMHoney/personalitySSH.yml', 'r', encoding="utf-8") as file:
+if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
+    with open(os.path.join(BASE_DIR, "personalitySSH.yml"), 'r', encoding="utf-8") as file:
         identity = yaml.safe_load(file)
 
     identity = identity['personality']
@@ -66,7 +63,6 @@ else:
     prompt = history.read()
 
 def main():
-    print(cwd)
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
                         default= prompt + 
@@ -77,7 +73,7 @@ def main():
 
     initial_prompt = f"You are Linux OS terminal. Your personality is: {args.personality}"
     messages = [{"role": "system", "content": initial_prompt}]
-    if os.stat('/home/simon/LLMHoney/history.txt').st_size == 0:
+    if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
         for msg in messages:
                     history.write(msg["content"])
     else:
@@ -87,7 +83,7 @@ def main():
 
     while True:
         
-        logs = open("/home/simon/LLMHoney/history.txt", "a+", encoding="utf-8")
+        logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
         try:
             res = openai.chat.completions.create(
                 model="gpt-4o-mini",
@@ -104,7 +100,7 @@ def main():
             if "$cd" in message["content"] or "$ cd" in message["content"]:
                 message["content"] = message["content"].split("\n")[1]
             
-            with open("/home/simon/LLMHoney/plugin_post.txt", 'r') as file:
+            with open(os.path.join(BASE_DIR, "plugin_post.txt"), 'r') as file:
                     content = file.read()
                     if main_command in content:
                         message = plugin_post_handler(message)
@@ -114,7 +110,7 @@ def main():
             logs.write(messages[len(messages) - 1]["content"])
             logs.close()
 
-            logs = open("/home/simon/LLMHoney/history.txt", "a+", encoding="utf-8")
+            logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
             
             if "will be reported" in messages[len(messages) - 1]["content"]:
                 print(messages[len(messages) - 1]["content"])
