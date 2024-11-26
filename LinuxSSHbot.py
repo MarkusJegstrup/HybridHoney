@@ -148,7 +148,7 @@ def main():
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
                 handle_cmd(user_input)
-                print(main_command)
+                # print(main_command)
                 plugin_pre_handler(main_command)
                     
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
