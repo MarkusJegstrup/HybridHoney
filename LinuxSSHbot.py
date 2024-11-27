@@ -147,6 +147,8 @@ def main():
             else:
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
+                if user_input == "":
+                    continue
                 handle_cmd(user_input)
                 # print(main_command)
                 plugin_pre_handler(main_command)
