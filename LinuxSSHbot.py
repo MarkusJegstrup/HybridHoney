@@ -52,7 +52,7 @@ if not openai.api_key:
 today = datetime.now()
 
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-
+history.truncate(0)
 
 if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
     with open(os.path.join(BASE_DIR, "personalitySSH.yml"), 'r', encoding="utf-8") as file:
