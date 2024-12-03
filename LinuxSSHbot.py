@@ -24,7 +24,7 @@ if ssh_connection:
     print(f"Attacker IP Address: {attacker_ip}")
 
     # Log the IP address
-    with open("/path/to/attacker_ips.txt", "a+") as log_file:
+    with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
         log_file.write(f"Attacker IP: {attacker_ip}\n")
 else:
     print("Unable to fetch attacker IP address.")
