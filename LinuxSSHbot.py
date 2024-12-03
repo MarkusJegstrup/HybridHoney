@@ -66,7 +66,7 @@ if not openai.api_key:
 today = datetime.now()
 
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-
+history.truncate(0)
 
 if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
     with open(os.path.join(BASE_DIR, "personalitySSH.yml"), 'r', encoding="utf-8") as file:
@@ -114,8 +114,8 @@ def main():
             )
 
             msg = res.choices[0].message.content
-            if msg.startswith("```") and msg.endswith("```"):
-                msg = msg[3:-3].strip()
+            if msg.startswith("`") and msg.endswith("`"):
+                msg = msg.strip("`")
 
             message = {"content": msg, "role": 'assistant'}
             lines = []
@@ -161,6 +161,8 @@ def main():
             else:
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
+                if user_input == "":
+                    continue
                 handle_cmd(user_input)
                 # print(main_command)
                 plugin_pre_handler(main_command)
