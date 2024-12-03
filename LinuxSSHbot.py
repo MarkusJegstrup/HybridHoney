@@ -15,6 +15,20 @@ main_command =""
 args = []
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# Get the SSH connection details from the environment
+ssh_connection = os.getenv("SSH_CONNECTION", "")
+
+if ssh_connection:
+    # Extract the attacker's IP address (first field in SSH_CONNECTION)
+    attacker_ip = ssh_connection.split()[0]
+    print(f"Attacker IP Address: {attacker_ip}")
+
+    # Log the IP address
+    with open("/path/to/attacker_ips.txt", "a+") as log_file:
+        log_file.write(f"Attacker IP: {attacker_ip}\n")
+else:
+    print("Unable to fetch attacker IP address.")
+
 def handle_cmd(cmd):
     parts = cmd.split()
     global main_command
