@@ -109,7 +109,7 @@ def main():
         history.write("The session continues in following lines.\n\n")
     
     history.close()
-    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\n Last login: {last_login} from {random_ip}\n"
+    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n"
     print(connection_message)
 
     while True:
@@ -125,7 +125,7 @@ def main():
             )
 
             msg = res.choices[0].message.content
-            if msg.startswith("`") and msg.endswith("`"):
+            if msg.startswith("`") or msg.endswith("`"):
                 msg = msg.strip("`")
 
             message = {"content": msg, "role": 'assistant'}
