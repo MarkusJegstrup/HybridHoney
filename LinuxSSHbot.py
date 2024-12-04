@@ -125,8 +125,8 @@ def main():
             )
 
             msg = res.choices[0].message.content
-            if msg.startswith("```") and msg.endswith("```"):
-                msg = msg.strip("```")
+            if msg.startswith("`") and msg.endswith("`"):
+                msg = msg.strip("`")
 
             message = {"content": msg, "role": 'assistant'}
             lines = []
