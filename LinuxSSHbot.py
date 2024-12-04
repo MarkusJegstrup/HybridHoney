@@ -45,7 +45,6 @@ def plugin_pre_handler(cmd):
         case "sudo":
             sudoPass.handle_fake_sudo_give_access()
         case "exit":
-            print("logout")
             sys.exit()
             # os.system("exit")
 
@@ -125,8 +124,8 @@ def main():
             )
 
             msg = res.choices[0].message.content
-            if msg.startswith("`") or msg.endswith("`"):
-                msg = msg.strip("`")
+            if msg.startswith("`"):
+                msg = msg.replace('`', '')
 
             message = {"content": msg, "role": 'assistant'}
             lines = []
