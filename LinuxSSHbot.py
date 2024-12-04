@@ -2,7 +2,7 @@
 import openai
 from dotenv import dotenv_values
 import argparse
-from datetime import datetime
+from datetime import datetime, timedelta
 import yaml
 from time import sleep
 import random
@@ -14,6 +14,7 @@ import sys
 main_command =""
 args = []
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+username = ""
 
 # Get the SSH connection details from the environment
 ssh_connection = os.getenv("SSH_CONNECTION", "")
@@ -21,13 +22,14 @@ ssh_connection = os.getenv("SSH_CONNECTION", "")
 if ssh_connection:
     # Extract the attacker's IP address (first field in SSH_CONNECTION)
     attacker_ip = ssh_connection.split()[0]
-    print(f"Attacker IP Address: {attacker_ip}")
+    username =  os.getlogin( )
+    # print(f"Attacker IP Address: {attacker_ip}")
 
     # Log the IP address
     with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
         log_file.write(f"Attacker IP: {attacker_ip}\n")
 else:
-    print("Unable to fetch attacker IP address.")
+    print("IP address unreachable")
 
 def handle_cmd(cmd):
     parts = cmd.split()
@@ -64,6 +66,13 @@ if not openai.api_key:
 # config = dotenv_values(".env")
 # openai.api_key = config["OPENAI_API_KEY"]
 today = datetime.now()
+random_days = random.randint(0, 5)
+random_hours = random.randint(0, 23)
+random_minutes = random.randint(0, 59)
+random_seconds = random.randint(0, 59)
+last_login = today - timedelta(days=random_days, hours=random_hours, minutes=random_minutes, seconds=random_seconds)
+random_ip = ".".join(map(str, (random.randint(0, 255) 
+                        for _ in range(4))))
 
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
 history.truncate(0)
@@ -86,7 +95,7 @@ def main():
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
                         default= prompt + 
-                        f"\nBased on these examples make something of your own (different username and hostname) to be a starting message. Always start the communication in this way and make sure your output ends with '$'. For the last login date use {today}\n" + 
+                        f"\nBased on these examples make something of your own (with username: {username} and different hostnames) to be a starting message. Always start the communication in this way and make sure your output ends with '$'\n" + 
                         "Ignore date-time in <> after user input. This is not your concern.\n")
 
     args = parser.parse_args()
@@ -100,6 +109,8 @@ def main():
         history.write("The session continues in following lines.\n\n")
     
     history.close()
+    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\n Last login: {last_login} from {random_ip}\n"
+    print(connection_message)
 
     while True:
         
