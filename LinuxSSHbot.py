@@ -11,11 +11,27 @@ import sudoPass
 from dotenv import load_dotenv
 import sys
 
+import readline
+
 main_command =""
 args = []
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 username = ""
+# A history list to store commands
+command_history = []
 
+def readline_input(prompt):
+    try:
+        # Use readline for input with arrow key support
+        user_input = input(prompt)
+        if user_input.strip():  # Avoid storing empty commands
+            command_history.append(user_input)
+        return user_input
+    except EOFError:
+        # Handle Ctrl+D gracefully
+        print("\nExiting terminal.")
+        exit(0)
+        
 # Get the SSH connection details from the environment
 ssh_connection = os.getenv("SSH_CONNECTION", "")
 
@@ -163,14 +179,14 @@ def main():
                 for i in range(len(lines)-4, len(lines)-1):
                     print(lines[i])
                 messages[len(messages) - 1]
-                user_input = input(f'{lines[len(lines)-1]}'.strip() + " ")
+                user_input = readline_input(f'{lines[len(lines)-1]}'.strip() + " ")
                 messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n" })
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
                 
 
             else:
                 #print("\n", messages[len(messages) - 1]["content"], " ")
-                user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
+                user_input = readline_input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
                 if user_input == "":
                     continue
                 handle_cmd(user_input)
