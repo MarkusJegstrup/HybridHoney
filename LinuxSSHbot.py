@@ -11,8 +11,6 @@ import sudoPass
 from dotenv import load_dotenv
 import sys
 
-import readline
-
 main_command =""
 args = []
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
