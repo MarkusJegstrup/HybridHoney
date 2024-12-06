@@ -24,8 +24,8 @@ def readline_input(prompt):
     try:
         # Use readline for input with arrow key support
         user_input = input(prompt)
-        if user_input.strip():  # Avoid storing empty commands
-            command_history.append(user_input)
+        #if user_input.strip():  # Avoid storing empty commands
+         #   command_history.append(user_input)
         return user_input
     except EOFError:
         # Handle Ctrl+D gracefully
