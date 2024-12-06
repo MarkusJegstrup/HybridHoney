@@ -31,7 +31,6 @@ def readline_input(prompt):
         # Handle Ctrl+D gracefully
         print("\nExiting terminal.")
         exit(0)
-        
 # Get the SSH connection details from the environment
 ssh_connection = os.getenv("SSH_CONNECTION", "")
 
