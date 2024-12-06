@@ -17,20 +17,15 @@ main_command =""
 args = []
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 username = ""
-# A history list to store commands
-command_history = []
 
 def readline_input(prompt):
     try:
-        # Use readline for input with arrow key support
         user_input = input(prompt)
-        #if user_input.strip():  # Avoid storing empty commands
-         #   command_history.append(user_input)
         return user_input
     except EOFError:
-        # Handle Ctrl+D gracefully
         print("\nExiting terminal.")
         exit(0)
+        
 # Get the SSH connection details from the environment
 ssh_connection = os.getenv("SSH_CONNECTION", "")
 
