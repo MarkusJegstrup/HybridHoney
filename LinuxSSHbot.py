@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import openai
 from dotenv import dotenv_values
 import argparse
@@ -6,24 +7,6 @@ import yaml
 from time import sleep
 import random
 import os
-import ollama
-
-main_command =""
-args = []
-
-def handle_cmd(cmd):
-    parts = cmd.split()
-    global main_command
-    main_command = parts[0]
-    global args
-    args = parts[1:]
-
-def plugin_pre_handler():
-    print("Plugin-pre")
-
-def plugin_post_handler(message):
-    print("Plugin_post")
-    return message 
 
 config = dotenv_values(".env")
 openai.api_key = config["OPENAI_API_KEY"]
@@ -70,7 +53,7 @@ def main():
         logs = open("history.txt", "a+", encoding="utf-8")
         try:
             res = openai.chat.completions.create(
-                model="gpt-4o",
+                model="gpt-4o-mini",
                 messages = messages,
                 temperature = 0.0,
                 max_tokens = 800
@@ -79,16 +62,11 @@ def main():
             msg = res.choices[0].message.content
             message = {"content": msg, "role": 'assistant'}
 
-            lines = []
-
             if "$cd" in message["content"] or "$ cd" in message["content"]:
                 message["content"] = message["content"].split("\n")[1]
-            
-            with open("plugin_post.txt", 'r') as file:
-                    content = file.read()
-                    if main_command in content:
-                        message = plugin_post_handler(message)
-                        
+
+            lines = []
+
             messages.append(message)
 
             logs.write(messages[len(messages) - 1]["content"])
@@ -110,7 +88,7 @@ def main():
                 
                 for i in range(len(lines)-4, len(lines)-1):
                     print(lines[i])
-                messages[len(messages) - 1]
+                
                 user_input = input(f'{lines[len(lines)-1]}'.strip() + " ")
                 messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n" })
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
@@ -118,12 +96,6 @@ def main():
             else:
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
-                handle_cmd(user_input)
-                with open("plugin_pre.txt", 'r') as file:
-                    content = file.read()
-                    if main_command in content:
-                        plugin_pre_handler()
-                    
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
             
@@ -134,9 +106,6 @@ def main():
         
         logs.close()
     # print(res)
-
-
-
 
 if __name__ == "__main__":
     main()

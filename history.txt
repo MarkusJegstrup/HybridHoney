@@ -113,3 +113,21 @@ walter@strato:~$ cd Presentations	<2024-10-02 12:00:17.807533>
 walter@strato:~/Presentations$ ls	<2024-10-02 12:00:20.266616>
 Meeting_Slides.pptx  Project_Proposal.pdf  Sales_Presentation.pptx
 walter@strato:~/Presentations$
+Here the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.
+The session continues in following lines.
+
+```
+Last login: Fri Dec  6 14:57:58 2024 from 192.168.10.5
+alex@devmachine:~$ 
+``` ls	<2024-12-06 14:58:04.310940>
+```
+Codes  Documents  Presentations  Scripts
+alex@devmachine:~$ 
+``` cd Codes	<2024-12-06 14:58:10.058655>
+```
+alex@devmachine:~/Codes$ 
+``` ls	<2024-12-06 14:58:19.455192>
+```
+project_a  project_b  README.md
+alex@devmachine:~/Codes$ 
+```
