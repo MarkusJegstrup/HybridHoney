@@ -7,16 +7,29 @@ import yaml
 from time import sleep
 import random
 import os
+from dotenv import load_dotenv
 
-config = dotenv_values(".env")
-openai.api_key = config["OPENAI_API_KEY"]
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Load environment variables from the .env file
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"))
+
+# Set the OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+if not openai.api_key:
+    raise ValueError("OPENAI_API_KEY is not set or not loaded from the .env file.")
+
+
+#config = dotenv_values(".env")
+#openai.api_key = config["OPENAI_API_KEY"]
 today = datetime.now()
 
-history = open("history.txt", "a+", encoding="utf-8")
+history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+history.truncate(0)
 
-
-if os.stat('history.txt').st_size == 0:
-    with open('personalitySSH.yml', 'r', encoding="utf-8") as file:
+if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
+    with open(os.path.join(BASE_DIR, "personalitySSH.yml"), 'r', encoding="utf-8") as file:
         identity = yaml.safe_load(file)
 
     identity = identity['personality']
@@ -28,6 +41,7 @@ else:
                               "Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.\n")
     history.seek(0)
     prompt = history.read()
+
 
 def main():
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
