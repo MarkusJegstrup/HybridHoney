@@ -10,6 +10,21 @@ import os
 from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+username = ""
+
+# Get the SSH connection details from the environment
+ssh_connection = os.getenv("SSH_CONNECTION", "")
+
+if ssh_connection:
+    # Extract the attacker's IP address (first field in SSH_CONNECTION)
+    attacker_ip = ssh_connection.split()[0]
+    username =  os.getlogin( )
+
+    # Log the IP address
+    with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
+        log_file.write(f"Attacker IP: {attacker_ip}\n")
+else:
+    print("IP address unreachable")
 
 # Load environment variables from the .env file
 load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"))
@@ -20,9 +35,6 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 if not openai.api_key:
     raise ValueError("OPENAI_API_KEY is not set or not loaded from the .env file.")
 
-
-#config = dotenv_values(".env")
-#openai.api_key = config["OPENAI_API_KEY"]
 today = datetime.now()
 
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
@@ -63,8 +75,9 @@ def main():
     history.close()
 
     while True:
-        
-        logs = open("history.txt", "a+", encoding="utf-8")
+
+        logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+        logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
         try:
             res = openai.chat.completions.create(
                 model="gpt-4o-mini",
@@ -84,9 +97,12 @@ def main():
             messages.append(message)
 
             logs.write(messages[len(messages) - 1]["content"])
+            logcmd.write(messages[len(messages) - 1]["content"])
             logs.close()
+            logcmd.close()
 
-            logs = open("history.txt", "a+", encoding="utf-8")
+            logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+            logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
             
             if "will be reported" in messages[len(messages) - 1]["content"]:
                 print(messages[len(messages) - 1]["content"])
