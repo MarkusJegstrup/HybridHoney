@@ -22,8 +22,8 @@ first_prompt = True
 def readline_input(prompt):
     try:
         user_input = input(prompt)
-        if user_input.strip():  # Avoid storing empty commands
-            readline.add_history(user_input)
+        if user_input.strip():{}  # Avoid storing empty commands
+        #   readline.add_history(user_input)
         return user_input
     except EOFError:
         print("\nExiting terminal.")
