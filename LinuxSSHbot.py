@@ -15,6 +15,8 @@ main_command =""
 args = []
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 username = ""
+attacker_ip = ""
+first_prompt = True
 
 def readline_input(prompt):
     try:
@@ -32,10 +34,6 @@ if ssh_connection:
     attacker_ip = ssh_connection.split()[0]
     username =  os.getlogin( )
     # print(f"Attacker IP Address: {attacker_ip}")
-
-    # Log the IP address
-    with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
-        log_file.write(f"Attacker IP: {attacker_ip}\n")
 else:
     print("IP address unreachable")
 
@@ -173,8 +171,12 @@ def main():
                 messages[len(messages) - 1]
                 user_input = readline_input(f'{lines[len(lines)-1]}'.strip() + " ")
                 messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n" })
+        
+                # Log the IP address
+                if first_prompt:
+                    with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
+                        log_file.write(f"Attacker IP: {attacker_ip}\n")
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
-                
 
             else:
                 #print("\n", messages[len(messages) - 1]["content"], " ")
@@ -188,7 +190,8 @@ def main():
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
                 logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
-            
+
+            first_prompt=False
         except KeyboardInterrupt:
             messages.append({"role": "user", "content": "\n"})
             print("")
