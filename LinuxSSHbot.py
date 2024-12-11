@@ -176,7 +176,7 @@ def main():
                 if first_prompt:
                     with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
                         log_file.write(f"Attacker IP: {attacker_ip}\n")
-                logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
 
             else:
                 #print("\n", messages[len(messages) - 1]["content"], " ")
@@ -189,6 +189,10 @@ def main():
                     
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                # Log the IP address
+                if first_prompt:
+                    with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
+                        log_file.write(f"Attacker IP: {attacker_ip}\n")
                 logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
 
             first_prompt=False
