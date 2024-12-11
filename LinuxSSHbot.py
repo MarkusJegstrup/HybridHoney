@@ -66,7 +66,7 @@ def main():
 
     initial_prompt = f"You are Linux OS terminal. Your personality is: {args.personality}"
     messages = [{"role": "system", "content": initial_prompt}]
-    if os.stat('history.txt').st_size == 0:
+    if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
         for msg in messages:
                     history.write(msg["content"])
     else:
