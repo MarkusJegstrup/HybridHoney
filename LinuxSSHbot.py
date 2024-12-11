@@ -89,6 +89,10 @@ def main():
 
         logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
         logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
+        # Log the IP address
+        if first_prompt:
+            logcmd.write(f"Attacker IP: {attacker_ip}\n")
+            first_prompt = False
         try:
             res = openai.chat.completions.create(
                 model="gpt-4o-mini",
@@ -108,12 +112,6 @@ def main():
             messages.append(message)
             
             logs.write(messages[len(messages) - 1]["content"])
-            logcmd.write(messages[len(messages) - 1]["content"])
-            logs.close()
-            logcmd.close()
-
-            logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-            logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
             
             if "will be reported" in messages[len(messages) - 1]["content"]:
                 print(messages[len(messages) - 1]["content"])
@@ -133,6 +131,10 @@ def main():
                     print(lines[i])
                 
                 user_input = input(f'{lines[len(lines)-1]}'.strip() + " ")
+                if user_input == "":
+                    continue
+                
+                logcmd.write(messages[len(messages) - 1]["content"])
                 messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n" })
 
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
@@ -142,12 +144,6 @@ def main():
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
-
-                # Log the IP address
-                if first_prompt:
-                    logcmd.write(f"Attacker IP: {attacker_ip}\n")
-                    first_prompt = False
-
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
                 logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
             
