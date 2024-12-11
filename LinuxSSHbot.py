@@ -2,7 +2,7 @@
 import openai
 from dotenv import dotenv_values
 import argparse
-from datetime import datetime
+from datetime import datetime, timedelta
 import yaml
 from time import sleep
 import random
@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 username = ""
+attacker_ip = ""
 
 # Get the SSH connection details from the environment
 ssh_connection = os.getenv("SSH_CONNECTION", "")
@@ -21,8 +22,8 @@ if ssh_connection:
     username =  os.getlogin( )
 
     # Log the IP address
-    with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
-        log_file.write(f"Attacker IP: {attacker_ip}\n")
+    #with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
+        #log_file.write(f"Attacker IP: {attacker_ip}\n")
 else:
     print("IP address unreachable")
 
@@ -36,6 +37,13 @@ if not openai.api_key:
     raise ValueError("OPENAI_API_KEY is not set or not loaded from the .env file.")
 
 today = datetime.now()
+random_days = random.randint(0, 5)
+random_hours = random.randint(0, 23)
+random_minutes = random.randint(0, 59)
+random_seconds = random.randint(0, 59)
+last_login = today - timedelta(days=random_days, hours=random_hours, minutes=random_minutes, seconds=random_seconds)
+random_ip = ".".join(map(str, (random.randint(0, 255)
+                        for _ in range(4))))
 
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
 history.truncate(0)
@@ -56,10 +64,11 @@ else:
 
 
 def main():
+    first_prompt = True
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
                         default= prompt + 
-                        f"\nBased on these examples make something of your own (different username and hostname) to be a starting message. Always start the communication in this way and make sure your output ends with '$'. For the last login date use {today}\n" + 
+                        f"\nBased on these examples make something of your own (with username: {username} and different hostnames) to be a starting message. Always start the communication in this way and make sure your output ends with '$'\n" + 
                         "Ignore date-time in <> after user input. This is not your concern.\n")
 
     args = parser.parse_args()
@@ -73,6 +82,8 @@ def main():
         history.write("The session continues in following lines.\n\n")
     
     history.close()
+    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n"
+    print(connection_message)
 
     while True:
 
@@ -95,7 +106,12 @@ def main():
             lines = []
 
             messages.append(message)
-
+            
+            # Log the IP address
+            if first_prompt:
+                    logcmd.write(f"Attacker IP: {attacker_ip}\n")
+                    first_prompt = False
+            
             logs.write(messages[len(messages) - 1]["content"])
             logcmd.write(messages[len(messages) - 1]["content"])
             logs.close()
@@ -106,6 +122,8 @@ def main():
             
             if "will be reported" in messages[len(messages) - 1]["content"]:
                 print(messages[len(messages) - 1]["content"])
+                logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
                 raise KeyboardInterrupt 
 
             if "PING" in message["content"]:
@@ -121,13 +139,16 @@ def main():
                 
                 user_input = input(f'{lines[len(lines)-1]}'.strip() + " ")
                 messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n" })
+
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
 
             else:
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
             
         except KeyboardInterrupt:
             messages.append({"role": "user", "content": "\n"})
@@ -135,6 +156,7 @@ def main():
             break
         
         logs.close()
+        logcmd.close()
     # print(res)
 
 if __name__ == "__main__":
