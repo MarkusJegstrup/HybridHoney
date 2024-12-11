@@ -107,11 +107,6 @@ def main():
 
             messages.append(message)
             
-            # Log the IP address
-            if first_prompt:
-                    logcmd.write(f"Attacker IP: {attacker_ip}\n")
-                    first_prompt = False
-            
             logs.write(messages[len(messages) - 1]["content"])
             logcmd.write(messages[len(messages) - 1]["content"])
             logs.close()
@@ -147,6 +142,12 @@ def main():
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
+
+                # Log the IP address
+                if first_prompt:
+                    logcmd.write(f"Attacker IP: {attacker_ip}\n")
+                    first_prompt = False
+
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
                 logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
             
