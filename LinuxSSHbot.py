@@ -134,7 +134,6 @@ def main():
                 msg = msg.replace('`', '')
 
             message = {"content": msg, "role": 'assistant'}
-            lines = []
 
             #if "$cd" in message["content"] or "$ cd" in message["content"]:
             #    message["content"] = message["content"].split("\n")[1]
@@ -166,6 +165,7 @@ def main():
             messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
             logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
             # Log the IP address
+            global first_prompt
             if first_prompt:
                     logcmd.write(f"Attacker IP: {attacker_ip}\n")
             logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
