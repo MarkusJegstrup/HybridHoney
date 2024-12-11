@@ -144,7 +144,10 @@ def main():
                         message = plugin_post_handler(message)
                         
             messages.append(message)
-
+            global first_prompt
+            if first_prompt:
+                    logcmd.write(f"Attacker IP: {attacker_ip}\n")
+                    first_prompt=False
             logs.write(messages[len(messages) - 1]["content"])
             logcmd.write(messages[len(messages) - 1]["content"])
             logs.close()
@@ -164,13 +167,9 @@ def main():
                 
             messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
             # Log the IP address
-            global first_prompt
-            if first_prompt:
-                    logcmd.write(f"Attacker IP: {attacker_ip}\n")
             logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
             logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
 
-            first_prompt=False
         except KeyboardInterrupt:
             messages.append({"role": "user", "content": "\n"})
             print("")
