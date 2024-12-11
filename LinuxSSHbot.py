@@ -163,11 +163,11 @@ def main():
             plugin_pre_handler(main_command)
                 
             messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
-            logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
             # Log the IP address
             global first_prompt
             if first_prompt:
                     logcmd.write(f"Attacker IP: {attacker_ip}\n")
+            logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
             logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
 
             first_prompt=False
