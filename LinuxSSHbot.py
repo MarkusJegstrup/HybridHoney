@@ -174,8 +174,7 @@ def main():
         
                 # Log the IP address
                 if first_prompt:
-                    with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
-                        log_file.write(f"Attacker IP: {attacker_ip}\n")
+                        logcmd.write(f"Attacker IP: {attacker_ip}\n")
                 logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
 
             else:
@@ -191,8 +190,7 @@ def main():
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
                 # Log the IP address
                 if first_prompt:
-                    with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
-                        log_file.write(f"Attacker IP: {attacker_ip}\n")
+                        logcmd.write(f"Attacker IP: {attacker_ip}\n")
                 logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
 
             first_prompt=False
