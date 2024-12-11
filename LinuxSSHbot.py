@@ -136,8 +136,8 @@ def main():
             message = {"content": msg, "role": 'assistant'}
             lines = []
 
-            if "$cd" in message["content"] or "$ cd" in message["content"]:
-                message["content"] = message["content"].split("\n")[1]
+            #if "$cd" in message["content"] or "$ cd" in message["content"]:
+            #    message["content"] = message["content"].split("\n")[1]
             
             with open(os.path.join(BASE_DIR, "plugin_post.txt"), 'r') as file:
                     content = file.read()
@@ -153,45 +153,22 @@ def main():
 
             logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
             logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
-            
-            if "will be reported" in messages[len(messages) - 1]["content"]:
-                print(messages[len(messages) - 1]["content"])
-                raise KeyboardInterrupt 
 
-            if "PING" in message["content"]:
-                lines = message["content"].split("\n")
-                print(lines[0])
-
-                for i in range(1, len(lines)-5):
-                    print(lines[i])
-                    sleep(random.uniform(0.1, 0.5))
+           
+            #print("\n", messages[len(messages) - 1]["content"], " ")
+            user_input = readline_input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
+            if user_input == "":
+                continue
+            handle_cmd(user_input)
+            # print(main_command)
+            plugin_pre_handler(main_command)
                 
-                for i in range(len(lines)-4, len(lines)-1):
-                    print(lines[i])
-                messages[len(messages) - 1]
-                user_input = readline_input(f'{lines[len(lines)-1]}'.strip() + " ")
-                messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n" })
-        
-                # Log the IP address
-                if first_prompt:
-                        logcmd.write(f"Attacker IP: {attacker_ip}\n")
-                logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
-
-            else:
-                #print("\n", messages[len(messages) - 1]["content"], " ")
-                user_input = readline_input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
-                if user_input == "":
-                    continue
-                handle_cmd(user_input)
-                # print(main_command)
-                plugin_pre_handler(main_command)
-                    
-                messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
-                logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
-                # Log the IP address
-                if first_prompt:
-                        logcmd.write(f"Attacker IP: {attacker_ip}\n")
-                logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
+            messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
+            logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+            # Log the IP address
+            if first_prompt:
+                    logcmd.write(f"Attacker IP: {attacker_ip}\n")
+            logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
 
             first_prompt=False
         except KeyboardInterrupt:
