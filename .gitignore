@@ -162,4 +162,5 @@ cython_debug/
 
 #files
 history.txt
-logs.txt
+cmd_logs.txt
+raw_logs.txt

@@ -113,6 +113,7 @@ def main():
             messages.append(message)
             
             logs.write(messages[len(messages) - 1]["content"])
+            log_cmd.write(messages[len(messages) - 1]["content"])
             
             if "will be reported" in messages[len(messages) - 1]["content"]:
                 print(messages[len(messages) - 1]["content"])
