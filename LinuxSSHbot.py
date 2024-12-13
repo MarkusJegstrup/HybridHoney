@@ -67,7 +67,7 @@ def main():
     first_prompt = True
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
-                        default= prompt + 
+                        default = prompt + 
                         f"\nBased on these examples make something of your own (with username: {username} and different hostnames) to be a starting message. Always start the communication in this way and make sure your output ends with '$'\n" + 
                         "Ignore date-time in <> after user input. This is not your concern.\n")
 
@@ -88,10 +88,11 @@ def main():
     while True:
 
         logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-        logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
-        # Log the IP address
+        log_raw = open(os.path.join(BASE_DIR, "raw_logs.txt"), "a+", encoding="utf-8")
+        log_cmd = open(os.path.join(BASE_DIR, "cmd_logs.txt"), "a+", encoding="utf-8")
+        # Log the IP address in raw logs before prompting 
         if first_prompt:
-            logcmd.write(f"Attacker IP: {attacker_ip}\n")
+            log_raw.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
             first_prompt = False
         try:
             res = openai.chat.completions.create(
@@ -116,7 +117,7 @@ def main():
             if "will be reported" in messages[len(messages) - 1]["content"]:
                 print(messages[len(messages) - 1]["content"])
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
-                logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                log_cmd.write(" " + user_input + f"\t<{datetime.now()}>\n" + attacker_ip + "\n")
                 raise KeyboardInterrupt 
 
             if "PING" in message["content"]:
@@ -134,18 +135,18 @@ def main():
                 if user_input == "":
                     continue
                 
-                logcmd.write(messages[len(messages) - 1]["content"])
+                log_cmd.write(messages[len(messages) - 1]["content"])
                 messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n" })
 
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
-                logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                log_cmd.write(" " + user_input + f"\t<{datetime.now()}>\n" + attacker_ip + "\n")
 
             else:
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
-                logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                log_cmd.write(" " + user_input + f"\t<{datetime.now()}>" + attacker_ip + "\n")
             
         except KeyboardInterrupt:
             messages.append({"role": "user", "content": "\n"})
@@ -153,7 +154,8 @@ def main():
             break
         
         logs.close()
-        logcmd.close()
+        log_raw.close()
+        log_cmd.close()
     # print(res)
 
 if __name__ == "__main__":
