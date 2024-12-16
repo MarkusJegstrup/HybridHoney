@@ -84,6 +84,8 @@ def main():
     history.close()
     connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n" + f"{username}@{machine_name}:~$ "
     print(connection_message)
+    user_input = input()
+    messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n"})
 
     while True:
 
@@ -94,7 +96,6 @@ def main():
         if first_prompt:
             log_raw.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
             first_prompt = False
-            continue
         try:
             res = openai.chat.completions.create(
                 model="gpt-4o-mini",
