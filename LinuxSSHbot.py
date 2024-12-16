@@ -94,6 +94,8 @@ def main():
     #awaiting first user input
     user_input = input()
     messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n"})
+    session_logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+    log_cmd.write(" " + user_input + f"\t<{datetime.now()}>" + attacker_ip + "\n")
     
     while True:
 
