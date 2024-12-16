@@ -82,8 +82,8 @@ def main():
         history.write("The session continues in following lines.\n\n")
     
     history.close()
-    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n" + f"{username}@{machine_name}:~$ "
-    print(connection_message)
+    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n" + f"{username}@{machine_name}:~$"
+    print(connection_message, end='')
     user_input = input()
     messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n"})
 
