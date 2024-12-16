@@ -82,20 +82,22 @@ def main():
         history.write("The session continues in following lines.\n\n")
     
     history.close()
+
     connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n" + f"{username}@{machine_name}:~$"
     print(connection_message, end='')
+
+    #readying log files and history and log the IP address in raw logs before prompting 
+    history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+    log_raw = open(os.path.join(BASE_DIR, "raw_logs.txt"), "a+", encoding="utf-8")
+    log_cmd = open(os.path.join(BASE_DIR, "cmd_logs.txt"), "a+", encoding="utf-8")
+    log_raw.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
+
+    #awaiting first user input
     user_input = input()
     messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n"})
-
+    
     while True:
 
-        logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-        log_raw = open(os.path.join(BASE_DIR, "raw_logs.txt"), "a+", encoding="utf-8")
-        log_cmd = open(os.path.join(BASE_DIR, "cmd_logs.txt"), "a+", encoding="utf-8")
-        # Log the IP address in raw logs before prompting 
-        if first_prompt:
-            log_raw.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
-            first_prompt = False
         try:
             res = openai.chat.completions.create(
                 model="gpt-4o-mini",
@@ -114,14 +116,14 @@ def main():
 
             messages.append(message)
             
-            logs.write(messages[len(messages) - 1]["content"])
+            history.write(messages[len(messages) - 1]["content"])
 
             if len(messages) > 1:
                 log_cmd.write(messages[len(messages) - 1]["content"])
             
             if "will be reported" in messages[len(messages) - 1]["content"]:
                 print(messages[len(messages) - 1]["content"])
-                logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                history.write(" " + user_input + f"\t<{datetime.now()}>\n")
                 log_cmd.write(" " + user_input + f"\t<{datetime.now()}>\n" + attacker_ip + "\n")
                 raise KeyboardInterrupt 
 
@@ -140,7 +142,7 @@ def main():
                 log_cmd.write(messages[len(messages) - 1]["content"])
                 messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n" })
 
-                logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                history.write(" " + user_input + f"\t<{datetime.now()}>\n")
                 log_cmd.write(" " + user_input + f"\t<{datetime.now()}>\n" + attacker_ip + "\n")
 
             else:
@@ -149,7 +151,7 @@ def main():
                 if user_input == "":
                     continue
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
-                logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+                history.write(" " + user_input + f"\t<{datetime.now()}>\n")
                 log_cmd.write(" " + user_input + f"\t<{datetime.now()}>" + attacker_ip + "\n")
             
         except KeyboardInterrupt:
@@ -157,9 +159,9 @@ def main():
             print("")
             break
         
-        logs.close()
-        log_raw.close()
-        log_cmd.close()
+    history.close()
+    log_raw.close()
+    log_cmd.close()
     # print(res)
 
 if __name__ == "__main__":
