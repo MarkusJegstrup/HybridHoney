@@ -64,7 +64,6 @@ else:
 
 
 def main():
-    first_prompt = True
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
                         default = prompt + 
@@ -95,6 +94,7 @@ def main():
     #awaiting first user input
     user_input = input()
     messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n"})
+    log_cmd.write(" " + user_input + f"\t<{datetime.now()}>\n" + attacker_ip + "\n")
     
     while True:
 
