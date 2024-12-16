@@ -10,6 +10,7 @@ import os
 import sudoPass
 from dotenv import load_dotenv
 import sys
+import readline
 
 main_command =""
 args = []
