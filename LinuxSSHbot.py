@@ -23,6 +23,13 @@ first_prompt = True
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
 history.truncate(0)
 
+
+def log_to_files(history_content, logcmd_content):
+    history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+    logs = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
+    history.write(history_content)
+    logs.write(logs_content)
+
 def readline_input(prompt):
     try:
         user_input = input(prompt)
@@ -111,6 +118,16 @@ def prompt_setup():
         prompt = history.read()
     return prompt
 
+def llm_response(messages):
+    res = openai.chat.completions.create(
+                model="gpt-4o-mini",
+                messages = messages,
+                temperature = 0.0,
+                max_tokens = 800
+            )
+
+    return res.choices[0].message.content
+
 def main():
     ###Setup
     ssh_connection = os.getenv("SSH_CONNECTION", "")
@@ -142,17 +159,12 @@ def main():
 
     while True:
         
-        logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-        logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
+        #history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+        #logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
         try:
-            res = openai.chat.completions.create(
-                model="gpt-4o-mini",
-                messages = messages,
-                temperature = 0.0,
-                max_tokens = 800
-            )
 
-            msg = res.choices[0].message.content
+            msg = llm_response(messages)
+
             if msg.startswith("`"):
                 msg = msg.replace('`', '')
 
@@ -171,13 +183,17 @@ def main():
             if first_prompt:
                     logcmd.write(f"Attacker IP: {attacker_ip}\n")
                     first_prompt=False
-            logs.write(messages[len(messages) - 1]["content"])
-            logcmd.write(messages[len(messages) - 1]["content"])
-            logs.close()
-            logcmd.close()
 
-            logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-            logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
+            #Logging content to history.txt and logs.txt
+            content_input = messages[len(messages) - 1]["content"]
+            log_to_files(content_input,content_input)
+            #logs.write(messages[len(messages) - 1]["content"])
+            #logcmd.write(messages[len(messages) - 1]["content"])
+            #logs.close()
+            #logcmd.close()
+
+            #logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+            #logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
 
            
             #print("\n", messages[len(messages) - 1]["content"], " ")
@@ -189,9 +205,12 @@ def main():
             plugin_pre_handler(main_command)
                 
             messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
-            # Log the IP address
-            logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
-            logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
+            # Log the IP address to history.txt and logs.txt
+            content = " " + user_input + f"\t<{datetime.now()}>\n"
+            log_to_files(content, content)
+
+            #logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
+            #logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
 
         except KeyboardInterrupt:
             messages.append({"role": "user", "content": "\n"})
