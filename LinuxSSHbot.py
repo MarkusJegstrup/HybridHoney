@@ -94,6 +94,7 @@ def main():
         if first_prompt:
             log_raw.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
             first_prompt = False
+            continue
         try:
             res = openai.chat.completions.create(
                 model="gpt-4o-mini",
@@ -135,9 +136,6 @@ def main():
                     print(lines[i])
                 
                 user_input = input(f'{lines[len(lines)-1]}'.strip() + " ")
-                if user_input == "":
-                    continue
-                
                 log_cmd.write(messages[len(messages) - 1]["content"])
                 messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n" })
 
@@ -147,6 +145,8 @@ def main():
             else:
                 #print("\n", messages[len(messages) - 1]["content"], " ")
                 user_input = input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
+                if user_input == "":
+                    continue
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
                 logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
                 log_cmd.write(" " + user_input + f"\t<{datetime.now()}>" + attacker_ip + "\n")
