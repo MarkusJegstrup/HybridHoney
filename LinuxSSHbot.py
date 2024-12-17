@@ -21,12 +21,13 @@ username = ""
 attacker_ip = ""
 first_prompt = True
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+logs = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
 history.truncate(0)
 
 
 def log_to_files(history_content, logcmd_content):
-    history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-    logs = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
+    #history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+    #logs = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
     history.write(history_content)
     logs.write(logs_content)
 
@@ -49,8 +50,9 @@ def username_att_ip(ssh_connection):
         attacker_ip = ssh_connection.split()[0]
         username =  os.getlogin( )
         # print(f"Attacker IP Address: {attacker_ip}")
-    else:
-        print("IP address unreachable")
+    
+    
+
 
 def handle_cmd(cmd):
     global full_command
@@ -157,6 +159,7 @@ def main():
     connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n"
     print(connection_message)
 
+
     while True:
         
         try:
@@ -177,10 +180,12 @@ def main():
                         message = plugin_post_handler(message)
                         
             messages.append(message)
+            
+            ###Before session write attacker ip to logs
             global first_prompt
             if first_prompt:
-                    logs.write(f"Attacker IP: {attacker_ip}\n")
-                    first_prompt=False
+                log_to_files(f"Attacker IP: {attacker_ip}\n",f"Attacker IP: {attacker_ip}\n")
+                first_prompt = False
 
             #Logging content to history.txt and logs.txt
             content_input = messages[len(messages) - 1]["content"]
@@ -196,7 +201,7 @@ def main():
             plugin_pre_handler(main_command)
                 
             messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
-            
+
             # Log the IP address to history.txt and logs.txt
             content = " " + user_input + f"\t<{datetime.now()}>\n"
             log_to_files(content, content)
