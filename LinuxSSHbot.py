@@ -157,7 +157,7 @@ def main():
         history.write("The session continues in following lines.\n\n")
     
     history.close()
-    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n"
+    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
     print(connection_message)
 
 
@@ -185,11 +185,11 @@ def main():
             ###Before session write attacker ip to logs
             global first_prompt
             if first_prompt:
-                log_to_files(f"\nAttacker IP: {attacker_ip}\n",f"\nAttacker IP: {attacker_ip}\n")
+                log_to_files(f"Attacker IP: {attacker_ip}\n",f"\nAttacker IP: {attacker_ip}\n")
                 first_prompt = False
 
             #Logging content to history.txt and logs.txt
-            content_input = messages[len(messages) - 1]["content"]
+            content_input = "assistant:" + messages[len(messages) - 1]["content"] + "\n"
             log_to_files(content_input,content_input)
 
            
@@ -204,7 +204,7 @@ def main():
             messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
 
             # Log the IP address to history.txt and logs.txt
-            content = " " + user_input + f"\t<{datetime.now()}>\n"
+            content = "user:" + user_input + f"\t<{datetime.now()}>\n"
             log_to_files(content, content)
 
 
