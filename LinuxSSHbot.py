@@ -159,8 +159,6 @@ def main():
 
     while True:
         
-        #history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-        #logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
         try:
 
             msg = llm_response(messages)
@@ -181,19 +179,12 @@ def main():
             messages.append(message)
             global first_prompt
             if first_prompt:
-                    logcmd.write(f"Attacker IP: {attacker_ip}\n")
+                    logs.write(f"Attacker IP: {attacker_ip}\n")
                     first_prompt=False
 
             #Logging content to history.txt and logs.txt
             content_input = messages[len(messages) - 1]["content"]
             log_to_files(content_input,content_input)
-            #logs.write(messages[len(messages) - 1]["content"])
-            #logcmd.write(messages[len(messages) - 1]["content"])
-            #logs.close()
-            #logcmd.close()
-
-            #logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-            #logcmd = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
 
            
             #print("\n", messages[len(messages) - 1]["content"], " ")
@@ -205,12 +196,11 @@ def main():
             plugin_pre_handler(main_command)
                 
             messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
+            
             # Log the IP address to history.txt and logs.txt
             content = " " + user_input + f"\t<{datetime.now()}>\n"
             log_to_files(content, content)
 
-            #logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
-            #logcmd.write(" " + user_input + f"\t<{datetime.now()}>\n")
 
         except KeyboardInterrupt:
             messages.append({"role": "user", "content": "\n"})
