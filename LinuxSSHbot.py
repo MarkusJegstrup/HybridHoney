@@ -192,9 +192,10 @@ def main():
             content_input = "assistant:" + messages[len(messages) - 1]["content"] + "\n"
             log_to_files(content_input,content_input)
 
-           
             #print("\n", messages[len(messages) - 1]["content"], " ")
-            user_input = readline_input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
+            print(message)
+            user_input = readline_input(f'{message["content"]}'.strip() + " ")
+            #user_input = readline_input(f'{messages[len(messages) - 1]["content"]}'.strip() + " ")
             if user_input == "":
                 continue
             handle_cmd(user_input)
