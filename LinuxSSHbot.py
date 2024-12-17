@@ -21,15 +21,16 @@ username = ""
 attacker_ip = ""
 first_prompt = True
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-logs = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
 history.truncate(0)
 
 
-def log_to_files(history_content, logcmd_content):
-    #history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-    #logs = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
+def log_to_files(history_content, logs_content):
+    history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+    logs = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
     history.write(history_content)
     logs.write(logs_content)
+    logs.close()
+    history.close()
 
 def readline_input(prompt):
     try:
@@ -184,7 +185,7 @@ def main():
             ###Before session write attacker ip to logs
             global first_prompt
             if first_prompt:
-                log_to_files(f"Attacker IP: {attacker_ip}\n",f"Attacker IP: {attacker_ip}\n")
+                log_to_files(f"\nAttacker IP: {attacker_ip}\n",f"\nAttacker IP: {attacker_ip}\n")
                 first_prompt = False
 
             #Logging content to history.txt and logs.txt
@@ -212,8 +213,7 @@ def main():
             print("")
             break
         
-        logs.close()
-        logcmd.close()
+
     # print(res)
 
 
