@@ -92,7 +92,15 @@ def main():
     log_raw.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
 
     #awaiting first user input
-    user_input = input()
+    try:
+        user_input = input()
+    except KeyboardInterrupt:
+        messages.append({"role": "user", "content": "\n"})
+        print("")
+        session_logs.close()
+        log_raw.close()
+        log_cmd.close()
+    
     messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n"})
     session_logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
     log_cmd.write(" " + user_input + f"\t<{datetime.now()}>" + attacker_ip + "\n")
