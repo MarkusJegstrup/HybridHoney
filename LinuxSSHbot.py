@@ -11,15 +11,21 @@ import sudoPass
 import readline
 from dotenv import load_dotenv
 import sys
+import re
 
 ##Global Fields
+preHandle = False
+preHandleCommand = ""
+
 full_command = ""
 main_command =""
 args = []
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 username = ""
 attacker_ip = ""
 first_prompt = True
+
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
 history.truncate(0)
 
@@ -40,6 +46,12 @@ def readline_input(prompt):
         print("\nExiting terminal.")
         exit(0)
         
+def get_last_content(messages, role):
+    ##Returns the last message by the given role
+    if messages[len(messages) - 1]["role"] == role:
+        return messages[len(messages) - 1]["content"]
+    else:
+        return messages[len(messages) - 2]["content"]
 # Get the SSH connection details from the environment
 #ssh_connection = os.getenv("SSH_CONNECTION", "")
 
@@ -60,6 +72,8 @@ def handle_cmd(cmd):
     global main_command
     global args
     full_command = cmd
+    if cmd == "": ### Cannot read parts[0] and args[1:] with empty cmd
+        return
     parts = cmd.split()
     main_command = parts[0]
     args = parts[1:]
@@ -67,17 +81,41 @@ def handle_cmd(cmd):
 
 
 def plugin_pre_handler(cmd):
+    global preHandle
+    global preHandleCommand
     match cmd:
         case "sudo":
             sudoPass.handle_fake_sudo_give_access()
         case "exit":
             sys.exit()
             # os.system("exit")
+        case "":
+            print("Hello")
+            preHandle = True
+            preHandleCommand = ""
 
+def pre_handle_output(preHandleCommand, messages):
+    pre_output = ""
+    match preHandleCommand:
+        case "":
+            print(messages[len(messages) - 2]["content"])
+            message = re.search(r'\n([^\n]+?\$)',messages[len(messages) - 2]["content"])
+            pre_output = message.group(1)
+            print("pre_output")
+
+    return pre_output
             
 
 def plugin_post_handler(message):
-    return message 
+    #open(os.path.join(BASE_DIR, "plugin_post.txt"), 'r')
+    ##Basic Checks
+    if message.startswith("`"):
+        message = message.replace('`', '')
+
+
+    ##Command checks
+
+    return message
 
 def setup():
     # Load environment variables from the .env file
@@ -163,23 +201,26 @@ def main():
 
     while True:
         
+        global preHandle
         try:
+            msg = ""
+            if preHandle:
+                msg = pre_handle_output(preHandleCommand, messages)
+                print("hello again")
+                preHandle = False
+            else:
+                msg = llm_response(messages)
 
-            msg = llm_response(messages)
-
-            if msg.startswith("`"):
-                msg = msg.replace('`', '')
-
-            message = {"content": msg, "role": 'assistant'}
-
+            
+            message = plugin_post_handler(msg)
             #if "$cd" in message["content"] or "$ cd" in message["content"]:
             #    message["content"] = message["content"].split("\n")[1]
             
-            with open(os.path.join(BASE_DIR, "plugin_post.txt"), 'r') as file:
-                    content = file.read()
-                    if main_command in content:
-                        message = plugin_post_handler(message)
-                        
+
+
+
+
+            message = {"content": message, "role": 'assistant'}                        
             messages.append(message)
             
             ###Before session write attacker ip to logs
@@ -193,16 +234,15 @@ def main():
             log_to_files(content_input,content_input)
 
             #print("\n", messages[len(messages) - 1]["content"], " ")
-            print(message)
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
             #user_input = readline_input(f'{messages[len(messages) - 1]["content"]}'.strip() + " ")
-            if user_input == "":
-                continue
+            
             handle_cmd(user_input)
             # print(main_command)
             plugin_pre_handler(main_command)
-                
-            messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
+
+            messages.append({"content": user_input, "role": 'user'}  )  
+            #messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
 
             # Log the IP address to history.txt and logs.txt
             content = "user:" + user_input + f"\t<{datetime.now()}>\n"
