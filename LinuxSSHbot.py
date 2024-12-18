@@ -100,6 +100,7 @@ def main():
         session_logs.close()
         log_raw.close()
         log_cmd.close()
+        return 0
     
     messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n"})
     session_logs.write(" " + user_input + f"\t<{datetime.now()}>\n")

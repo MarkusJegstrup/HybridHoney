@@ -1,0 +1,12 @@
+ ls	<2024-12-18 11:39:30.002764>192.38.81.6
+```
+Documents  Downloads  Projects  .git  README.md
+admin@testbench:~$ 
+``` ls	<2024-12-18 11:52:35.714308>192.38.81.6
+```
+Documents  Downloads  Projects  Reports  .git
+admin@workstation:~$ 
+``` cd Downloads	<2024-12-18 11:52:42.022758>192.38.81.6
+```
+admin@workstation:~/Downloads$ 
+```
