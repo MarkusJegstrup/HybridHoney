@@ -8,7 +8,6 @@ from time import sleep
 import random
 import os
 import sudoPass
-import readline
 from dotenv import load_dotenv
 import sys
 import re
