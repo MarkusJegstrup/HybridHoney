@@ -13,8 +13,10 @@ import sys
 import re
 
 ##Global Fields
-preHandle = False
-preHandleCommand = ""
+
+pre_gen_sessions = {}
+pre_gen_message = ""
+pre_gen_flag = False
 
 full_command = ""
 main_command =""
@@ -71,8 +73,8 @@ def handle_cmd(cmd):
     global main_command
     global args
     full_command = cmd
-    if cmd == "": ### Cannot read parts[0] and args[1:] with empty cmd
-        return
+    ##if cmd == "": ### Cannot read parts[0] and args[1:] with empty cmd
+    ##    return
     parts = cmd.split()
     main_command = parts[0]
     args = parts[1:]
@@ -80,18 +82,22 @@ def handle_cmd(cmd):
 
 
 def plugin_pre_handler(cmd):
-    global preHandle
-    global preHandleCommand
+    ###Pregen
+    global pre_gen_message
+    global pre_gen_flag
+    if full_command in pre_gen_sessions:
+        print(f"Found pre-generated response for command: {full_command}")
+        pre_gen_flag = True
+        pre_gen_message = pre_gen_sessions[full_command]
+        return
+    ###Pregen End
+
     match cmd:
         case "sudo":
             sudoPass.handle_fake_sudo_give_access()
         case "exit":
             sys.exit()
             # os.system("exit")
-        case "":
-            print("Hello")
-            preHandle = True
-            preHandleCommand = ""
 
 def pre_handle_output(preHandleCommand, messages):
     pre_output = ""
@@ -115,6 +121,25 @@ def plugin_post_handler(message):
     ##Command checks
 
     return message
+
+
+def pregenerate_Sessions(prompt, commands):
+    pre_generated_responses = {}
+    message = [{"role": "system", "content": f"You are a Linux OS terminal. Your personality is: {prompt}"}]
+    for cmd in commands:
+        # Prepare the input message for GPT
+        temp_messages = message + [{"role": "user", "content": cmd}]
+        response = llm_response(temp_messages)
+            
+        gpt_response = response.strip()
+        pre_generated_responses[cmd] = gpt_response
+            
+    return pre_generated_responses
+
+def pregenerate_common_responses(prompt):
+    commands = ["pwd", "whoami", "cat /etc/passwd", "uname -a", "id"]
+    global pre_gen_sessions
+    pre_gen_sessions = pregenerate_Sessions(prompt, commands)
 
 def setup():
     # Load environment variables from the .env file
@@ -169,6 +194,8 @@ def llm_response(messages):
     return res.choices[0].message.content
 
 def main():
+    #### Variable setup
+
     ###Setup
     ssh_connection = os.getenv("SSH_CONNECTION", "")
     username_att_ip(ssh_connection)
@@ -176,6 +203,8 @@ def main():
     last_login, random_ip = last_login_random_ip()
     
     prompt = prompt_setup()
+
+    pregenerate_common_responses(prompt)
 
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
@@ -200,13 +229,16 @@ def main():
 
     while True:
         
-        global preHandle
+        global pre_gen_flag
         try:
-            msg = ""
-            if preHandle:
-                msg = pre_handle_output(preHandleCommand, messages)
-                print("hello again")
-                preHandle = False
+
+            if (pre_gen_flag) :
+                print("Here")
+                print(pre_gen_message)
+                print("After")
+                msg = pre_gen_message
+                pre_gen_flag = False
+                print("pregen activate")
             else:
                 msg = llm_response(messages)
 
@@ -236,8 +268,12 @@ def main():
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
             #user_input = readline_input(f'{messages[len(messages) - 1]["content"]}'.strip() + " ")
             
+
+            if (user_input == ""):
+                continue
             handle_cmd(user_input)
             # print(main_command)
+
             plugin_pre_handler(main_command)
 
             messages.append({"content": user_input, "role": 'user'}  )  
