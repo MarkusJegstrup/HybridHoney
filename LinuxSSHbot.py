@@ -13,14 +13,11 @@ import sys
 import re
 
 ##Global Fields
-
-pre_gen_sessions = {}
-pre_gen_message = ""
-pre_gen_flag = False
-
 full_command = ""
 main_command =""
 args = []
+
+commands = ["pwd", "whoami", "cat /etc/passwd", "uname -a", "id"]
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 username = ""
@@ -53,8 +50,7 @@ def get_last_content(messages, role):
         return messages[len(messages) - 1]["content"]
     else:
         return messages[len(messages) - 2]["content"]
-# Get the SSH connection details from the environment
-#ssh_connection = os.getenv("SSH_CONNECTION", "")
+
 
 def username_att_ip(ssh_connection):
     global attacker_ip
@@ -64,6 +60,8 @@ def username_att_ip(ssh_connection):
         attacker_ip = ssh_connection.split()[0]
         username =  os.getlogin( )
         # print(f"Attacker IP Address: {attacker_ip}")
+    else: 
+        username = "matthew"
     
     
 
@@ -82,15 +80,6 @@ def handle_cmd(cmd):
 
 
 def plugin_pre_handler(cmd):
-    ###Pregen
-    global pre_gen_message
-    global pre_gen_flag
-    if full_command in pre_gen_sessions:
-        print(f"Found pre-generated response for command: {full_command}")
-        pre_gen_flag = True
-        pre_gen_message = pre_gen_sessions[full_command]
-        return
-    ###Pregen End
 
     match cmd:
         case "sudo":
@@ -122,24 +111,6 @@ def plugin_post_handler(message):
 
     return message
 
-
-def pregenerate_Sessions(prompt, commands):
-    pre_generated_responses = {}
-    message = [{"role": "system", "content": f"You are a Linux OS terminal. Your personality is: {prompt}"}]
-    for cmd in commands:
-        # Prepare the input message for GPT
-        temp_messages = message + [{"role": "user", "content": cmd}]
-        response = llm_response(temp_messages)
-            
-        gpt_response = response.strip()
-        pre_generated_responses[cmd] = gpt_response
-            
-    return pre_generated_responses
-
-def pregenerate_common_responses(prompt):
-    commands = ["pwd", "whoami", "cat /etc/passwd", "uname -a", "id"]
-    global pre_gen_sessions
-    pre_gen_sessions = pregenerate_Sessions(prompt, commands)
 
 def setup():
     # Load environment variables from the .env file
@@ -204,23 +175,22 @@ def main():
     
     prompt = prompt_setup()
 
-    pregenerate_common_responses(prompt)
-
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
                         default= prompt + 
                         f"\nBased on these examples make something of your own (with username: {username} and different hostnames) to be a starting message. Always start the communication in this way and make sure your output ends with '$'\n" + 
-                        "Ignore date-time in <> after user input. This is not your concern.\n")
+                        "Ignore date-time in <> after user input. This is not your concern.\n"
+                        )
 
     args = parser.parse_args()
-
-    initial_prompt = f"You are Linux OS terminal. Your personality is: {args.personality}"
+    initial_prompt = args.personality
     messages = [{"role": "system", "content": initial_prompt}]
-    if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
-        for msg in messages:
-                    history.write(msg["content"])
-    else:
-        history.write("The session continues in following lines.\n\n")
+    #if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
+    #    for msg in messages:
+    #        print("hello")
+    #       history.write(msg["content"])
+    #else:
+    #    history.write("The session continues in following lines.\n\n")
     
     history.close()
     connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
@@ -229,18 +199,9 @@ def main():
 
     while True:
         
-        global pre_gen_flag
         try:
-
-            if (pre_gen_flag) :
-                print("Here")
-                print(pre_gen_message)
-                print("After")
-                msg = pre_gen_message
-                pre_gen_flag = False
-                print("pregen activate")
-            else:
-                msg = llm_response(messages)
+            
+            msg = llm_response(messages)
 
             
             message = plugin_post_handler(msg)
