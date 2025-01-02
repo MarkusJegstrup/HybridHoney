@@ -17,6 +17,11 @@ full_command = ""
 main_command =""
 args = []
 
+host_alias_handle = ""
+
+pre_handle = False
+pre_handle_message = ""
+
 commands = ["pwd", "whoami", "cat /etc/passwd", "uname -a", "id"]
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -80,6 +85,8 @@ def handle_cmd(cmd):
 
 
 def plugin_pre_handler(cmd):
+    global pre_handle
+    global pre_handle_message
 
     match cmd:
         case "sudo":
@@ -166,7 +173,10 @@ def llm_response(messages):
 
 def main():
     #### Variable setup
-
+    global pre_handle
+    global first_prompt
+    global pre_handle_message
+    global host_alias_handle
     ###Setup
     ssh_connection = os.getenv("SSH_CONNECTION", "")
     username_att_ip(ssh_connection)
@@ -194,14 +204,24 @@ def main():
     
     history.close()
     connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
-    print(connection_message)
+    ## Starting message
+    initial_message = llm_response(messages)
+    pre_handle_message = ""+connection_message + plugin_post_handler(initial_message)
+    pre_handle = True
 
+    ##Extract the user, host handle
+    host_alias_handle = pre_handle_message.splitlines()[-1]
 
     while True:
+
+
         
         try:
-            
-            msg = llm_response(messages)
+            if (pre_handle):
+                msg = pre_handle_message
+                pre_handle = False
+            else:    
+                msg = llm_response(messages)
 
             
             message = plugin_post_handler(msg)
@@ -216,7 +236,6 @@ def main():
             messages.append(message)
             
             ###Before session write attacker ip to logs
-            global first_prompt
             if first_prompt:
                 log_to_files(f"Attacker IP: {attacker_ip}\n",f"\nAttacker IP: {attacker_ip}\n")
                 first_prompt = False
