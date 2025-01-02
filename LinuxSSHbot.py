@@ -76,8 +76,9 @@ def handle_cmd(cmd):
     global main_command
     global args
     full_command = cmd
-    ##if cmd == "": ### Cannot read parts[0] and args[1:] with empty cmd
-    ##    return
+    if cmd == "": ### Cannot read parts[0] and args[1:] with empty cmd
+        main_command = ""
+        return
     parts = cmd.split()
     main_command = parts[0]
     args = parts[1:]
@@ -87,25 +88,18 @@ def handle_cmd(cmd):
 def plugin_pre_handler(cmd):
     global pre_handle
     global pre_handle_message
-
     match cmd:
         case "sudo":
             sudoPass.handle_fake_sudo_give_access()
         case "exit":
             sys.exit()
             # os.system("exit")
-
-def pre_handle_output(preHandleCommand, messages):
-    pre_output = ""
-    match preHandleCommand:
+        case "whoami":
+            pre_handle_message = host_alias_handle.split('@')[0] + "\n"+ host_alias_handle
+            pre_handle = True
         case "":
-            print(messages[len(messages) - 2]["content"])
-            message = re.search(r'\n([^\n]+?\$)',messages[len(messages) - 2]["content"])
-            pre_output = message.group(1)
-            print("pre_output")
-
-    return pre_output
-            
+            pre_handle_message = host_alias_handle
+            pre_handle = True
 
 def plugin_post_handler(message):
     #open(os.path.join(BASE_DIR, "plugin_post.txt"), 'r')
@@ -225,8 +219,6 @@ def main():
 
             
             message = plugin_post_handler(msg)
-            #if "$cd" in message["content"] or "$ cd" in message["content"]:
-            #    message["content"] = message["content"].split("\n")[1]
             
 
 
@@ -244,20 +236,15 @@ def main():
             content_input = "assistant:" + messages[len(messages) - 1]["content"] + "\n"
             log_to_files(content_input,content_input)
 
-            #print("\n", messages[len(messages) - 1]["content"], " ")
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
             #user_input = readline_input(f'{messages[len(messages) - 1]["content"]}'.strip() + " ")
             
 
-            if (user_input == ""):
-                continue
             handle_cmd(user_input)
-            # print(main_command)
 
             plugin_pre_handler(main_command)
 
             messages.append({"content": user_input, "role": 'user'}  )  
-            #messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
 
             # Log the IP address to history.txt and logs.txt
             content = "user:" + user_input + f"\t<{datetime.now()}>\n"
@@ -270,7 +257,6 @@ def main():
             break
         
 
-    # print(res)
 
 
 
