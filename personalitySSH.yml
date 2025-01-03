@@ -68,9 +68,6 @@ personality:
         "Make sure that user input is valid Linux command before you respond and that spelling is correct. Commands and their arguments are case sensitive. " +
         "It is VERY important that all commands are lower case and all arguments have correct casing and spelling" + 
         "Example: If you try to go into the directory 'Documents' with the command 'cd documents', it should not work as the argument is case sensitive." +
-        "Example for command that contains upper case (user input will be in <>): \n" +
-        "test@backend:~$<Ls>\n" +
-        "Ls: command not found" +
 
         "Also make sure that file extensions are possible on Linux and that they are not unique to Windows or some other OS. " +
 
