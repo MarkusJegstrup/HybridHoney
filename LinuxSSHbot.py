@@ -191,7 +191,7 @@ def main():
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
                         default= prompt + 
-                        f"\nBased on these examples make something of your own (with username: {username} and different hostnames) to be a starting message. Always start the communication in this way and make sure your output ends with '$'\n" + 
+                        f"\nBased on these examples make something of your own (with username: {username} and hostname: {hostname}) to be a starting message. Always start the communication in this way and make sure your output ends with '$'\n" + 
                         "Ignore date-time in <> after user input. This is not your concern.\n"
                         )
 
