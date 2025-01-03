@@ -27,6 +27,7 @@ commands = ["pwd", "whoami", "cat /etc/passwd", "uname -a", "id"]
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 username = ""
+hostname = ""
 attacker_ip = ""
 first_prompt = True
 
@@ -61,13 +62,16 @@ def get_last_content(messages, role):
 def username_att_ip(ssh_connection):
     global attacker_ip
     global username
+    global hostname
     if ssh_connection:
         # Extract the attacker's IP address (first field in SSH_CONNECTION)
         attacker_ip = ssh_connection.split()[0]
         username =  os.getlogin( )
+        hostname = random.choice(["devbox", "workstation","testbench", "dbnode", "buildhost", "vmlab", "backend", "gateway", "docker", "webnode", "webserver", "webhost"])
         # print(f"Attacker IP Address: {attacker_ip}")
     else: 
-        username = "matthew"
+        username = "dev"
+        hostname = random.choice(["devbox", "workstation","testbench", "dbnode", "buildhost", "vmlab", "backend", "gateway", "docker", "webnode", "webserver", "webhost"])
     
     
 
@@ -204,8 +208,7 @@ def main():
     history.close()
     connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
     ## Starting message
-    initial_message = llm_response(messages)
-    pre_handle_message = ""+connection_message + plugin_post_handler(initial_message)
+    pre_handle_message = ""+connection_message + f"\n{username}@{hostname}:~$ "
     pre_handle = True
 
     ##Extract the user, host handle
