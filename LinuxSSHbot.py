@@ -109,8 +109,6 @@ def plugin_post_handler(message):
     ##Basic Checks
     if message.startswith("`"):
         message = message.replace('`', '')
-    escaped_string = message.encode('unicode_escape').decode('utf-8')
-    print(escaped_string)
     if '\n\n' in message:
         message = message.replace('\n\n','\n')
 
