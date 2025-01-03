@@ -8,19 +8,28 @@ from time import sleep
 import random
 import os
 import sudoPass
-import readline
 from dotenv import load_dotenv
 import sys
+import re
 import readline
 
 ##Global Fields
 full_command = ""
 main_command =""
 args = []
+
+host_alias_handle = ""
+
+pre_handle = False
+pre_handle_message = ""
+
+commands = ["pwd", "whoami", "cat /etc/passwd", "uname -a", "id"]
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 username = ""
 attacker_ip = ""
 first_prompt = True
+
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
 history.truncate(0)
 
@@ -41,8 +50,13 @@ def readline_input(prompt):
         print("\nExiting terminal.")
         exit(0)
         
-# Get the SSH connection details from the environment
-#ssh_connection = os.getenv("SSH_CONNECTION", "")
+def get_last_content(messages, role):
+    ##Returns the last message by the given role
+    if messages[len(messages) - 1]["role"] == role:
+        return messages[len(messages) - 1]["content"]
+    else:
+        return messages[len(messages) - 2]["content"]
+
 
 def username_att_ip(ssh_connection):
     global attacker_ip
@@ -52,6 +66,8 @@ def username_att_ip(ssh_connection):
         attacker_ip = ssh_connection.split()[0]
         username =  os.getlogin( )
         # print(f"Attacker IP Address: {attacker_ip}")
+    else: 
+        username = "matthew"
     
     
 
@@ -61,6 +77,9 @@ def handle_cmd(cmd):
     global main_command
     global args
     full_command = cmd
+    if cmd == "": ### Cannot read parts[0] and args[1:] with empty cmd
+        main_command = ""
+        return
     parts = cmd.split()
     main_command = parts[0]
     args = parts[1:]
@@ -68,17 +87,36 @@ def handle_cmd(cmd):
 
 
 def plugin_pre_handler(cmd):
+    global pre_handle
+    global pre_handle_message
     match cmd:
         case "sudo":
             sudoPass.handle_fake_sudo_give_access()
         case "exit":
             sys.exit()
             # os.system("exit")
-
-            
+        case "whoami":
+            pre_handle_message = host_alias_handle.split('@')[0] + "\n"+ host_alias_handle
+            pre_handle = True
+        case "hostname":
+            pre_handle_message = host_alias_handle.split('@')[1].split(':')[0] + "\n"+ host_alias_handle
+            pre_handle = True
+        case "":
+            pre_handle_message = host_alias_handle
+            pre_handle = True
 
 def plugin_post_handler(message):
-    return message 
+    #open(os.path.join(BASE_DIR, "plugin_post.txt"), 'r')
+    ##Basic Checks
+    if message.startswith("`"):
+        message = message.replace('`', '')
+    if '\n\n' in message:
+        message = message.replace('\n\n','\n')
+
+    ##Command checks
+
+    return message
+
 
 def setup():
     # Load environment variables from the .env file
@@ -133,6 +171,11 @@ def llm_response(messages):
     return res.choices[0].message.content
 
 def main():
+    #### Variable setup
+    global pre_handle
+    global first_prompt
+    global pre_handle_message
+    global host_alias_handle
     ###Setup
     ssh_connection = os.getenv("SSH_CONNECTION", "")
     username_att_ip(ssh_connection)
@@ -145,67 +188,70 @@ def main():
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
                         default= prompt + 
                         f"\nBased on these examples make something of your own (with username: {username} and different hostnames) to be a starting message. Always start the communication in this way and make sure your output ends with '$'\n" + 
-                        "Ignore date-time in <> after user input. This is not your concern.\n")
+                        "Ignore date-time in <> after user input. This is not your concern.\n"
+                        )
 
     args = parser.parse_args()
-
-    initial_prompt = f"You are Linux OS terminal. Your personality is: {args.personality}"
+    initial_prompt = args.personality
     messages = [{"role": "system", "content": initial_prompt}]
-    if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
-        for msg in messages:
-                    history.write(msg["content"])
-    else:
-        history.write("The session continues in following lines.\n\n")
+    #if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
+    #    for msg in messages:
+    #        print("hello")
+    #       history.write(msg["content"])
+    #else:
+    #    history.write("The session continues in following lines.\n\n")
     
     history.close()
-    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n"
-    print(connection_message)
+    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
+    ## Starting message
+    initial_message = llm_response(messages)
+    pre_handle_message = ""+connection_message + plugin_post_handler(initial_message)
+    pre_handle = True
 
+    ##Extract the user, host handle
+    host_alias_handle = pre_handle_message.splitlines()[-1]
 
     while True:
+
+
         
         try:
+            if (pre_handle):
+                msg = pre_handle_message
+                pre_handle = False
+            else:    
+                msg = llm_response(messages)
 
-            msg = llm_response(messages)
-
-            if msg.startswith("`"):
-                msg = msg.replace('`', '')
-
-            message = {"content": msg, "role": 'assistant'}
-
-            #if "$cd" in message["content"] or "$ cd" in message["content"]:
-            #    message["content"] = message["content"].split("\n")[1]
+            message = plugin_post_handler(msg)
             
-            with open(os.path.join(BASE_DIR, "plugin_post.txt"), 'r') as file:
-                    content = file.read()
-                    if main_command in content:
-                        message = plugin_post_handler(message)
-                        
+
+
+
+
+            message = {"content": message, "role": 'assistant'}                        
             messages.append(message)
             
             ###Before session write attacker ip to logs
-            global first_prompt
             if first_prompt:
-                log_to_files(f"\nAttacker IP: {attacker_ip}\n",f"\nAttacker IP: {attacker_ip}\n")
+                log_to_files(f"Attacker IP: {attacker_ip}\n",f"\nAttacker IP: {attacker_ip}\n")
                 first_prompt = False
 
             #Logging content to history.txt and logs.txt
-            content_input = messages[len(messages) - 1]["content"]
+            content_input = "assistant:" + messages[len(messages) - 1]["content"] + "\n"
             log_to_files(content_input,content_input)
 
-           
-            #print("\n", messages[len(messages) - 1]["content"], " ")
-            user_input = readline_input(f'\n{messages[len(messages) - 1]["content"]}'.strip() + " ")
-            if user_input == "":
-                continue
+            user_input = readline_input(f'{message["content"]}'.strip() + " ")
+            #user_input = readline_input(f'{messages[len(messages) - 1]["content"]}'.strip() + " ")
+            
+
             handle_cmd(user_input)
-            # print(main_command)
+
             plugin_pre_handler(main_command)
-                
-            messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
+
+            messages.append({"content": user_input, "role": 'user'}  )  
 
             # Log the IP address to history.txt and logs.txt
-            content = " " + user_input + f"\t<{datetime.now()}>\n"
+            content = "user:" + user_input + f"\t<{datetime.now()}>\n"
             log_to_files(content, content)
 
 
@@ -215,7 +261,6 @@ def main():
             break
         
 
-    # print(res)
 
 
 
