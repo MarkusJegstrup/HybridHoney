@@ -97,6 +97,9 @@ def plugin_pre_handler(cmd):
         case "whoami":
             pre_handle_message = host_alias_handle.split('@')[0] + "\n"+ host_alias_handle
             pre_handle = True
+        case "hostname":
+            pre_handle_message = host_alias_handle.split('@')[1].split(':')[0] + "\n"+ host_alias_handle
+            pre_handle = True
         case "":
             pre_handle_message = host_alias_handle
             pre_handle = True
@@ -106,7 +109,10 @@ def plugin_post_handler(message):
     ##Basic Checks
     if message.startswith("`"):
         message = message.replace('`', '')
-
+    escaped_string = message.encode('unicode_escape').decode('utf-8')
+    print(escaped_string)
+    if '\n\n' in message:
+        message = message.replace('\n\n','\n')
 
     ##Command checks
 
@@ -217,7 +223,6 @@ def main():
             else:    
                 msg = llm_response(messages)
 
-            
             message = plugin_post_handler(msg)
             
 
