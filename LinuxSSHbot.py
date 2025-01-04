@@ -21,7 +21,8 @@ args = []
 
 host_alias_handle = ""
 
-pre_handle = False
+is_sudo = False
+is_pre_handle = False
 pre_handle_message = ""
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -83,13 +84,13 @@ def handle_cmd(cmd):
 
 
 def plugin_pre_handler(cmd):
-    global pre_handle
+    global is_pre_handle
     global pre_handle_message
     global messages
     match cmd:
         case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
-            pre_handle = True
+            is_pre_handle = True
             time.sleep(0.2)
         case "sudo":
             sudoPass.handle_fake_sudo_give_access()
@@ -98,33 +99,33 @@ def plugin_pre_handler(cmd):
             # os.system("exit")
         case "whoami":
             pre_handle_message = host_alias_handle.split('@')[0] + "\n"+ host_alias_handle
-            pre_handle = True
+            is_pre_handle = True
             time.sleep(0.2)
         case "hostname":
             pre_handle_message = host_alias_handle.split('@')[1].split(':')[0] + "\n"+ host_alias_handle
-            pre_handle = True
+            is_pre_handle = True
             time.sleep(0.2)
         case "date":
             now_utc = datetime.now(timezone.utc)
             formatted_time = now_utc.strftime("%a %b %d %H:%M:%S UTC %Y")
             pre_handle_message = ""+ formatted_time + "\n" + host_alias_handle
-            pre_handle = True
+            is_pre_handle = True
             time.sleep(0.2)
         case "ping":
             if len(args)==1:
                 os.system(f"ping {args[0]}")
                 pre_handle_message = host_alias_handle
-                pre_handle = True
+                is_pre_handle = True
                 log_to_files(f"Ping {args[0]} success")
                 message = {"content": f"Ping {args[0]} success", "role": 'assistant'}                        
                 messages.append(message)
         case "":
             pre_handle_message = host_alias_handle
-            pre_handle = True
+            is_pre_handle = True
             time.sleep(0.1)
         case "apt":
             if args[0]=="update":
-                pre_handle = True
+                is_pre_handle = True
                 done=" Done"
                 h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
                 h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
@@ -148,7 +149,7 @@ def plugin_pre_handler(cmd):
                 concat=h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n" + s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + e1
                 messages.append(concat)   
             if args[0]=="upgrade":
-                pre_handle = True
+                is_pre_handle = True
 
 def plugin_post_handler(message):
     ##Basic Checks
@@ -210,7 +211,7 @@ def llm_response(messages):
 
 def main():
     #### Variable setup
-    global pre_handle
+    global is_pre_handle
     global pre_handle_message
     global host_alias_handle
     global messages
@@ -239,7 +240,7 @@ def main():
     connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
     ## Starting message
     pre_handle_message = ""+connection_message + f"\n{username}@{hostname}:~$ "
-    pre_handle = True
+    is_pre_handle = True
 
     ##Extract the user, host handle
     host_alias_handle = pre_handle_message.splitlines()[-1]
@@ -249,9 +250,9 @@ def main():
 
         
         try:
-            if (pre_handle):
+            if (is_pre_handle):
                 msg = pre_handle_message
-                pre_handle = False
+                is_pre_handle = False
             else:    
                 msg = llm_response(messages)
             
