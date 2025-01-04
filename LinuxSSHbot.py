@@ -29,17 +29,11 @@ username = ""
 hostname = ""
 attacker_ip = ""
 
-history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-history.truncate(0)
 
-
-def log_to_files(history_content, logs_content):
-    history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+def log_to_files(logs_content):
     logs = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
-    history.write(history_content)
     logs.write(logs_content)
     logs.close()
-    history.close()
 
 def readline_input(prompt):
     try:
@@ -118,9 +112,12 @@ def plugin_pre_handler(cmd):
             time.sleep(0.2)
         case "ping":
             if len(args)==1:
-                ping = os.system(f"ping {args[0]}")
+                os.system(f"ping {args[0]}")
                 pre_handle_message = host_alias_handle
                 pre_handle = True
+                log_to_files(f"Ping {args[0]} success")
+                message = {"content": f"Ping {args[0]} success", "role": 'assistant'}                        
+                messages.append(message)
         case "":
             pre_handle_message = host_alias_handle
             pre_handle = True
@@ -192,19 +189,13 @@ def last_login_random_ip():
 
 def prompt_setup():
     prompt = ""
-    if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
-        with open(os.path.join(BASE_DIR, "personalitySSH.yml"), 'r', encoding="utf-8") as file:
-            identity = yaml.safe_load(file)
+    with open(os.path.join(BASE_DIR, "personalitySSH.yml"), 'r', encoding="utf-8") as file:
+        identity = yaml.safe_load(file)
 
-        identity = identity['personality']
+    personality = identity['personality']
 
-        prompt = identity['prompt']
+    prompt = personality['prompt']
 
-    else:
-        history.write("\nHere the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. " +
-                                "Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.\n")
-        history.seek(0)
-        prompt = history.read()
     return prompt
 
 def llm_response(messages):
@@ -220,7 +211,6 @@ def llm_response(messages):
 def main():
     #### Variable setup
     global pre_handle
-    global first_prompt
     global pre_handle_message
     global host_alias_handle
     global messages
@@ -242,15 +232,9 @@ def main():
     args = parser.parse_args()
     initial_prompt = args.personality
     messages = [{"role": "system", "content": initial_prompt}]
-    #if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
-    #    for msg in messages:
-    #        print("hello")
-    #       history.write(msg["content"])
-    #else:
-    #    history.write("The session continues in following lines.\n\n")
 
     ###Before session write attacker ip to logs
-    log_to_files(f"Attacker IP: {attacker_ip}\n",f"\nAttacker IP: {attacker_ip}\n")
+    log_to_files(f"\nAttacker IP: {attacker_ip}\n")
 
     connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
     ## Starting message
@@ -279,9 +263,9 @@ def main():
             messages.append(message)
             
 
-            #Logging content to history.txt and logs.txt
+            #Logging content to and logs.txt
             content_input = "assistant:" + messages[len(messages) - 1]["content"] + "\n"
-            log_to_files(content_input,content_input)
+            log_to_files(content_input)
 
             # This i where the message is outputted to the user as well as waiting for the user response.
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
@@ -294,9 +278,9 @@ def main():
 
             messages.append({"content": user_input, "role": 'user'}  )  
 
-            # Log the IP address to history.txt and logs.txt
+            # Log the IP address to logs.txt
             content = "user:" + user_input + f"\t<{datetime.now()}>\n"
-            log_to_files(content, content)
+            log_to_files(content)
 
 
         except KeyboardInterrupt:
