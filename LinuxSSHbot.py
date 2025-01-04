@@ -23,8 +23,6 @@ host_alias_handle = ""
 pre_handle = False
 pre_handle_message = ""
 
-commands = ["pwd", "whoami", "cat /etc/passwd", "uname -a", "id"]
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 username = ""
 attacker_ip = ""
