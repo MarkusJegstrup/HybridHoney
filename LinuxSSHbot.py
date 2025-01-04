@@ -124,17 +124,17 @@ def plugin_pre_handler(cmd):
             is_pre_handle = True
             time.sleep(0.1)
         case "apt":
+            s1="Reading package lists..."
+            s2="Building dependency tree..."
+            s3="Reading state information..."
+            done=" Done"
             if args[0]=="update":
                 is_pre_handle = True
-                done=" Done"
                 h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
                 h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
                 h3="Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease"
                 h4="Hit:4 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease"
-                s1="Reading package lists..."
-                s2="Building dependency tree..."
-                s3="Reading state information..."
-                e1="All packages are up to date."
+                end="All packages are up to date."
                 print(h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n")
                 print(s1)
                 time.sleep(0.5)
@@ -145,11 +145,31 @@ def plugin_pre_handler(cmd):
                 print(s3)
                 time.sleep(0.4)
                 print(done)
-                print(e1)
-                concat=h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n" + s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + e1
+                print(end)
+                concat=h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n" + s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + end
                 messages.append(concat)   
-            if args[0]=="upgrade":
+                
+            elif args[0]=="upgrade":
                 is_pre_handle = True
+                s4="Calculating upgrade..."
+                end="0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded."
+                print(s1)
+                time.sleep(0.5)
+                print(done)
+                print("\n")
+                print(s2)
+                time.sleep(0.7)
+                print(done)
+                print("\n")
+                print(s3)
+                time.sleep(0.4)
+                print(done)
+                print("\n")
+                print(s4)
+                time.sleep(0.9)
+                print(end)
+                concat=s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + s4 + done + "\n" + end
+                messages.append(concat)  
 
 def plugin_post_handler(message):
     ##Basic Checks
