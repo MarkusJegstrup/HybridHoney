@@ -15,7 +15,8 @@ import readline
 
 ##Global Fields
 full_command = ""
-main_command =""
+main_command = ""
+messages = ""
 args = []
 
 host_alias_handle = ""
@@ -90,6 +91,7 @@ def handle_cmd(cmd):
 def plugin_pre_handler(cmd):
     global pre_handle
     global pre_handle_message
+    global messages
     match cmd:
         case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
@@ -123,6 +125,33 @@ def plugin_pre_handler(cmd):
             pre_handle_message = host_alias_handle
             pre_handle = True
             time.sleep(0.1)
+        case "apt":
+            if args[0]=="update":
+                pre_handle = True
+                done=" Done"
+                h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
+                h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
+                h3="Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease"
+                h4="Hit:4 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease"
+                s1="Reading package lists..."
+                s2="Building dependency tree..."
+                s3="Reading state information..."
+                e1="All packages are up to date."
+                print(h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n")
+                print(s1)
+                time.sleep(0.5)
+                print(done)
+                print(s2)
+                time.sleep(0.7)
+                print(done)
+                print(s3)
+                time.sleep(0.4)
+                print(done)
+                print(e1)
+                concat=h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n" + s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + e1
+                messages.append(concat)   
+            if args[0]=="upgrade":
+                pre_handle = True
 
 def plugin_post_handler(message):
     ##Basic Checks
@@ -194,6 +223,7 @@ def main():
     global first_prompt
     global pre_handle_message
     global host_alias_handle
+    global messages
     ###Setup
     ssh_connection = os.getenv("SSH_CONNECTION", "")
     username_att_ip(ssh_connection)
