@@ -114,6 +114,11 @@ def plugin_pre_handler(cmd):
             pre_handle_message = ""+ formatted_time + "\n" + host_alias_handle
             pre_handle = True
             time.sleep(0.2)
+        case "ping":
+            if len(args)==1:
+                ping = os.system(f"ping {args[0]}")
+                pre_handle_message = host_alias_handle
+                pre_handle = True
         case "":
             pre_handle_message = host_alias_handle
             pre_handle = True
