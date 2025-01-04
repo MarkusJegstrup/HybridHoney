@@ -2,9 +2,9 @@
 import openai
 from dotenv import dotenv_values
 import argparse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,timezone
 import yaml
-from time import sleep
+import time
 import random
 import os
 import sudoPass
@@ -23,13 +23,10 @@ host_alias_handle = ""
 pre_handle = False
 pre_handle_message = ""
 
-commands = ["pwd", "whoami", "cat /etc/passwd", "uname -a", "id"]
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 username = ""
 hostname = ""
 attacker_ip = ""
-first_prompt = True
 
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
 history.truncate(0)
@@ -94,6 +91,10 @@ def plugin_pre_handler(cmd):
     global pre_handle
     global pre_handle_message
     match cmd:
+        case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
+            pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
+            pre_handle = True
+            time.sleep(0.2)
         case "sudo":
             sudoPass.handle_fake_sudo_give_access()
         case "exit":
@@ -102,15 +103,23 @@ def plugin_pre_handler(cmd):
         case "whoami":
             pre_handle_message = host_alias_handle.split('@')[0] + "\n"+ host_alias_handle
             pre_handle = True
+            time.sleep(0.2)
         case "hostname":
             pre_handle_message = host_alias_handle.split('@')[1].split(':')[0] + "\n"+ host_alias_handle
             pre_handle = True
+            time.sleep(0.2)
+        case "date":
+            now_utc = datetime.now(timezone.utc)
+            formatted_time = now_utc.strftime("%a %b %d %H:%M:%S UTC %Y")
+            pre_handle_message = ""+ formatted_time + "\n" + host_alias_handle
+            pre_handle = True
+            time.sleep(0.2)
         case "":
             pre_handle_message = host_alias_handle
             pre_handle = True
+            time.sleep(0.1)
 
 def plugin_post_handler(message):
-    #open(os.path.join(BASE_DIR, "plugin_post.txt"), 'r')
     ##Basic Checks
     if message.startswith("`"):
         message = message.replace('`', '')
@@ -204,8 +213,10 @@ def main():
     #       history.write(msg["content"])
     #else:
     #    history.write("The session continues in following lines.\n\n")
-    
-    history.close()
+
+    ###Before session write attacker ip to logs
+    log_to_files(f"Attacker IP: {attacker_ip}\n",f"\nAttacker IP: {attacker_ip}\n")
+
     connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
     ## Starting message
     pre_handle_message = ""+connection_message + f"\n{username}@{hostname}:~$ "
@@ -224,31 +235,26 @@ def main():
                 pre_handle = False
             else:    
                 msg = llm_response(messages)
-
+            
+            #Check for any mistakes in the generated response
             message = plugin_post_handler(msg)
             
-
-
-
 
             message = {"content": message, "role": 'assistant'}                        
             messages.append(message)
             
-            ###Before session write attacker ip to logs
-            if first_prompt:
-                log_to_files(f"Attacker IP: {attacker_ip}\n",f"\nAttacker IP: {attacker_ip}\n")
-                first_prompt = False
 
             #Logging content to history.txt and logs.txt
             content_input = "assistant:" + messages[len(messages) - 1]["content"] + "\n"
             log_to_files(content_input,content_input)
 
+            # This i where the message is outputted to the user as well as waiting for the user response.
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
-            #user_input = readline_input(f'{messages[len(messages) - 1]["content"]}'.strip() + " ")
-            
 
+            #Split the user commands into main_command, args
             handle_cmd(user_input)
 
+            #Prehandle any specific main command, that we want to handle ourselves
             plugin_pre_handler(main_command)
 
             messages.append({"content": user_input, "role": 'user'}  )  
