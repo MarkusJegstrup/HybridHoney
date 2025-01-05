@@ -87,6 +87,7 @@ def plugin_pre_handler(cmd):
     global is_pre_handle
     global pre_handle_message
     global messages
+    global is_sudo
     match cmd:
         case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
@@ -101,14 +102,15 @@ def plugin_pre_handler(cmd):
                 message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND", "role": 'assistant'}                        
                 messages.append(message)
                 log_to_files("system:Sudo privilege given to user")
+                plugin_pre_handler(full_command[len("sudo "):])
             else: 
                 pre_handle_message = "\n"+ host_alias_handle
                 is_pre_handle = True
                 log_to_files("system:Sudo privilege not given to user\n")
 
         case "sudo" if is_sudo == True:
-            plugin_pre_handler()
-            
+            ##Remove sudo prefix and then check if there is any matches
+            plugin_pre_handler(full_command[len("sudo "):])
         case "exit":
             sys.exit()
             # os.system("exit")
@@ -143,7 +145,6 @@ def plugin_pre_handler(cmd):
             s3="Reading state information..."
             done=" Done"
             if args[0]=="update":
-                is_pre_handle = True
                 h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
                 h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
                 h3="Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease"
@@ -162,9 +163,10 @@ def plugin_pre_handler(cmd):
                 print(end)
                 concat=h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n" + s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + end
                 messages.append(concat)   
+                is_pre_handle = True
+                pre_handle_message = "\n" + host_alias_handle
                 
             elif args[0]=="upgrade":
-                is_pre_handle = True
                 s4="Calculating upgrade..."
                 end="0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded."
                 print(s1)
@@ -183,8 +185,10 @@ def plugin_pre_handler(cmd):
                 time.sleep(0.9)
                 print(end)
                 concat=s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + s4 + done + "\n" + end
-                messages.append(concat)  
-
+                messages.append(concat)     
+                is_pre_handle = True
+                pre_handle_message = "\n" + host_alias_handle
+                
 def plugin_post_handler(message):
     if message.startswith("`"):
         message = message.replace('`', '')
