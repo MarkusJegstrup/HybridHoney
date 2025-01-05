@@ -13,7 +13,7 @@ def fake_wget(args):
         filename = url.split("/")[-1] or "index.html"
         download_path = os.path.join(BASE_DIR, "downloads", filename)
         print("Filename: " + filename + "\n")
-        
+
         # Log the wget command and URL
         logs = open(os.path.join(BASE_DIR, "dlog.txt"), "a+", encoding="utf-8")
         logs.write(f"wget command: {' '.join(args)}\n")
@@ -28,10 +28,6 @@ def fake_wget(args):
         with open(download_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
-
-        # Ensure the file is owned by simon
-        subprocess.run(["chown", "simon:simon", download_path], check=True)
-
-        print(f"'{filename}' saved [{len(response.content)}/{len(response.content)}]")
+                
     except Exception as e:
         print(f"wget: {str(e)}")
