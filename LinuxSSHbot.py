@@ -8,6 +8,7 @@ import time
 import random
 import os
 import sudoPass
+import wget
 from dotenv import load_dotenv
 import sys
 import re
