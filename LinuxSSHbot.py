@@ -160,7 +160,7 @@ def plugin_pre_handler(cmd):
                 print(end)
                 concat=h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n" + s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + end
                 messages.append(concat)   
-                
+    
             elif args[0]=="upgrade":
                 is_pre_handle = True
                 s4="Calculating upgrade..."
