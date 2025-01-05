@@ -88,24 +88,30 @@ def plugin_pre_handler(cmd):
     global is_pre_handle
     global pre_handle_message
     global messages
+    global is_sudo
     match cmd:
         case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
             is_pre_handle = True
             time.sleep(0.2)
-        case "sudo":
+        case "sudo" if is_sudo == False:
             ### First go through sudo to gain privilege
-            if is_sudo == False:
-                is_sudo = sudoPass.handle_fake_sudo_give_access()
+            is_sudo = sudoPass.handle_fake_sudo_give_access()
             
             ### After the first privilege access, we then check if the user got sudo privilege
             if is_sudo == True:
-                message = {"content": "USER HAS SUDO PRIVILEGE, PROCEED WITH THE USER COMMAND", "role": 'assistant'}                        
+                message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND", "role": 'assistant'}                        
                 messages.append(message)
+                log_to_files("system:Sudo privilege given to user")
+                plugin_pre_handler(full_command[len("sudo "):])
             else: 
                 pre_handle_message = "\n"+ host_alias_handle
                 is_pre_handle = True
-            
+                log_to_files("system:Sudo privilege not given to user\n")
+
+        case "sudo" if is_sudo == True:
+            ##Remove sudo prefix and then check if there is any matches
+            plugin_pre_handler(full_command[len("sudo "):])
         case "exit":
             sys.exit()
             # os.system("exit")
@@ -124,13 +130,12 @@ def plugin_pre_handler(cmd):
             is_pre_handle = True
             time.sleep(0.2)
         case "ping":
-            if len(args)==1:
-                os.system(f"ping {args[0]}")
-                pre_handle_message = host_alias_handle
-                is_pre_handle = True
-                log_to_files(f"Ping {args[0]} success")
-                message = {"content": f"Ping {args[0]} success", "role": 'assistant'}                        
-                messages.append(message)
+            os.system(f"{full_command}")
+            pre_handle_message = host_alias_handle
+            is_pre_handle = True
+            log_to_files(f"system: {full_command}\n")
+            message = {"content": "Ping command executed", "role": 'assistant'}                        
+            messages.append(message)
         case "":
             pre_handle_message = host_alias_handle
             is_pre_handle = True
@@ -141,7 +146,6 @@ def plugin_pre_handler(cmd):
             s3="Reading state information..."
             done=" Done"
             if args[0]=="update":
-                is_pre_handle = True
                 h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
                 h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
                 h3="Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease"
@@ -160,9 +164,10 @@ def plugin_pre_handler(cmd):
                 print(end)
                 concat=h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n" + s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + end
                 messages.append(concat)   
-    
-            elif args[0]=="upgrade":
                 is_pre_handle = True
+                pre_handle_message = "\n" + host_alias_handle
+                
+            elif args[0]=="upgrade":
                 s4="Calculating upgrade..."
                 end="0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded."
                 print(s1)
@@ -181,19 +186,15 @@ def plugin_pre_handler(cmd):
                 time.sleep(0.9)
                 print(end)
                 concat=s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + s4 + done + "\n" + end
-                messages.append(concat)  
-        case "wget" | "curl":
-            wget.fake_wget(args)
-
-
+                messages.append(concat)     
+                is_pre_handle = True
+                pre_handle_message = "\n" + host_alias_handle
+                
 def plugin_post_handler(message):
-    ##Basic Checks
     if message.startswith("`"):
         message = message.replace('`', '')
     if '\n\n' in message:
         message = message.replace('\n\n','\n')
-
-    ##Command checks
 
     return message
 
@@ -299,11 +300,11 @@ def main():
             messages.append(message)
             
 
-            #Logging content to and logs.txt
+            #Logging content to logs.txt
             content_input = "assistant:" + messages[len(messages) - 1]["content"] + "\n"
             log_to_files(content_input)
 
-            # This i where the message is outputted to the user as well as waiting for the user response.
+            # This is where the message is outputted to the user as well as waiting for the user response.
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
 
             #Split the user commands into main_command, args
