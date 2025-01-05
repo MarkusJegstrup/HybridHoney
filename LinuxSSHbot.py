@@ -8,6 +8,7 @@ import time
 import random
 import os
 import sudoPass
+import wget
 from dotenv import load_dotenv
 import sys
 import re
@@ -181,6 +182,9 @@ def plugin_pre_handler(cmd):
                 print(end)
                 concat=s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + s4 + done + "\n" + end
                 messages.append(concat)  
+        case "wget":
+            url=args[0]
+            wget(url)
 
 def plugin_post_handler(message):
     ##Basic Checks
