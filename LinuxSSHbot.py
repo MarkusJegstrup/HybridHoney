@@ -93,7 +93,18 @@ def plugin_pre_handler(cmd):
             is_pre_handle = True
             time.sleep(0.2)
         case "sudo":
-            sudoPass.handle_fake_sudo_give_access()
+            ### First go through sudo to gain privilege
+            if is_sudo == False:
+                is_sudo = sudoPass.handle_fake_sudo_give_access()
+            
+            ### After the first privilege access, we then check if the user got sudo privilege
+            if is_sudo == True:
+                message = {"content": "USER HAS SUDO PRIVILEGE, PROCEED WITH THE USER COMMAND", "role": 'assistant'}                        
+                messages.append(message)
+            else: 
+                pre_handle_message = "\n"+ host_alias_handle
+                is_pre_handle = True
+            
         case "exit":
             sys.exit()
             # os.system("exit")
