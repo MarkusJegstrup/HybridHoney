@@ -15,7 +15,7 @@ def fake_wget(args):
         print("Filename: " + filename + "\n")
 
         # Log the wget command and URL
-        logs = open(os.path.join(BASE_DIR, "dlog.txt"), "a+", encoding="utf-8")
+        logs = open(os.path.join(BASE_DIR, "downloads/dlog.txt"), "a+", encoding="utf-8")
         logs.write(f"wget command: {' '.join(args)}\n")
         logs.write(f"Attempted URL: {url}\n")
         logs.close()    
@@ -28,6 +28,6 @@ def fake_wget(args):
         with open(download_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
-                
+
     except Exception as e:
         print(f"wget: {str(e)}")
