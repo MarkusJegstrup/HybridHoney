@@ -16,7 +16,6 @@ def fake_wget(args):
 
         # Log the wget command and URL
         logs = open(os.path.join(BASE_DIR, "downloads/dlog.txt"), "a+", encoding="utf-8")
-        logs.write(f"wget command: {' '.join(args)}\n")
         logs.write(f"Attempted URL: {url}\n")
         logs.close()    
 
