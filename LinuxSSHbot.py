@@ -92,18 +92,22 @@ def plugin_pre_handler(cmd):
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
             is_pre_handle = True
             time.sleep(0.2)
-        case "sudo":
+        case "sudo" if is_sudo == False:
             ### First go through sudo to gain privilege
-            if is_sudo == False:
-                is_sudo = sudoPass.handle_fake_sudo_give_access()
+            is_sudo = sudoPass.handle_fake_sudo_give_access()
             
             ### After the first privilege access, we then check if the user got sudo privilege
             if is_sudo == True:
-                message = {"content": "USER HAS SUDO PRIVILEGE, PROCEED WITH THE USER COMMAND", "role": 'assistant'}                        
+                message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND", "role": 'assistant'}                        
                 messages.append(message)
+                log_to_files("system:Sudo privilege given to user")
             else: 
                 pre_handle_message = "\n"+ host_alias_handle
                 is_pre_handle = True
+                log_to_files("system:Sudo privilege not given to user\n")
+
+        case "sudo" if is_sudo == True:
+            plugin_pre_handler()
             
         case "exit":
             sys.exit()
@@ -123,13 +127,12 @@ def plugin_pre_handler(cmd):
             is_pre_handle = True
             time.sleep(0.2)
         case "ping":
-            if len(args)==1:
-                os.system(f"ping {args[0]}")
-                pre_handle_message = host_alias_handle
-                is_pre_handle = True
-                log_to_files(f"Ping {args[0]} success")
-                message = {"content": f"Ping {args[0]} success", "role": 'assistant'}                        
-                messages.append(message)
+            os.system(f"{full_command}")
+            pre_handle_message = host_alias_handle
+            is_pre_handle = True
+            log_to_files(f"system: {full_command}\n")
+            message = {"content": "Ping command executed", "role": 'assistant'}                        
+            messages.append(message)
         case "":
             pre_handle_message = host_alias_handle
             is_pre_handle = True
@@ -183,13 +186,10 @@ def plugin_pre_handler(cmd):
                 messages.append(concat)  
 
 def plugin_post_handler(message):
-    ##Basic Checks
     if message.startswith("`"):
         message = message.replace('`', '')
     if '\n\n' in message:
         message = message.replace('\n\n','\n')
-
-    ##Command checks
 
     return message
 
@@ -295,11 +295,11 @@ def main():
             messages.append(message)
             
 
-            #Logging content to and logs.txt
+            #Logging content to logs.txt
             content_input = "assistant:" + messages[len(messages) - 1]["content"] + "\n"
             log_to_files(content_input)
 
-            # This i where the message is outputted to the user as well as waiting for the user response.
+            # This is where the message is outputted to the user as well as waiting for the user response.
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
 
             #Split the user commands into main_command, args
