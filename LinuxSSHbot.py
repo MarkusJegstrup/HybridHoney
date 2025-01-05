@@ -182,9 +182,9 @@ def plugin_pre_handler(cmd):
                 print(end)
                 concat=s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + s4 + done + "\n" + end
                 messages.append(concat)  
-        case "wget":
-            url=args[0]
-            wget.fake_wget(url)
+        case "wget" | "curl":
+            wget.fake_wget(args)
+
 
 def plugin_post_handler(message):
     ##Basic Checks
