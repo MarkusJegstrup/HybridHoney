@@ -184,7 +184,7 @@ def plugin_pre_handler(cmd):
                 messages.append(concat)  
         case "wget":
             url=args[0]
-            wget(url)
+            wget.fake_wget(url)
 
 def plugin_post_handler(message):
     ##Basic Checks
