@@ -7,11 +7,13 @@ def fake_wget(args):
     try:
         # Parse the URL from the args
         url = args
+        print("Url: " + url + "\n")
 
         # Extract the filename from the URL
         filename = url.split("/")[-1] or "index.html"
         download_path = os.path.join(BASE_DIR, "downloads", filename)
-
+        print("Filename: " + filename + "\n")
+        
         # Log the wget command and URL
         logs = open(os.path.join(BASE_DIR, "dlog.txt"), "a+", encoding="utf-8")
         logs.write(f"wget command: {' '.join(args)}\n")
