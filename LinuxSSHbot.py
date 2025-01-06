@@ -103,7 +103,7 @@ def plugin_pre_handler(cmd):
                 message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND", "role": 'assistant'}                        
                 messages.append(message)
                 log_to_files("system:Sudo privilege given to user")
-                plugin_pre_handler(full_command[len("sudo "):])
+                plugin_pre_handler(args[0])
             else: 
                 pre_handle_message = "\n"+ host_alias_handle
                 is_pre_handle = True
@@ -112,7 +112,7 @@ def plugin_pre_handler(cmd):
         case "sudo" if is_sudo == True:
             print("SUDO IS TRUE")
             ##Remove sudo prefix and then check if there is any matches
-            plugin_pre_handler(full_command[len("sudo "):])
+            plugin_pre_handler(args[0])
         case "exit":
             sys.exit()
             # os.system("exit")
@@ -147,7 +147,7 @@ def plugin_pre_handler(cmd):
             s3="Reading state information..."
             done=" Done"
             print("APT confirmed")
-            if args[0]=="update":
+            if args[1]=="update":
                 print("UPDATE confirmed")
                 h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
                 h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
@@ -170,7 +170,7 @@ def plugin_pre_handler(cmd):
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
                 
-            elif args[0]=="upgrade":
+            elif args[1]=="upgrade":
                 s4="Calculating upgrade..."
                 end="0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded."
                 print(s1)
