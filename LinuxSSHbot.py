@@ -162,7 +162,8 @@ def plugin_pre_handler(cmd):
                 print(done)
                 print(end)
                 concat=h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n" + s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + end
-                messages.append(concat)   
+                message = {"content": concat, "role": 'assistant'} 
+                messages.append(message)   
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
                 
@@ -182,7 +183,8 @@ def plugin_pre_handler(cmd):
                 time.sleep(0.9)
                 print(end)
                 concat=s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + s4 + done + "\n" + end
-                messages.append(concat)     
+                message = {"content": concat, "role": 'assistant'} 
+                messages.append(message)     
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
         case "wget" | "curl":
