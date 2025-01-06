@@ -97,9 +97,10 @@ def plugin_pre_handler(cmd):
         case "sudo" if is_sudo == False:
             ### First go through sudo to gain privilege
             is_sudo = sudoPass.handle_fake_sudo_give_access()
-            
+            print(is_sudo)
             ### After the first privilege access, we then check if the user got sudo privilege
             if is_sudo == True:
+                print("sudo")
                 message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND", "role": 'assistant'}                        
                 messages.append(message)
                 log_to_files("system:Sudo privilege given to user")
