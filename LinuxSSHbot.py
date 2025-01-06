@@ -89,6 +89,7 @@ def plugin_pre_handler(cmd):
     global pre_handle_message
     global messages
     global is_sudo
+    print(cmd)
     match cmd:
         case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
@@ -97,21 +98,21 @@ def plugin_pre_handler(cmd):
         case "sudo" if is_sudo == False:
             ### First go through sudo to gain privilege
             is_sudo = sudoPass.handle_fake_sudo_give_access()
-            
             ### After the first privilege access, we then check if the user got sudo privilege
             if is_sudo == True:
                 message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND", "role": 'assistant'}                        
                 messages.append(message)
                 log_to_files("system:Sudo privilege given to user")
-                plugin_pre_handler(full_command[len("sudo "):])
+                plugin_pre_handler(args[0])
             else: 
                 pre_handle_message = "\n"+ host_alias_handle
                 is_pre_handle = True
                 log_to_files("system:Sudo privilege not given to user\n")
 
         case "sudo" if is_sudo == True:
+            print("SUDO IS TRUE")
             ##Remove sudo prefix and then check if there is any matches
-            plugin_pre_handler(full_command[len("sudo "):])
+            plugin_pre_handler(args[0])
         case "exit":
             sys.exit()
             # os.system("exit")
@@ -145,7 +146,9 @@ def plugin_pre_handler(cmd):
             s2="Building dependency tree..."
             s3="Reading state information..."
             done=" Done"
-            if args[0]=="update":
+            print("APT confirmed")
+            if args[1]=="update":
+                print("UPDATE confirmed")
                 h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
                 h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
                 h3="Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease"
@@ -167,7 +170,7 @@ def plugin_pre_handler(cmd):
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
                 
-            elif args[0]=="upgrade":
+            elif args[1]=="upgrade":
                 s4="Calculating upgrade..."
                 end="0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded."
                 print(s1)
@@ -189,6 +192,8 @@ def plugin_pre_handler(cmd):
                 messages.append(concat)     
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
+        case "wget" | "curl":
+            wget.fake_wget(args)        
                 
 def plugin_post_handler(message):
     if message.startswith("`"):
