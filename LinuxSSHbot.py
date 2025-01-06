@@ -89,7 +89,6 @@ def plugin_pre_handler(cmd):
     global pre_handle_message
     global messages
     global is_sudo
-    print(cmd)
     match cmd:
         case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
@@ -110,7 +109,6 @@ def plugin_pre_handler(cmd):
                 log_to_files("system:Sudo privilege not given to user\n")
 
         case "sudo" if is_sudo == True:
-            print("SUDO IS TRUE")
             ##Remove sudo prefix and then check if there is any matches
             plugin_pre_handler(args[0])
         case "exit":
@@ -146,15 +144,13 @@ def plugin_pre_handler(cmd):
             s2="Building dependency tree..."
             s3="Reading state information..."
             done=" Done"
-            print("APT confirmed")
             if args[1]=="update":
-                print("UPDATE confirmed")
                 h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
                 h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
                 h3="Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease"
                 h4="Hit:4 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease"
                 end="All packages are up to date."
-                print(h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n")
+                print(h1 + "\n" + h2 + "\n" + h3 + "\n" + h4)
                 print(s1, end="")
                 time.sleep(0.5)
                 print(done)
