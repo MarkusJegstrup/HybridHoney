@@ -139,7 +139,7 @@ def plugin_pre_handler(cmd):
             pre_handle_message = host_alias_handle
             is_pre_handle = True
             time.sleep(0.1)
-        case "apt":
+        case "apt" if "sudo" in main_command:
             s1="Reading package lists..."
             s2="Building dependency tree..."
             s3="Reading state information..."
