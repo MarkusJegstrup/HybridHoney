@@ -99,7 +99,7 @@ def plugin_pre_handler(cmd):
             is_sudo = sudoPass.handle_fake_sudo_give_access()
             ### After the first privilege access, we then check if the user got sudo privilege
             if is_sudo == True:
-                message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND", "role": 'assistant'}                        
+                message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND AS THE USER HAVE PRIVILEGE", "role": 'assistant'}                        
                 messages.append(message)
                 log_to_files("system:Sudo privilege given to user")
                 plugin_pre_handler(args[0])
@@ -144,7 +144,7 @@ def plugin_pre_handler(cmd):
             s2="Building dependency tree..."
             s3="Reading state information..."
             done=" Done"
-            if args[1]=="update":
+            if "update" in args:
                 h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
                 h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
                 h3="Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease"
@@ -166,7 +166,7 @@ def plugin_pre_handler(cmd):
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
                 
-            elif args[1]=="upgrade":
+            elif "upgrade" in args:
                 s4="Calculating upgrade..."
                 end="0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded."
                 print(s1, end="")
