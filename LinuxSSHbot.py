@@ -253,6 +253,7 @@ def main():
     global pre_handle_message
     global host_alias_handle
     global messages
+    print(b"\x00")
     ###Setup
     ssh_connection = os.getenv("SSH_CONNECTION", "")
     username_att_ip(ssh_connection)
