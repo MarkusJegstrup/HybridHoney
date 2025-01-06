@@ -171,7 +171,7 @@ def plugin_pre_handler(cmd):
                 end="0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded."
                 print(s1, end="")
                 time.sleep(0.5)
-                print(done, end="")
+                print(done)
                 print(s2, end="")
                 time.sleep(0.7)
                 print(done)
