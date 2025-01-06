@@ -90,8 +90,9 @@ def plugin_pre_handler(cmd):
     global messages
     global is_sudo
     if len(full_command) > 400:
-                print("command length execeeded")
-                return
+            pre_handle_message = "Permission denied\n" + host_alias_handle
+            is_pre_handle = True
+            return
     match cmd:
         case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
