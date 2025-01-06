@@ -8,6 +8,7 @@ import time
 import random
 import os
 import sudoPass
+import wget
 from dotenv import load_dotenv
 import sys
 import re
@@ -188,6 +189,8 @@ def plugin_pre_handler(cmd):
                 messages.append(concat)     
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
+        case "wget" | "curl":
+            wget.fake_wget(args)        
                 
 def plugin_post_handler(message):
     if message.startswith("`"):
@@ -317,7 +320,7 @@ def main():
             messages.append({"content": user_input, "role": 'user'}  )  
 
             # Log the IP address to logs.txt
-            content = "user:" + user_input + f"\t<{datetime.now()}>\n"
+            content = f"user {attacker_ip}:" + user_input + f"\t<{datetime.now()}>\n"
             log_to_files(content)
 
 
@@ -326,9 +329,6 @@ def main():
             print("")
             break
         
-
-
-
 
 
 if __name__ == "__main__":
