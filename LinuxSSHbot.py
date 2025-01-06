@@ -133,7 +133,6 @@ def plugin_pre_handler(cmd):
             os.system(f"{full_command}")
             pre_handle_message = host_alias_handle
             is_pre_handle = True
-            log_to_files(f"system: {full_command}\n")
             message = {"content": "Ping command executed", "role": 'assistant'}                        
             messages.append(message)
         case "":
