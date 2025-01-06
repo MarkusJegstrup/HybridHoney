@@ -194,6 +194,8 @@ def plugin_post_handler(message):
         message = message.replace('`', '')
     if '\n\n' in message:
         message = message.replace('\n\n','\n')
+    if host_alias_handle.split(":")[0] not in message:
+        message = message + "\n" + host_alias_handle
 
     return message
 
