@@ -90,6 +90,8 @@ def main():
     log_raw = open(os.path.join(BASE_DIR, "raw_logs.txt"), "a+", encoding="utf-8")
     log_cmd = open(os.path.join(BASE_DIR, "cmd_logs.txt"), "a+", encoding="utf-8")
     log_raw.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
+    session_logs.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
+    log_cmd.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
 
     #awaiting first user input
     try:
@@ -126,10 +128,10 @@ def main():
 
             messages.append(message)
             
-            session_logs.write(messages[len(messages) - 1]["content"])
+            session_logs.write("assistant:"+messages[len(messages) - 1]["content"])
 
             if len(messages) > 1:
-                log_cmd.write(messages[len(messages) - 1]["content"])
+                log_cmd.write("assistant:"+messages[len(messages) - 1]["content"])
             
             if "will be reported" in messages[len(messages) - 1]["content"]:
                 print(messages[len(messages) - 1]["content"])
@@ -152,8 +154,8 @@ def main():
                 log_cmd.write(messages[len(messages) - 1]["content"])
                 messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n" })
 
-                session_logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
-                log_cmd.write(" " + user_input + f"\t<{datetime.now()}>\n" + attacker_ip + "\n")
+                session_logs.write(f"user {attacker_ip}:" + user_input + f"\t<{datetime.now()}>\n")
+                log_cmd.write(f"user {attacker_ip}:" + user_input + f"\t<{datetime.now()}>\n")
 
             else:
                 #print("\n", messages[len(messages) - 1]["content"], " ")
@@ -161,8 +163,8 @@ def main():
                 if user_input == "":
                     continue
                 messages.append({"role": "user", "content": " " + user_input + f"\t<{datetime.now()}>\n"})
-                session_logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
-                log_cmd.write(" " + user_input + f"\t<{datetime.now()}>" + attacker_ip + "\n")
+                session_logs.write(f"user {attacker_ip}:" + user_input + f"\t<{datetime.now()}>\n")
+                log_cmd.write(f"user {attacker_ip}:" + user_input + f"\t<{datetime.now()}>\n")
             
         except KeyboardInterrupt:
             messages.append({"role": "user", "content": "\n"})
