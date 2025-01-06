@@ -155,13 +155,13 @@ def plugin_pre_handler(cmd):
                 h4="Hit:4 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease"
                 end="All packages are up to date."
                 print(h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n")
-                print(s1)
+                print(s1, end="")
                 time.sleep(0.5)
                 print(done)
-                print(s2)
+                print(s2, end="")
                 time.sleep(0.7)
                 print(done)
-                print(s3)
+                print(s3, end="")
                 time.sleep(0.4)
                 print(done)
                 print(end)
@@ -173,15 +173,15 @@ def plugin_pre_handler(cmd):
             elif args[1]=="upgrade":
                 s4="Calculating upgrade..."
                 end="0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded."
-                print(s1)
+                print(s1, end="")
                 time.sleep(0.5)
-                print(done)
+                print(done, end="")
                 print("\n")
-                print(s2)
+                print(s2, end="")
                 time.sleep(0.7)
                 print(done)
                 print("\n")
-                print(s3)
+                print(s3, end="")
                 time.sleep(0.4)
                 print(done)
                 print("\n")
