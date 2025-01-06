@@ -110,6 +110,7 @@ def plugin_pre_handler(cmd):
                 log_to_files("system:Sudo privilege not given to user\n")
 
         case "sudo" if is_sudo == True:
+            print("SUDO IS TRUE")
             ##Remove sudo prefix and then check if there is any matches
             plugin_pre_handler(full_command[len("sudo "):])
         case "exit":
