@@ -146,7 +146,9 @@ def plugin_pre_handler(cmd):
             s2="Building dependency tree..."
             s3="Reading state information..."
             done=" Done"
+            print("APT confirmed")
             if args[0]=="update":
+                print("UPDATE confirmed")
                 h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
                 h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
                 h3="Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease"
