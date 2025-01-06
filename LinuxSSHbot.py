@@ -189,6 +189,8 @@ def plugin_pre_handler(cmd):
                 messages.append(concat)     
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
+        case "wget" | "curl":
+            wget.fake_wget(args)        
                 
 def plugin_post_handler(message):
     if message.startswith("`"):
