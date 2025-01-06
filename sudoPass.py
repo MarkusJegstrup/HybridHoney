@@ -4,8 +4,22 @@ import getpass
 def handle_fake_sudo_give_access():
     attempts = 0
     max_attempts = 3
-    correct_passwords = ["", "password", "password123", "123456", "qwerty", "123123", "1234", "12345", "password1"]
     is_password = False
+
+    import getpass
+
+def handle_fake_sudo_give_access():
+    attempts = 0
+    max_attempts = 3
+    is_password = False
+
+    # Load correct passwords from a file
+    try:
+        with open("10kpasswords.txt", "r") as file:
+            correct_passwords = [line.strip() for line in file]  # Remove any leading/trailing whitespace
+    except FileNotFoundError:
+        print("Error: 10kpasswords.txt file not found.")
+        return
 
     while attempts < max_attempts:
         try:
