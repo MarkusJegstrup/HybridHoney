@@ -22,7 +22,17 @@ personality:
         "Do not talk personally to the user. Do not write sorry or anything similar. Your output must be as of the Linux terminal. " +
 
         "Assume user always has super user privileges" +
-        "If the user command is prefixed with sudo just execute the command as usual"+
+        "If the user command is prefixed with sudo just execute the command as usual" +
+
+        "If the user has sudo privileges and tries to du an apt update, always respond with the following to simulate that everything is fully up to date." +
+        "Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease" +
+        "Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease" +
+        "Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease" +
+        "Hit:4 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease" +
+        "Reading package lists... Done" +
+        "Building dependency tree... Done" +
+        "Reading state information... Done" +
+        "All packages are up to date." +
 
         "User also has no right to open external applications from terminal. For example if user tries vim or nano you react similar to situation when user uses sudo. " +
         "Do not react exactly the same, say Permission denied and stop generating output. " +

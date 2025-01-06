@@ -2,12 +2,13 @@
 import openai
 from dotenv import dotenv_values
 import argparse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,timezone
 import yaml
-from time import sleep
+import time
 import random
 import os
 import sudoPass
+import wget
 from dotenv import load_dotenv
 import sys
 import re
@@ -15,33 +16,26 @@ import readline
 
 ##Global Fields
 full_command = ""
-main_command =""
+main_command = ""
+messages = ""
 args = []
 
 host_alias_handle = ""
 
-pre_handle = False
+is_sudo = False
+is_pre_handle = False
 pre_handle_message = ""
-
-commands = ["pwd", "whoami", "cat /etc/passwd", "uname -a", "id"]
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 username = ""
 hostname = ""
 attacker_ip = ""
-first_prompt = True
-
-history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
-history.truncate(0)
 
 
-def log_to_files(history_content, logs_content):
-    history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
+def log_to_files(logs_content):
     logs = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
-    history.write(history_content)
     logs.write(logs_content)
     logs.close()
-    history.close()
 
 def readline_input(prompt):
     try:
@@ -91,33 +85,116 @@ def handle_cmd(cmd):
 
 
 def plugin_pre_handler(cmd):
-    global pre_handle
+    global is_pre_handle
     global pre_handle_message
+    global messages
+    global is_sudo
     match cmd:
-        case "sudo":
-            sudoPass.handle_fake_sudo_give_access()
+        case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
+            pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
+            is_pre_handle = True
+            time.sleep(0.2)
+        case "sudo" if is_sudo == False:
+            ### First go through sudo to gain privilege
+            is_sudo = sudoPass.handle_fake_sudo_give_access()
+            
+            ### After the first privilege access, we then check if the user got sudo privilege
+            if is_sudo == True:
+                message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND", "role": 'assistant'}                        
+                messages.append(message)
+                log_to_files("system:Sudo privilege given to user")
+                plugin_pre_handler(full_command[len("sudo "):])
+            else: 
+                pre_handle_message = "\n"+ host_alias_handle
+                is_pre_handle = True
+                log_to_files("system:Sudo privilege not given to user\n")
+
+        case "sudo" if is_sudo == True:
+            ##Remove sudo prefix and then check if there is any matches
+            plugin_pre_handler(full_command[len("sudo "):])
         case "exit":
             sys.exit()
             # os.system("exit")
         case "whoami":
             pre_handle_message = host_alias_handle.split('@')[0] + "\n"+ host_alias_handle
-            pre_handle = True
+            is_pre_handle = True
+            time.sleep(0.2)
         case "hostname":
             pre_handle_message = host_alias_handle.split('@')[1].split(':')[0] + "\n"+ host_alias_handle
-            pre_handle = True
+            is_pre_handle = True
+            time.sleep(0.2)
+        case "date":
+            now_utc = datetime.now(timezone.utc)
+            formatted_time = now_utc.strftime("%a %b %d %H:%M:%S UTC %Y")
+            pre_handle_message = ""+ formatted_time + "\n" + host_alias_handle
+            is_pre_handle = True
+            time.sleep(0.2)
+        case "ping":
+            os.system(f"{full_command}")
+            pre_handle_message = host_alias_handle
+            is_pre_handle = True
+            log_to_files(f"system: {full_command}\n")
+            message = {"content": "Ping command executed", "role": 'assistant'}                        
+            messages.append(message)
         case "":
             pre_handle_message = host_alias_handle
-            pre_handle = True
-
+            is_pre_handle = True
+            time.sleep(0.1)
+        case "apt":
+            s1="Reading package lists..."
+            s2="Building dependency tree..."
+            s3="Reading state information..."
+            done=" Done"
+            if args[0]=="update":
+                h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
+                h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
+                h3="Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease"
+                h4="Hit:4 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease"
+                end="All packages are up to date."
+                print(h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n")
+                print(s1)
+                time.sleep(0.5)
+                print(done)
+                print(s2)
+                time.sleep(0.7)
+                print(done)
+                print(s3)
+                time.sleep(0.4)
+                print(done)
+                print(end)
+                concat=h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n" + s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + end
+                messages.append(concat)   
+                is_pre_handle = True
+                pre_handle_message = "\n" + host_alias_handle
+                
+            elif args[0]=="upgrade":
+                s4="Calculating upgrade..."
+                end="0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded."
+                print(s1)
+                time.sleep(0.5)
+                print(done)
+                print("\n")
+                print(s2)
+                time.sleep(0.7)
+                print(done)
+                print("\n")
+                print(s3)
+                time.sleep(0.4)
+                print(done)
+                print("\n")
+                print(s4)
+                time.sleep(0.9)
+                print(end)
+                concat=s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + s4 + done + "\n" + end
+                messages.append(concat)     
+                is_pre_handle = True
+                pre_handle_message = "\n" + host_alias_handle
+                
 def plugin_post_handler(message):
-    #open(os.path.join(BASE_DIR, "plugin_post.txt"), 'r')
-    ##Basic Checks
     if message.startswith("`"):
         message = message.replace('`', '')
     if '\n\n' in message:
         message = message.replace('\n\n','\n')
-
-    ##Command checks
 
     return message
 
@@ -149,19 +226,13 @@ def last_login_random_ip():
 
 def prompt_setup():
     prompt = ""
-    if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
-        with open(os.path.join(BASE_DIR, "personalitySSH.yml"), 'r', encoding="utf-8") as file:
-            identity = yaml.safe_load(file)
+    with open(os.path.join(BASE_DIR, "personalitySSH.yml"), 'r', encoding="utf-8") as file:
+        identity = yaml.safe_load(file)
 
-        identity = identity['personality']
+    personality = identity['personality']
 
-        prompt = identity['prompt']
+    prompt = personality['prompt']
 
-    else:
-        history.write("\nHere the session stopped. Now you will start it again from the beginning with the same user. You must respond just with starting message and nothing more. " +
-                                "Make sure you use same file and folder names. Ignore date-time in <>. This is not your concern.\n")
-        history.seek(0)
-        prompt = history.read()
     return prompt
 
 def llm_response(messages):
@@ -176,10 +247,10 @@ def llm_response(messages):
 
 def main():
     #### Variable setup
-    global pre_handle
-    global first_prompt
+    global is_pre_handle
     global pre_handle_message
     global host_alias_handle
+    global messages
     ###Setup
     ssh_connection = os.getenv("SSH_CONNECTION", "")
     username_att_ip(ssh_connection)
@@ -198,18 +269,14 @@ def main():
     args = parser.parse_args()
     initial_prompt = args.personality
     messages = [{"role": "system", "content": initial_prompt}]
-    #if os.stat(os.path.join(BASE_DIR, "history.txt")).st_size == 0:
-    #    for msg in messages:
-    #        print("hello")
-    #       history.write(msg["content"])
-    #else:
-    #    history.write("The session continues in following lines.\n\n")
-    
-    history.close()
+
+    ###Before session write attacker ip to logs
+    log_to_files(f"\nAttacker IP: {attacker_ip}\n")
+
     connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
     ## Starting message
     pre_handle_message = ""+connection_message + f"\n{username}@{hostname}:~$ "
-    pre_handle = True
+    is_pre_handle = True
 
     ##Extract the user, host handle
     host_alias_handle = pre_handle_message.splitlines()[-1]
@@ -219,43 +286,38 @@ def main():
 
         
         try:
-            if (pre_handle):
+            if (is_pre_handle):
                 msg = pre_handle_message
-                pre_handle = False
+                is_pre_handle = False
             else:    
                 msg = llm_response(messages)
-
+            
+            #Check for any mistakes in the generated response
             message = plugin_post_handler(msg)
             
-
-
-
 
             message = {"content": message, "role": 'assistant'}                        
             messages.append(message)
             
-            ###Before session write attacker ip to logs
-            if first_prompt:
-                log_to_files(f"Attacker IP: {attacker_ip}\n",f"\nAttacker IP: {attacker_ip}\n")
-                first_prompt = False
 
-            #Logging content to history.txt and logs.txt
+            #Logging content to logs.txt
             content_input = "assistant:" + messages[len(messages) - 1]["content"] + "\n"
-            log_to_files(content_input,content_input)
+            log_to_files(content_input)
 
+            # This is where the message is outputted to the user as well as waiting for the user response.
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
-            #user_input = readline_input(f'{messages[len(messages) - 1]["content"]}'.strip() + " ")
-            
 
+            #Split the user commands into main_command, args
             handle_cmd(user_input)
 
+            #Prehandle any specific main command, that we want to handle ourselves
             plugin_pre_handler(main_command)
 
             messages.append({"content": user_input, "role": 'user'}  )  
 
-            # Log the IP address to history.txt and logs.txt
+            # Log the IP address to logs.txt
             content = "user:" + user_input + f"\t<{datetime.now()}>\n"
-            log_to_files(content, content)
+            log_to_files(content)
 
 
         except KeyboardInterrupt:
