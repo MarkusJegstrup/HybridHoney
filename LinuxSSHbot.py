@@ -91,6 +91,7 @@ def plugin_pre_handler(cmd):
     global is_sudo
     if len(full_command) > 400:
             pre_handle_message = "Permission denied\n" + host_alias_handle
+            log_to_files("system:User tried to execute command with length more than 400")
             is_pre_handle = True
             return
     match cmd:
