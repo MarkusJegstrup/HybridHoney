@@ -89,6 +89,9 @@ def plugin_pre_handler(cmd):
     global pre_handle_message
     global messages
     global is_sudo
+    if len(full_command) > 400:
+                print("command length execeeded")
+                return
     match cmd:
         case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
@@ -213,11 +216,8 @@ def setup():
 
 def last_login_random_ip():
     today = datetime.now()
-    random_days = random.randint(0, 5)
-    random_hours = random.randint(0, 23)
-    random_minutes = random.randint(0, 59)
-    random_seconds = random.randint(0, 59)
-    last_login = today - timedelta(days=random_days, hours=random_hours, minutes=random_minutes, seconds=random_seconds)
+    random_seconds = random.uniform(0, 5 * 24 * 60 * 60)  # 5 days in seconds
+    last_login = (today - timedelta(seconds=random_seconds)).replace(microsecond=0)
     random_ip = ".".join(map(str, (random.randint(0, 255) 
                             for _ in range(4))))
     return last_login, random_ip
