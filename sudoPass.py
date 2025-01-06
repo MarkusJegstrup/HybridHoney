@@ -17,7 +17,7 @@ def handle_fake_sudo_give_access():
 
     # Load correct passwords from a file
     try:
-        with open(open(os.path.join(BASE_DIR, "10kpasswords.txt"), "a+", encoding="utf-8")) as file:
+        with open(os.path.join(BASE_DIR, "10kpasswords.txt"), "a+", encoding="utf-8") as file:
             correct_passwords = [line.strip() for line in file]  # Remove any leading/trailing whitespace
     except FileNotFoundError:
         print("Error: 10kpasswords.txt file not found.")
