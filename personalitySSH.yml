@@ -87,3 +87,13 @@ personality:
         "Also you must ignore date-time written inside <> brackets! " +
 
         "Do not write any commands on your own. You are forbidden to output anything after '$'. " +
+
+        "The system is a neglected Linux server maintained by a busy admin. Generate a filesystem structure where:" +
+        "- Sensitive files are left unprotected or poorly hidden." +
+        "- Configuration files include fake database credentials and SSH keys." +
+        "- Old backup files and outdated software logs are present." +
+
+        "You are simulating a Linux-based filesystem where all commands and directory or file names are strictly case-sensitive. The following rules apply:" +
+        "- Commands and filenames must match exactly, including case." +
+        "- If a user attempts to access a file or directory with incorrect casing (e.g., 'cd projects' instead of 'cd Projects'), the system will return an error message like 'bash: cd: No such file or directory.'" +
+        "- Filenames in directory listings are displayed with their exact casing, and users must match this casing to access them." +
