@@ -89,6 +89,11 @@ def plugin_pre_handler(cmd):
     global pre_handle_message
     global messages
     global is_sudo
+    if len(full_command) > 400:
+            pre_handle_message = "Permission denied\n" + host_alias_handle
+            log_to_files("system:User tried to execute command with length more than 400")
+            is_pre_handle = True
+            return
     match cmd:
         case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
@@ -97,13 +102,12 @@ def plugin_pre_handler(cmd):
         case "sudo" if is_sudo == False:
             ### First go through sudo to gain privilege
             is_sudo = sudoPass.handle_fake_sudo_give_access()
-            
             ### After the first privilege access, we then check if the user got sudo privilege
             if is_sudo == True:
-                message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND", "role": 'assistant'}                        
+                message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND AS THE USER HAVE PRIVILEGE", "role": 'assistant'}                        
                 messages.append(message)
                 log_to_files("system:Sudo privilege given to user")
-                plugin_pre_handler(full_command[len("sudo "):])
+                plugin_pre_handler(args[0])
             else: 
                 pre_handle_message = "\n"+ host_alias_handle
                 is_pre_handle = True
@@ -111,7 +115,7 @@ def plugin_pre_handler(cmd):
 
         case "sudo" if is_sudo == True:
             ##Remove sudo prefix and then check if there is any matches
-            plugin_pre_handler(full_command[len("sudo "):])
+            plugin_pre_handler(args[0])
         case "exit":
             sys.exit()
             # os.system("exit")
@@ -139,53 +143,52 @@ def plugin_pre_handler(cmd):
             pre_handle_message = host_alias_handle
             is_pre_handle = True
             time.sleep(0.1)
-        case "apt":
+        case "apt" if "sudo" in main_command:
             s1="Reading package lists..."
             s2="Building dependency tree..."
             s3="Reading state information..."
             done=" Done"
-            if args[0]=="update":
+            if "update" in args:
                 h1="Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease"
                 h2="Hit:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease"
                 h3="Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease"
                 h4="Hit:4 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease"
                 end="All packages are up to date."
-                print(h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n")
-                print(s1)
+                print(h1 + "\n" + h2 + "\n" + h3 + "\n" + h4)
+                print(s1, end="")
                 time.sleep(0.5)
                 print(done)
-                print(s2)
+                print(s2, end="")
                 time.sleep(0.7)
                 print(done)
-                print(s3)
+                print(s3, end="")
                 time.sleep(0.4)
                 print(done)
                 print(end)
                 concat=h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n" + s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + end
-                messages.append(concat)   
+                message = {"content": concat, "role": 'assistant'} 
+                messages.append(message)   
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
                 
-            elif args[0]=="upgrade":
+            elif "upgrade" in args:
                 s4="Calculating upgrade..."
                 end="0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded."
-                print(s1)
+                print(s1, end="")
                 time.sleep(0.5)
                 print(done)
-                print("\n")
-                print(s2)
+                print(s2, end="")
                 time.sleep(0.7)
                 print(done)
-                print("\n")
-                print(s3)
+                print(s3, end="")
                 time.sleep(0.4)
                 print(done)
-                print("\n")
                 print(s4)
                 time.sleep(0.9)
                 print(end)
                 concat=s1 + done + "\n" + s2 + done + "\n" + s3 + done + "\n" + s4 + done + "\n" + end
-                messages.append(concat)     
+                message = {"content": concat, "role": 'assistant'} 
+                messages.append(message)     
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
         case "wget" | "curl":
@@ -194,7 +197,7 @@ def plugin_pre_handler(cmd):
             if len(args) < 1:
                 return
             ### Handle script edge case, where it is a specific bot attack changing the password
-            if ':' in full_command and '|' in full_command:
+            if ':' in full_command:
                 if full_command.split(':')[0].endswith("root") and 'chpasswd' in full_command:
                     is_pre_handle = True
                     pre_handle_message = """Changing password for root.\n
@@ -231,11 +234,8 @@ def setup():
 
 def last_login_random_ip():
     today = datetime.now()
-    random_days = random.randint(0, 5)
-    random_hours = random.randint(0, 23)
-    random_minutes = random.randint(0, 59)
-    random_seconds = random.randint(0, 59)
-    last_login = today - timedelta(days=random_days, hours=random_hours, minutes=random_minutes, seconds=random_seconds)
+    random_seconds = random.uniform(0, 5 * 24 * 60 * 60)  # 5 days in seconds
+    last_login = (today - timedelta(seconds=random_seconds)).replace(microsecond=0)
     random_ip = ".".join(map(str, (random.randint(0, 255) 
                             for _ in range(4))))
     return last_login, random_ip
