@@ -137,7 +137,6 @@ def plugin_pre_handler(cmd):
             os.system(f"{full_command}")
             pre_handle_message = host_alias_handle
             is_pre_handle = True
-            log_to_files(f"system: {full_command}\n")
             message = {"content": "Ping command executed", "role": 'assistant'}                        
             messages.append(message)
         case "":
@@ -193,13 +192,28 @@ def plugin_pre_handler(cmd):
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
         case "wget" | "curl":
-            wget.fake_wget(args)        
+            wget.fake_wget(args)
+        case "echo":
+            if len(args) < 1:
+                return
+            ### Handle script edge case, where it is a specific bot attack changing the password
+            if ':' in full_command:
+                if full_command.split(':')[0].endswith("root") and 'chpasswd' in full_command:
+                    is_pre_handle = True
+                    pre_handle_message = """Changing password for root.\n
+                                            chpasswd: (user root) pam_chauthtok() failed, error:\n
+                                            Authentication token manipulation error\n
+                                            chpasswd: (line 1, user root) password not changed\n""" + host_alias_handle
+
+
                 
 def plugin_post_handler(message):
     if message.startswith("`"):
         message = message.replace('`', '')
     if '\n\n' in message:
         message = message.replace('\n\n','\n')
+    if host_alias_handle.split(":")[0] not in message:
+        message = message + "\n" + host_alias_handle
 
     return message
 
@@ -318,7 +332,7 @@ def main():
             messages.append({"content": user_input, "role": 'user'}  )  
 
             # Log the IP address to logs.txt
-            content = "user:" + user_input + f"\t<{datetime.now()}>\n"
+            content = f"user {attacker_ip}:" + user_input + f"\t<{datetime.now()}>\n"
             log_to_files(content)
 
 
@@ -327,9 +341,6 @@ def main():
             print("")
             break
         
-
-
-
 
 
 if __name__ == "__main__":
