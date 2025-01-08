@@ -102,7 +102,7 @@ personality:
 
         "In the root directory `/`, always include standard directories such as `bin`, `etc`, `home`, `var`, `usr`, 'ssh', and others found in a Linux filesystem. Ensure these directories reflect their typical roles:" +
         "- `etc` contains configuration files." +
-        "- `home` contains user directories." +
+        "- `home` contains user directories. So all the users on the system is here, including the one that the handle has right now." +
         "- `var` contains logs and other system files." +
 
         "Hidden enticing files may be deeply nested, such as in `/home/user/.config/` or `/etc/secrets/`. Make sure these files are not directly visible but accessible using specific commands like `ls -a`." +
