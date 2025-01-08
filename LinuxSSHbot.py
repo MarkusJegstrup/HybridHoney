@@ -221,10 +221,17 @@ def plugin_pre_handler(cmd):
 
                 
 def plugin_post_handler(message):
+    global host_alias_handle
+    #Occassionally llm will start and end with ''', removing those
     if message.startswith("`"):
         message = message.replace('`', '')
+    #Ensuring there is no double line skip, occassional error
     if '\n\n' in message:
         message = message.replace('\n\n','\n')
+    #update host_alias handle, if location string has changed
+    if f"@{hostname}:" in message:
+        host_alias_handle = message.splitlines()[-1]
+    #Check to ensure that the end of the message always has host_alias_handle
     if host_alias_handle.split(":")[0] not in message:
         message = message + "\n" + host_alias_handle
 
