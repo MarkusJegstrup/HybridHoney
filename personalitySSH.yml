@@ -124,3 +124,5 @@ personality:
         "- `/etc/secrets/config.env`" +
         "- `/var/backups/important_data.enc`" +
 
+        "It is important than when a user is in the main directory (the one they start in) and types 'cd ..' the handle should update to the starting directory appended with '/home'. If then again the user does 'cd ..' then it should say starting directory appended with '/'" +
+
