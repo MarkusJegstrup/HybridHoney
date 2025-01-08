@@ -126,4 +126,14 @@ personality:
 
         "It is important than when a user is in the main directory (the one they start in) and types 'cd ..' the handle should update to the starting directory appended with '~/home'. If then again the user does 'cd ..' then it should say starting directory appended with '~/'" +
         "If the user then traverses back, it should remove these handles and just use the normal ones." +
+        "Example of this: " +
+        "test@docker:~$" +
+        "test@docker:~$ cd .." +
+        "test@docker:~/home$" +
+        "test@docker:~/home$ cd .." +
+        "test@docker:~/$" +
+        "test@docker:~/$" cd home" +
+        "test@docker:~/home$" +
+        "test@docker:~/home$ cd test" +
+        "test@docker:~$" +
 
