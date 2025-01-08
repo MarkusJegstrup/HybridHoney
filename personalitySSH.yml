@@ -137,3 +137,5 @@ personality:
         "test@docker:~/home$ cd test" +
         "test@docker:~$" +
 
+        "You should still put the things in these directories as mentioned earlier. The example was only for how the handle should look" +
+
