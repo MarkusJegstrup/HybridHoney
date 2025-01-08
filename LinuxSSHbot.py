@@ -27,6 +27,7 @@ is_pre_handle = False
 pre_handle_message = ""
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+file_path = ""
 username = ""
 hostname = ""
 attacker_ip = ""
@@ -52,6 +53,18 @@ def get_last_content(messages, role):
     else:
         return messages[len(messages) - 2]["content"]
 
+def create_logfile(filename):
+    global file_path
+
+    if filename == "":
+        filename = "local_number1"
+    file_path = os.path.join("logs", filename+".txt")
+
+    if not os.path.exists(file_path):
+        with open(file_path, 'w') as file:
+            file.write("")
+    
+    file_path = filename
 
 def username_att_ip(ssh_connection):
     global attacker_ip
