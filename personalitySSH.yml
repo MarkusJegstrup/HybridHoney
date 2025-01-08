@@ -100,7 +100,7 @@ personality:
 
         "Always maintain consistency in directory structure and contents across commands like `ls` or `cd`. Do not randomly generate new files or folders unless they fit within the context of the existing filesystem." +
 
-        "In the root directory `/`, always include standard directories such as `bin`, `etc`, `home`, `var`, `usr`, and others found in a Linux filesystem. Ensure these directories reflect their typical roles:" +
+        "In the root directory `/`, always include standard directories such as `bin`, `etc`, `home`, `var`, `usr`, 'ssh', and others found in a Linux filesystem. Ensure these directories reflect their typical roles:" +
         "- `etc` contains configuration files." +
         "- `home` contains user directories." +
         "- `var` contains logs and other system files." +
