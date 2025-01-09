@@ -8,6 +8,7 @@ import time
 import random
 import os
 import sudoPass
+import session_logs
 import wget
 from dotenv import load_dotenv
 import sys
@@ -33,11 +34,6 @@ hostname = ""
 attacker_ip = ""
 
 
-def log_to_files(logs_content):
-    logs = open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8")
-    logs.write(logs_content)
-    logs.close()
-
 def readline_input(prompt):
     try:
         user_input = input(prompt)
@@ -53,19 +49,6 @@ def get_last_content(messages, role):
     else:
         return messages[len(messages) - 2]["content"]
 
-def create_logfile(filename):
-    global file_path
-
-    if filename == "":
-        filename = "local_number1"
-    file_path = os.path.join("logs", filename+".txt")
-
-    if not os.path.exists(file_path):
-        with open(file_path, 'w') as file:
-            file.write("")
-    
-    file_path = filename
-
 def username_att_ip(ssh_connection):
     global attacker_ip
     global username
@@ -80,8 +63,6 @@ def username_att_ip(ssh_connection):
         username = "dev"
         hostname = random.choice(["devbox", "workstation","testbench", "dbnode", "buildhost", "vmlab", "backend", "gateway", "docker", "webnode", "webserver", "webhost"])
     
-    
-
 
 def handle_cmd(cmd):
     global full_command
@@ -104,7 +85,7 @@ def plugin_pre_handler(cmd):
     global is_sudo
     if len(full_command) > 400:
             pre_handle_message = "Permission denied\n" + host_alias_handle
-            log_to_files("system:User tried to execute command with length more than 400")
+            session_logs.log_to_files("system:User tried to execute command with length more than 400\n",file_path)
             is_pre_handle = True
             return
     match cmd:
@@ -119,12 +100,12 @@ def plugin_pre_handler(cmd):
             if is_sudo == True:
                 message = {"content": "USER HAS SUDO PRIVILEGE, FROM NOW ON PROCEED WITH ANY LEGITIMATE SUDO COMMAND AS THE USER HAVE PRIVILEGE", "role": 'assistant'}                        
                 messages.append(message)
-                log_to_files("system:Sudo privilege given to user")
+                session_logs.log_to_files("system:Sudo privilege given to user\n",file_path)
                 plugin_pre_handler(args[0])
             else: 
                 pre_handle_message = "\n"+ host_alias_handle
                 is_pre_handle = True
-                log_to_files("system:Sudo privilege not given to user\n")
+                session_logs.log_to_files("system:Sudo privilege not given to user\n",file_path)
 
         case "sudo" if is_sudo == True:
             ##Remove sudo prefix and then check if there is any matches
@@ -287,9 +268,12 @@ def main():
     global pre_handle_message
     global host_alias_handle
     global messages
+    global file_path
+    global hostname
     ###Setup
     ssh_connection = os.getenv("SSH_CONNECTION", "")
     username_att_ip(ssh_connection)
+    file_path = session_logs.create_logfile(attacker_ip)
     setup()
     last_login, random_ip = last_login_random_ip()
     
@@ -305,9 +289,11 @@ def main():
     args = parser.parse_args()
     initial_prompt = args.personality
     messages = [{"role": "system", "content": initial_prompt}]
-
-    ###Before session write attacker ip to logs
-    log_to_files(f"\nAttacker IP: {attacker_ip}\n")
+    history, history_hostname = session_logs.create_history(file_path)
+    messages.extend(history)
+    ## set hostname to the hostname in history if there was one.
+    if len(history_hostname) > 0:
+        hostname = history_hostname
 
     connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
     ## Starting message
@@ -340,7 +326,7 @@ def main():
 
             content_input = "assistant:::" + message_content + ":::" + "\n"
             #content_input = "assistant:::" + messages[len(messages) - 1]["content"]+ ":::" + "\n"
-            log_to_files(content_input)
+            session_logs.log_to_files(content_input,file_path)
 
             # This is where the message is outputted to the user as well as waiting for the user response.
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
@@ -355,7 +341,7 @@ def main():
 
             # Log the IP address to logs.txt
             content = f"user:::" + user_input + ":::" + f"\t<{datetime.now()}>\n"
-            log_to_files(content)
+            session_logs.log_to_files(content,file_path)
 
 
         except KeyboardInterrupt:
