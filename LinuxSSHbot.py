@@ -329,15 +329,17 @@ def main():
                 msg = llm_response(messages)
             
             #Check for any mistakes in the generated response
-            message = plugin_post_handler(msg)
+            message_content = plugin_post_handler(msg)
             
 
-            message = {"content": message, "role": 'assistant'}                        
+            message = {"content": message_content, "role": 'assistant'}                        
             messages.append(message)
             
 
             #Logging content to logs.txt
-            content_input = "assistant:" + messages[len(messages) - 1]["content"] + "\n"
+
+            content_input = "assistant:::" + message_content + ":::" + "\n"
+            #content_input = "assistant:::" + messages[len(messages) - 1]["content"]+ ":::" + "\n"
             log_to_files(content_input)
 
             # This is where the message is outputted to the user as well as waiting for the user response.
@@ -352,7 +354,7 @@ def main():
             messages.append({"content": user_input, "role": 'user'}  )  
 
             # Log the IP address to logs.txt
-            content = f"user {attacker_ip}:" + user_input + f"\t<{datetime.now()}>\n"
+            content = f"user:::" + user_input + ":::" + f"\t<{datetime.now()}>\n"
             log_to_files(content)
 
 
