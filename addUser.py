@@ -2,7 +2,6 @@ import subprocess
 
 def handle_useradd(command):
     """Intercept and handle the `useradd` command."""
-    print(command)
     try:
         # Ensure the command has required flags
         if "-m" not in command or "-p" not in command:
