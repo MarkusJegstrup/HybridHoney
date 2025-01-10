@@ -9,6 +9,7 @@ import random
 import os
 import sudoPass
 import session_logs
+import addUser
 import wget
 from dotenv import load_dotenv
 import sys
@@ -200,7 +201,8 @@ def plugin_pre_handler(cmd):
                                             chpasswd: (user root) pam_chauthtok() failed, error:\n
                                             Authentication token manipulation error\n
                                             chpasswd: (line 1, user root) password not changed\n""" + host_alias_handle
-
+        case "adduser":
+            addUser.handle_useradd(args)
 
                 
 def plugin_post_handler(message):
