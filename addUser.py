@@ -24,10 +24,15 @@ def handle_useradd(command):
 
     try:
         # Ensure the group exists
-        subprocess.run(["sudo", "groupadd", "redirect"], check=True)
+        #result2=subprocess.run(["sudo", "groupadd", "redirect"], check=True)
 
         # Create the user with the specified group
-        subprocess.run(["sudo", "useradd", "-m", "-g", "redirect", username], check=True)
+        result2=subprocess.run(["sudo", "useradd", "-m", "-g", "redirect", username], check=True)
+
+        if result2.returncode == 0:
+            ""
+        else:
+            print("Permission denied.")
 
         print(f"User '{username}' created successfully with group '{"redirect"}'.")
     except subprocess.CalledProcessError as e:
