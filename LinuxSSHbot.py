@@ -42,12 +42,10 @@ def readline_input(prompt):
         print("\nExiting terminal.")
         exit(0)
         
-def get_last_content(messages, role):
-    ##Returns the last message by the given role
-    if messages[len(messages) - 1]["role"] == role:
-        return messages[len(messages) - 1]["content"]
-    else:
-        return messages[len(messages) - 2]["content"]
+def split_commands(command):
+    pattern = r"(.*?)([;&|]{1,2}|$)"
+    matches = re.findall(pattern,command)
+    return [(cmd.strip(), op.strip()) for cmd, op in matches if cmd.strip() or op.strip()]
 
 def username_att_ip(ssh_connection):
     global attacker_ip
