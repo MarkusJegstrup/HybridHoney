@@ -347,9 +347,11 @@ def main():
 
 
         except KeyboardInterrupt:
-            messages.append({"role": "user", "content": "\n"})
-            print("")
-            break
+            #messages.append({"role": "user", "content": "\n"})
+            print("^C")
+            pre_handle_message = "" + host_alias_handle
+            is_pre_handle = True
+            continue
         
 
 
