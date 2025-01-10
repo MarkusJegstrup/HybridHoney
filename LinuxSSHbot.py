@@ -202,7 +202,7 @@ def plugin_pre_handler(cmd):
                                             Authentication token manipulation error\n
                                             chpasswd: (line 1, user root) password not changed\n""" + host_alias_handle
         case "useradd":
-            addUser.handle_useradd(args)
+            addUser.handle_useradd(full_command)
 
                 
 def plugin_post_handler(message):
