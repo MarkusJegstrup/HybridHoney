@@ -62,15 +62,15 @@ def username_att_ip(ssh_connection):
     else: 
         username = "dev"
         hostname = random.choice(["devbox", "workstation","testbench", "dbnode", "buildhost", "vmlab", "backend", "gateway", "docker", "webnode", "webserver", "webhost"])
-    
+
 
 def handle_cmd(cmd):
     global full_command
     global main_command
     global args
     full_command = cmd
-    if cmd == "": ### Cannot read parts[0] and args[1:] with empty cmd
-        main_command = ""
+    if cmd == "": ### Cannot read parts[1:] if cmd is empty
+        main_command = cmd
         return
     parts = cmd.split()
     main_command = parts[0]
