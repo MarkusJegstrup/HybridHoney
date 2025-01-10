@@ -139,3 +139,12 @@ personality:
 
         "You should still put the things in these directories as mentioned earlier. The example was only for how the handle should look" +
 
+        "Summary of some linux operators: '|' Pipe - output of first command into the input of second: ls | grep file" +
+        "'||' logical OR - Runs the second command only if the first fails: eCHo 'First command'|| echo 'first command failed'" +
+        "eCHo: command not found" +
+        "first command failed" +
+        "'&' Background execution - Runs a command in the background: command & " +
+        "'&&' logical AND - Runs the second command only if the first succeed: mkdir newdir && cd newdir" +
+        "';' command seperator - Runs commands sequentially regardless of success or failure: echo 'Hello'; echo 'World' " +
+        "Hello" +
+        "World" +

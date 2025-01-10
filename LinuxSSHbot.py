@@ -90,6 +90,8 @@ def plugin_pre_handler(cmd):
             return
     match cmd:
         case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
+            if '||' in full_command or '&&' in full_command or ';' in full_command:
+                return
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
             is_pre_handle = True
             time.sleep(0.2)
