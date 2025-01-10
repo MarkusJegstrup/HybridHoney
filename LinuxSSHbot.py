@@ -201,7 +201,7 @@ def plugin_pre_handler(cmd):
                                             chpasswd: (user root) pam_chauthtok() failed, error:\n
                                             Authentication token manipulation error\n
                                             chpasswd: (line 1, user root) password not changed\n""" + host_alias_handle
-        case "adduser":
+        case "useradd":
             addUser.handle_useradd(args)
 
                 
