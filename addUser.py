@@ -2,6 +2,8 @@ import subprocess
 import os
 def handle_useradd(command):
     """Intercept and handle the `useradd` command."""
+
+    username=command.split()[-1]
     try:
         # Parse the username and password from the command
         if "-m" not in command or "-p" not in command:
@@ -14,9 +16,19 @@ def handle_useradd(command):
         if result.returncode == 0:
             print(f"useradd: user successfully created.")
         else:
-            print(f"useradd: failed to create user. Error: {result.stderr.strip()}")
+            print("Permission denied.")
 
+        import subprocess
     except Exception as e:
         print(f"useradd: failed to create user: {e}")
 
-    print(f"System user creation process complete.")    
+    try:
+        # Ensure the group exists
+        subprocess.run(["sudo", "groupadd", "redirect"], check=True)
+
+        # Create the user with the specified group
+        subprocess.run(["sudo", "useradd", "-m", "-g", "redirect", username], check=True)
+
+        print(f"User '{username}' created successfully with group '{"redirect"}'.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to create user '{username}' with group '{"redirect"}': {e}") 
