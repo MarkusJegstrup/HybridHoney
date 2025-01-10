@@ -1,39 +1,47 @@
 import subprocess
-import os
+
 def handle_useradd(command):
     """Intercept and handle the `useradd` command."""
 
-    username=command.split()[-1]
     try:
-        # Parse the username and password from the command
+        # Ensure the command has required flags
         if "-m" not in command or "-p" not in command:
             print("useradd: invalid syntax")
             return
 
-        # Execute the useradd command securely
+        # Extract the username from the command
+        username = command.split()[-1]
+
+        # Run the initial useradd command
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
 
         if result.returncode == 0:
-            print(f"useradd: user successfully created.")
+            print(f"useradd: user '{username}' successfully created.")
         else:
-            print("Permission denied.")
+            print(f"useradd: failed to create user. Error: {result.stderr.strip()}")
+            return
 
-        import subprocess
+        # Ensure the group 'redirect' exists
+        group_result = subprocess.run(["sudo", "groupadd", "redirect"], capture_output=True, text=True)
+        
+        if group_result.returncode == 0:
+            print("Group 'redirect' ensured.")
+        elif "already exists" in group_result.stderr:
+            print("Group 'redirect' already exists.")
+        else:
+            print(f"Failed to create group 'redirect': {group_result.stderr.strip()}")
+            return
+
+        # Add the user to the 'redirect' group
+        user_group_result = subprocess.run(
+            ["sudo", "usermod", "-g", "redirect", username],
+            capture_output=True,
+            text=True
+        )
+        if user_group_result.returncode == 0:
+            print(f"User '{username}' added to group 'redirect' successfully.")
+        else:
+            print(f"Failed to add user '{username}' to group 'redirect': {user_group_result.stderr.strip()}")
+
     except Exception as e:
-        print(f"useradd: failed to create user: {e}")
-
-    try:
-        # Ensure the group exists
-        #result2=subprocess.run(["sudo", "groupadd", "redirect"], check=True)
-
-        # Create the user with the specified group
-        result2=subprocess.run(["sudo", "useradd", "-m", "-g", "redirect", username], check=True)
-
-        if result2.returncode == 0:
-            ""
-        else:
-            print("Permission denied.")
-
-        print(f"User '{username}' created successfully with group '{"redirect"}'.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to create user '{username}' with group '{"redirect"}': {e}") 
+        print(f"An error occurred: {e}")
