@@ -1,6 +1,11 @@
 import subprocess
+import os
 def handle_useradd(command):
     """Intercept and handle the `useradd` command."""
+
+    print("Handling userAdd")
+    os.system("sudo /usr/sbin/useradd --help")
+    print("Done checking sudo access")
     try:
         # Parse the username and password from the command
         if "-m" not in command or "-p" not in command:
