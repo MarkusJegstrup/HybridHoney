@@ -2,7 +2,7 @@ import subprocess
 
 def handle_useradd(command):
     """Intercept and handle the `useradd` command."""
-
+    print(command)
     try:
         # Ensure the command has required flags
         if "-m" not in command or "-p" not in command:
@@ -23,7 +23,7 @@ def handle_useradd(command):
 
         # Ensure the group 'redirect' exists
         group_result = subprocess.run(["sudo", "groupadd", "redirect"], capture_output=True, text=True)
-        
+
         if group_result.returncode == 0:
             print("Group 'redirect' ensured.")
         elif "already exists" in group_result.stderr:

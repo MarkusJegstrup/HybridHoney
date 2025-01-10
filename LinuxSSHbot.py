@@ -203,6 +203,7 @@ def plugin_pre_handler(cmd):
                                             chpasswd: (line 1, user root) password not changed\n""" + host_alias_handle
         case "useradd":
             addUser.handle_useradd(full_command)
+            is_pre_handle = True
 
                 
 def plugin_post_handler(message):
