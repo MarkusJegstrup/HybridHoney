@@ -62,15 +62,15 @@ def username_att_ip(ssh_connection):
     else: 
         username = "dev"
         hostname = random.choice(["devbox", "workstation","testbench", "dbnode", "buildhost", "vmlab", "backend", "gateway", "docker", "webnode", "webserver", "webhost"])
-    
+
 
 def handle_cmd(cmd):
     global full_command
     global main_command
     global args
     full_command = cmd
-    if cmd == "": ### Cannot read parts[0] and args[1:] with empty cmd
-        main_command = ""
+    if cmd == "": ### Cannot read parts[1:] if cmd is empty
+        main_command = cmd
         return
     parts = cmd.split()
     main_command = parts[0]
@@ -90,6 +90,8 @@ def plugin_pre_handler(cmd):
             return
     match cmd:
         case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
+            if '||' in full_command or '&&' in full_command or ';' in full_command:
+                return
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
             is_pre_handle = True
             time.sleep(0.2)
@@ -345,9 +347,11 @@ def main():
 
 
         except KeyboardInterrupt:
-            messages.append({"role": "user", "content": "\n"})
-            print("")
-            break
+            #messages.append({"role": "user", "content": "\n"})
+            print("^C")
+            pre_handle_message = "" + host_alias_handle
+            is_pre_handle = True
+            continue
         
 
 

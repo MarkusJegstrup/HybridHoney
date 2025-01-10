@@ -3,9 +3,10 @@ import os
 
 
 def create_logfile(filename):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     if filename == "":
         filename = "local_number1"
-    file_path = os.path.join("logs", filename+".txt")
+    file_path = os.path.join(BASE_DIR,"logs", filename+".txt")
 
     if not os.path.exists(file_path):
         with open(file_path, 'w') as file:
