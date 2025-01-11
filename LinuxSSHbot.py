@@ -42,10 +42,6 @@ def readline_input(prompt):
         print("\nExiting terminal.")
         exit(0)
         
-def split_commands(command):
-    pattern = r"(.*?)([;&|]{1,2}|$)"
-    matches = re.findall(pattern,command)
-    return [(cmd.strip(), op.strip()) for cmd, op in matches if cmd.strip() or op.strip()]
 
 def username_att_ip(ssh_connection):
     global attacker_ip
@@ -75,6 +71,41 @@ def handle_cmd(cmd):
     args = parts[1:]
 
 
+def split_commands(command):
+    pattern = r"(.*?)(;|&&|\|\||$)"
+    matches = re.findall(pattern,command)
+    return [(cmd.strip(), op.strip()) for cmd, op in matches if cmd.strip() or op.strip()]
+
+def remove_last_line(input_string):
+    lines = input_string.split('\n')
+    if len(lines) > 0:
+        lines = lines[:-1] 
+    return '\n'.join(lines)
+
+def multiCommandExecution(command_with_operators):
+    global messages
+    final_output = ""
+
+    for command,operator in command_with_operators:
+        handle_cmd(command)
+
+        plugin_pre_handler(main_command)
+        if is_pre_handle:
+            pre_handle_output = plugin_post_handler(pre_handle_message)
+            final_output += remove_last_line(pre_handle_output)
+            is_pre_handle = False
+        else:
+            messages.append({"content": command, "role":'user'})
+            llm_output = plugin_post_handler(llm_response(messages))
+            final_output += remove_last_line(llm_output)
+            messages.pop()
+
+
+
+    
+    final_output += "\n" + host_alias_handle
+
+    return final_output
 
 def plugin_pre_handler(cmd):
     global is_pre_handle
@@ -213,7 +244,7 @@ def plugin_post_handler(message):
     if f"@{hostname}:" in message:
         host_alias_handle = message.splitlines()[-1]
     #Check to ensure that the end of the message always has host_alias_handle
-    if host_alias_handle.split(":")[0] not in message:
+    if f"@{hostname}:" not in message:
         message = message + "\n" + host_alias_handle
 
     return message
