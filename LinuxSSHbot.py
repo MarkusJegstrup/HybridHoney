@@ -316,6 +316,7 @@ def main():
             if (is_pre_handle):
                 msg = pre_handle_message
                 is_pre_handle = False
+                pre_handle_message=""
             else:    
                 msg = llm_response(messages)
             
