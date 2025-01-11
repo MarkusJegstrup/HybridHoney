@@ -204,6 +204,7 @@ def plugin_pre_handler(cmd):
         case "useradd":
             addUser.handle_useradd(full_command)
             is_pre_handle = True
+            pre_handle_message=""
 
                 
 def plugin_post_handler(message):
