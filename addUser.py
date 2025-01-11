@@ -10,37 +10,19 @@ def handle_useradd(command):
 
         # Extract the username from the command
         username = command.split()[-1]
+        parts = command.split()
+        username = parts[-1]
 
+        # Insert '-g redirect' before the username
+        updated_command = " ".join(parts[:-1]) + " -g redirect " + username
         # Run the initial useradd command
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        result = subprocess.run(updated_command, shell=True, capture_output=True, text=True)
 
         if result.returncode == 0:
             print(f"useradd: user '{username}' successfully created.")
         else:
             print(f"useradd: failed to create user. Error: {result.stderr.strip()}")
             return
-
-        # Ensure the group 'redirect' exists
-        group_result = subprocess.run(["sudo", "groupadd", "redirect"], capture_output=True, text=True)
-
-        if group_result.returncode == 0:
-            print("Group 'redirect' ensured.")
-        elif "already exists" in group_result.stderr:
-            print("Group 'redirect' already exists.")
-        else:
-            print(f"Failed to create group 'redirect': {group_result.stderr.strip()}")
-            return
-
-        # Add the user to the 'redirect' group
-        user_group_result = subprocess.run(
-            ["sudo", "usermod", "-g", "redirect", username],
-            capture_output=True,
-            text=True
-        )
-        if user_group_result.returncode == 0:
-            print(f"User '{username}' added to group 'redirect' successfully.")
-        else:
-            print(f"Failed to add user '{username}' to group 'redirect': {user_group_result.stderr.strip()}")
 
     except Exception as e:
         print(f"An error occurred: {e}")
