@@ -26,6 +26,7 @@ host_alias_handle = ""
 is_sudo = False
 is_pre_handle = False
 pre_handle_message = ""
+is_multi_cmd = False
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 file_path = ""
@@ -82,10 +83,28 @@ def remove_last_line(input_string):
         lines = lines[:-1] 
     return '\n'.join(lines)
 
+def checkMultiCmd(multi_cmds):
+    global is_multi_cmd
+    if len(multi_cmds) > 1:
+        exist_pre_handle = False
+        is_multi_cmd = True
+        for cmd in multi_cmds:
+            handle_cmd(cmd)
+            plugin_pre_handler(main_command)
+            if is_pre_handle:
+                exist_pre_handle = True
+        is_multi_cmd = False
+        if exist_pre_handle:
+            return True
+    
+    return False
+
+
 def multiCommandExecution(command_with_operators):
     global messages
     final_output = ""
 
+    # Operator is if we want to add the operator logic into it.
     for command,operator in command_with_operators:
         handle_cmd(command)
 
@@ -125,6 +144,10 @@ def plugin_pre_handler(cmd):
             is_pre_handle = True
             time.sleep(0.2)
         case "sudo" if is_sudo == False:
+            #If check for multi cmd executions
+            if is_multi_cmd:
+                is_pre_handle = True
+                return
             ### First go through sudo to gain privilege
             is_sudo = sudoPass.handle_fake_sudo_give_access()
             ### After the first privilege access, we then check if the user got sudo privilege
@@ -362,11 +385,18 @@ def main():
             # This is where the message is outputted to the user as well as waiting for the user response.
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
 
-            #Split the user commands into main_command, args
-            handle_cmd(user_input)
 
-            #Prehandle any specific main command, that we want to handle ourselves
-            plugin_pre_handler(main_command)
+            #Check for multiple cmd executions
+            multiCmds = split_commands(user_input)
+            if checkMultiCmd(multiCmds):
+                pre_handle_message = multiCommandExecution(multiCmds)
+                is_pre_handle = True
+            else:
+                #Split the user commands into main_command, args
+                handle_cmd(user_input)
+                #Prehandle any specific main command, that we want to handle ourselves
+                plugin_pre_handler(main_command)
+
 
             messages.append({"content": user_input, "role": 'user'}  )  
 
