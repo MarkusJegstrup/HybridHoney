@@ -88,7 +88,7 @@ def checkMultiCmd(multi_cmds):
     if len(multi_cmds) > 1:
         exist_pre_handle = False
         is_multi_cmd = True
-        for cmd in multi_cmds:
+        for cmd,op in multi_cmds:
             handle_cmd(cmd)
             plugin_pre_handler(main_command)
             if is_pre_handle:
@@ -101,22 +101,25 @@ def checkMultiCmd(multi_cmds):
 
 def multiCommandExecution(command_with_operators):
     global messages
+    global is_pre_handle
+    global pre_handle_message
     final_output = ""
 
     # Operator is if we want to add the operator logic into it.
     for command,operator in command_with_operators:
         handle_cmd(command)
-
+        is_pre_handle = False
         plugin_pre_handler(main_command)
         if is_pre_handle:
             pre_handle_output = plugin_post_handler(pre_handle_message)
             final_output += remove_last_line(pre_handle_output)
-            is_pre_handle = False
         else:
             messages.append({"content": command, "role":'user'})
             llm_output = plugin_post_handler(llm_response(messages))
             final_output += remove_last_line(llm_output)
             messages.pop()
+        if not operator == "":
+            final_output += "\n"
 
     final_output += "\n" + host_alias_handle
     return final_output
