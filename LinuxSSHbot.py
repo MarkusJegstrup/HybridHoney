@@ -96,7 +96,6 @@ def checkMultiCmd(multi_cmds):
         is_multi_cmd = False
         if exist_pre_handle:
             return True
-    
     return False
 
 
@@ -119,11 +118,7 @@ def multiCommandExecution(command_with_operators):
             final_output += remove_last_line(llm_output)
             messages.pop()
 
-
-
-    
     final_output += "\n" + host_alias_handle
-
     return final_output
 
 def plugin_pre_handler(cmd):
