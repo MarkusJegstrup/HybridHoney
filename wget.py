@@ -27,4 +27,4 @@ def fake_wget(args):
                 f.write(chunk)
 
     except Exception as e:
-        print(f"wget: {str(e)}")
+        ""
