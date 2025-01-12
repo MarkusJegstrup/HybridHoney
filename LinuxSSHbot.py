@@ -240,17 +240,6 @@ def plugin_pre_handler(cmd):
                 pre_handle_message = "\n" + host_alias_handle
         case "wget" | "curl":
             wget.fake_wget(args)
-        case "echo":
-            if len(args) < 1:
-                return
-            ### Handle script edge case, where it is a specific bot attack changing the password
-            if ':' in full_command:
-                if full_command.split(':')[0].endswith("root") and 'chpasswd' in full_command:
-                    is_pre_handle = True
-                    pre_handle_message = """Changing password for root.\n
-                                            chpasswd: (user root) pam_chauthtok() failed, error:\n
-                                            Authentication token manipulation error\n
-                                            chpasswd: (line 1, user root) password not changed\n""" + host_alias_handle
         case "useradd":
             addUser.handle_useradd(full_command)
             is_pre_handle = True
