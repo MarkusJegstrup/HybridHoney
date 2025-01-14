@@ -164,7 +164,7 @@ def plugin_pre_handler(cmd):
             ##Remove sudo prefix and then check if there is any matches
             plugin_pre_handler(args[0])
         case "exit":
-            session_logs.log_to_files("Last login: "+ f"\t{datetime.now().replace(microsecond=0)}",file_path)
+            session_logs.log_to_files("Logout: " + f"{datetime.now().replace(microsecond=0)}" + "from " + attacker_ip,file_path + "\n")
             sys.exit()
             # os.system("exit")
         case "whoami":
@@ -344,13 +344,8 @@ def main():
     if len(history_hostname) > 0:
         hostname = history_hostname
         #Use the last login message from the history
-        if "Last login:" in messages[-1]["content"]:
-            connection_message = messages[-1]["content"]
-        
-        # for message in reversed(messages):
-        #     if "Last login:" in message["content"] and (len(message["content"].splitlines())>1):
-        #         connection_message = message["content"].splitlines()[1]
-        #         break
+        if "Logout" in messages[-1]["content"]:
+            connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login:" + messages[-1]["content"].strip("Logout: ")
 
 
     ## Starting message
