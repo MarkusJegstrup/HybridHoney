@@ -343,7 +343,9 @@ def main():
     ## set hostname to the hostname in history if there was one.
     if len(history_hostname) > 0:
         hostname = history_hostname
-        #Use the last login message from the history
+    
+    #Use the last login message from the history
+    if history > 0:
         print (messages[-1]["content"]+ "\n")
         if "Logout" in messages[-1]["content"]:
             print("hej")
