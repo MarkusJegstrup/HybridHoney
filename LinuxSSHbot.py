@@ -17,13 +17,7 @@ attacker_ip = ""
 ssh_connection = os.getenv("SSH_CONNECTION", "")
 
 if ssh_connection:
-    # Extract the attacker's IP address (first field in SSH_CONNECTION)
     attacker_ip = ssh_connection.split()[0]
-    #username =  os.getlogin( )
-    #machine_name = random.choice(["devbox", "workstation","testbench", "dbnode", "buildhost", "vmlab", "backend", "gateway", "docker", "webnode", "webserver", "webhost"])
-    # Log the IP address
-    #with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
-        #log_file.write(f"Attacker IP: {attacker_ip}\n")
 else:
     print("IP address unreachable")
 
@@ -35,15 +29,6 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 if not openai.api_key:
     raise ValueError("OPENAI_API_KEY is not set or not loaded from the .env file.")
-
-today = datetime.now()
-random_days = random.randint(0, 5)
-random_hours = random.randint(0, 23)
-random_minutes = random.randint(0, 59)
-random_seconds = random.randint(0, 59)
-last_login = today - timedelta(days=random_days, hours=random_hours, minutes=random_minutes, seconds=random_seconds)
-random_ip = ".".join(map(str, (random.randint(0, 255)
-                        for _ in range(4))))
 
 history = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
 history.truncate(0)
@@ -82,8 +67,6 @@ def main():
     
     history.close()
 
-    #connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n" + f"{username}@{machine_name}:~$"
-    #print(connection_message, end='')
 
     #readying log files and history and log the IP address in raw logs before prompting 
     session_logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
@@ -92,21 +75,6 @@ def main():
     log_raw.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
     session_logs.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
     log_cmd.write(f"Attacker IP: {attacker_ip} " + f"\t<{datetime.now()}>\n")
-
-    #awaiting first user input
-    try:
-        user_input = input()
-    except KeyboardInterrupt:
-        messages.append({"role": "user", "content": "\n"})
-        print("")
-        session_logs.close()
-        log_raw.close()
-        log_cmd.close()
-        return 0
-    
-    messages.append({"role": "user", "content": user_input + f"\t<{datetime.now()}>\n"})
-    session_logs.write(" " + user_input + f"\t<{datetime.now()}>\n")
-    log_cmd.write(" " + user_input + f"\t<{datetime.now()}>" + attacker_ip + "\n")
     
     while True:
 
