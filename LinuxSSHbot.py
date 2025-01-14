@@ -344,7 +344,9 @@ def main():
     if len(history_hostname) > 0:
         hostname = history_hostname
         #Use the last login message from the history
+        print (messages[-1]["content"]+ "\n")
         if "Logout" in messages[-1]["content"]:
+            print("hej")
             connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: " + messages[-1]["content"].split("Logout:")[1]
 
 
