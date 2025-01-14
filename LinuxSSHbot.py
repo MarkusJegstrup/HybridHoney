@@ -10,17 +10,17 @@ import os
 from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-username = ""
+#username = ""
 attacker_ip = ""
-machine_name = ""
+#machine_name = ""
 # Get the SSH connection details from the environment
 ssh_connection = os.getenv("SSH_CONNECTION", "")
 
 if ssh_connection:
     # Extract the attacker's IP address (first field in SSH_CONNECTION)
     attacker_ip = ssh_connection.split()[0]
-    username =  os.getlogin( )
-    machine_name = random.choice(["devbox", "workstation","testbench", "dbnode", "buildhost", "vmlab", "backend", "gateway", "docker", "webnode", "webserver", "webhost"])
+    #username =  os.getlogin( )
+    #machine_name = random.choice(["devbox", "workstation","testbench", "dbnode", "buildhost", "vmlab", "backend", "gateway", "docker", "webnode", "webserver", "webhost"])
     # Log the IP address
     #with open(os.path.join(BASE_DIR, "logs.txt"), "a+", encoding="utf-8") as log_file:
         #log_file.write(f"Attacker IP: {attacker_ip}\n")
@@ -66,8 +66,8 @@ else:
 def main():
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
-                        default = prompt + 
-                        f"\nBased on these examples make something of your own (with username: {username} and hostname: {machine_name}) to be a starting message. Always start the communication in this way and make sure your output ends with '$'\n" + 
+                        default= prompt + 
+                        f"\nBased on these examples make something of your own (different username and hostname) to be a starting message. Always start the communication in this way and make sure your output ends with '$'. For the last login date use {today}\n" + 
                         "Ignore date-time in <> after user input. This is not your concern.\n")
 
     args = parser.parse_args()
@@ -82,8 +82,8 @@ def main():
     
     history.close()
 
-    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n" + f"{username}@{machine_name}:~$"
-    print(connection_message, end='')
+    #connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}\n" + f"{username}@{machine_name}:~$"
+    #print(connection_message, end='')
 
     #readying log files and history and log the IP address in raw logs before prompting 
     session_logs = open(os.path.join(BASE_DIR, "history.txt"), "a+", encoding="utf-8")
