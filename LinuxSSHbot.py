@@ -336,11 +336,19 @@ def main():
     messages = [{"role": "system", "content": initial_prompt}]
     history, history_hostname = session_logs.create_history(file_path)
     messages.extend(history)
+
+    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
+
     ## set hostname to the hostname in history if there was one.
     if len(history_hostname) > 0:
         hostname = history_hostname
+        #Use the last login message from the history
+        for message in reversed(messages):
+            if "Last login:" in message["content"] and (len(message["content"].splitlines())>1):
+                connection_message = message["content"].splitlines()[1]
+                break
 
-    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
+
     ## Starting message
     pre_handle_message = ""+connection_message + f"\n{username}@{hostname}:~$ "
     is_pre_handle = True
