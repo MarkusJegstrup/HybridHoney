@@ -27,6 +27,8 @@ load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"))
 # Set the OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+today = datetime.now()
+
 if not openai.api_key:
     raise ValueError("OPENAI_API_KEY is not set or not loaded from the .env file.")
 
