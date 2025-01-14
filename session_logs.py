@@ -60,9 +60,9 @@ def create_history(file_path):
                 messages.append(current_message)
                 current_content = ""
                 start_message = False
-        elif "system:" in line:
-            if len(parts) == 1:
-                current_message = {"content": line.split("system:")[1], "role":"system"}
+        elif "system:::" in line:
+            if len(parts) >= 2:
+                current_message = {"content": line.split(":::")[1], "role":"system"}
                 messages.append(current_message)
 
     return messages, hostname

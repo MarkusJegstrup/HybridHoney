@@ -38,6 +38,14 @@ sudo chmod 755 /home/$USER/LLMHoney
 sudo chmod 666 logs.txt
 sudo chmod 777 home/$USER/downloads
 sudo chmod 766 home/$USER/downloads/dlog.txt
+sudo chmod 777 /home/$USER/LLMHoney/logs
+sudo chgrp -R redirect .
+sudo chmod -R g+rwx .
+
+sudo cat << EOF >> visudo
+%redirect ALL=(ALL) NOPASSWD: /usr/sbin/groupadd
+%redirect ALL=(ALL) NOPASSWD: /usr/sbin/useradd, /usr/bin/openssl
+EOF
 
 echo Add passwordless user admin and put them in the group redirect:
 sudo useradd -m -g redirect admin
