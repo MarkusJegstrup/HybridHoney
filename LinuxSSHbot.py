@@ -346,9 +346,7 @@ def main():
     
     #Use the last login message from the history
     if len(history) > 0:
-        print (messages[-1]["content"]+ "\n")
         if "Logout" in messages[-1]["content"]:
-            print("hej")
             connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: " + messages[-1]["content"].split("Logout:")[1]
 
 
