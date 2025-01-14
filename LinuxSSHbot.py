@@ -164,7 +164,7 @@ def plugin_pre_handler(cmd):
             ##Remove sudo prefix and then check if there is any matches
             plugin_pre_handler(args[0])
         case "exit":
-            session_logs.log_to_files("system::: Logout:" + f"{datetime.now().replace(microsecond=0)}" + "from " + attacker_ip + ":::\n", file_path)
+            session_logs.log_to_files("system::: Logout:" + f"{datetime.now().replace(microsecond=0)}" + " from " + attacker_ip + ":::\n", file_path)
             sys.exit()
             # os.system("exit")
         case "whoami":
