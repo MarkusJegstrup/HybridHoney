@@ -239,7 +239,7 @@ def plugin_pre_handler(cmd):
                 messages.append(message)     
                 is_pre_handle = True
                 pre_handle_message = "\n" + host_alias_handle
-        case "wget" | "curl":
+        case "wget" | "curl" | "tftp":
             wget.fake_wget(args)
         case "useradd":
             addUser.handle_useradd(full_command)
