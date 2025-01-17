@@ -342,8 +342,8 @@ def main():
     formatted_time = now_utc.strftime("%a %b %d %H:%M:%S %Y")
 
     with open(os.path.join(BASE_DIR, "connection_message.txt"), 'r', encoding="utf-8") as message_file:
-        connection_message = message_file.read()
-    connection_message += f"\nLast login: {formatted_time} from {random_ip}"
+        connection_file = message_file.read()
+    connection_message = connection_file + f"\nLast login: {formatted_time} from {random_ip}"
     
 
     ## set hostname to the hostname in history if there was one.
@@ -353,7 +353,7 @@ def main():
     #Use the last login message from the history
     if len(history) > 0:
         if "Logout" in messages[-1]["content"]:
-            connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: " + messages[-1]["content"].split("Logout:")[1]
+            connection_message = f"{connection_file}\nLast login: " + messages[-1]["content"].split("Logout:")[1]
 
 
     ## Starting message
