@@ -338,7 +338,10 @@ def main():
     history, history_hostname = session_logs.create_history(file_path)
     messages.extend(history)
 
-    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {last_login} from {random_ip}"
+    now_utc = datetime.now(timezone.utc)
+    formatted_time = now_utc.strftime("%a %b %d %H:%M:%S %Y")
+
+    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {formatted_time} from {random_ip}"
 
     ## set hostname to the hostname in history if there was one.
     if len(history_hostname) > 0:
