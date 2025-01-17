@@ -143,6 +143,8 @@ def plugin_pre_handler(cmd):
             is_pre_handle = True
             time.sleep(0.2)
         case "sudo" if is_sudo == False:
+            if len(args) == 0:
+                return
             #If check for multi cmd executions
             if is_multi_cmd:
                 is_pre_handle = True
