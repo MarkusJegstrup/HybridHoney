@@ -341,7 +341,10 @@ def main():
     now_utc = datetime.now(timezone.utc)
     formatted_time = now_utc.strftime("%a %b %d %H:%M:%S %Y")
 
-    connection_message = f"Welcome to Ubuntu 24.04.1 LTS\nLast login: {formatted_time} from {random_ip}"
+    with open(os.path.join(BASE_DIR, "connection_message.txt"), 'r', encoding="utf-8") as message_file:
+        connection_message = message_file.read()
+    connection_message += f"\nLast login: {formatted_time} from {random_ip}"
+    
 
     ## set hostname to the hostname in history if there was one.
     if len(history_hostname) > 0:
