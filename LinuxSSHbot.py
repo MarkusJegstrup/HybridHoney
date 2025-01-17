@@ -252,8 +252,8 @@ def plugin_post_handler(message):
     #Occassionally llm will start and end with ''', removing those
     if message.startswith("`"):
         message = message.replace('`', '')
-    #Ensuring there is no double line skip, occassional error
-    if '\n\n' in message:
+    #Ensuring there is no double line skip when ls, occassional error
+    if '\n\n' in message and "ls" in main_command:
         message = message.replace('\n\n','\n')
     #update host_alias handle, if location string has changed
     if f"@{hostname}:" in message:
