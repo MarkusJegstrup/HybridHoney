@@ -9,7 +9,6 @@ def handle_useradd(command):
             return
 
         # Extract the username from the command
-        username = command.split()[-1]
         parts = command.split()
         username = parts[-1]
 
