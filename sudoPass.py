@@ -3,7 +3,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-#Gives the 
+#Sets up sudo environment, hiding the content written. Simulating real sudo implementation
 def handle_fake_sudo_give_access():
     attempts = 0
     max_attempts = 3
