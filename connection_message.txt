@@ -18,7 +18,7 @@ Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-1020-azure x86_64)
 
 Expanded Security Maintenance for Applications is not enabled.
 
-40 updates can be applied immediately.
+5 updates can be applied immediately.
 To see these additional updates run: apt list --upgradable
 
 Enable ESM Apps to receive additional future security updates.

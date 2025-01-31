@@ -17,20 +17,22 @@ import re
 import readline
 
 ##Global Fields
+#Input
 full_command = ""
 main_command = ""
 messages = ""
 args = []
-
-host_alias_handle = ""
-
+#Flags
 is_sudo = False
 is_pre_handle = False
-pre_handle_message = ""
 is_multi_cmd = False
-
+#prehandle output
+pre_handle_message = ""
+#File path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 file_path = ""
+#user handle
+host_alias_handle = ""
 username = ""
 hostname = ""
 attacker_ip = ""
@@ -59,7 +61,7 @@ def username_att_ip(ssh_connection):
         username = "dev"
         hostname = random.choice(["devbox", "workstation","testbench", "dbnode", "buildhost", "vmlab", "backend", "gateway", "docker", "webnode", "webserver", "webhost"])
 
-
+#Takes the user input and updates global variables that holds full command, main command and arguments.
 def handle_cmd(cmd):
     global full_command
     global main_command
@@ -72,19 +74,20 @@ def handle_cmd(cmd):
     main_command = parts[0]
     args = parts[1:]
 
-
+#Seperates command, where seperator is: ';' '||' '&&'
 def split_commands(command):
     pattern = r"(.*?)(;|&&|\|\||$)"
     matches = re.findall(pattern,command)
     return [(cmd.strip(), op.strip()) for cmd, op in matches if cmd.strip() or op.strip()]
-
+#Removes the last line of a string
 def remove_last_line(input_string):
     lines = input_string.split('\n')
     if len(lines) > 0:
         lines = lines[:-1] 
     return '\n'.join(lines)
-
-def checkMultiCmd(multi_cmds):
+#Check if there is multiple commands
+def checkMultiCmd(user_input):
+    multi_cmds = split_commands(user_input)
     global is_multi_cmd
     if len(multi_cmds) > 1:
         exist_pre_handle = False
@@ -98,14 +101,12 @@ def checkMultiCmd(multi_cmds):
         if exist_pre_handle:
             return True
     return False
-
-
+# Handle multicommands, by either prehandling them or let the llm handle it.
 def multiCommandExecution(command_with_operators):
     global messages
     global is_pre_handle
     global pre_handle_message
     final_output = ""
-
     # Operator is if we want to add the operator logic into it.
     for command,operator in command_with_operators:
         handle_cmd(command)
@@ -125,6 +126,7 @@ def multiCommandExecution(command_with_operators):
     final_output += "\n" + host_alias_handle
     return final_output
 
+#Prehandle, check if there is specific command handling needed. Otherwise
 def plugin_pre_handler(cmd):
     global is_pre_handle
     global pre_handle_message
@@ -263,23 +265,7 @@ def plugin_post_handler(message):
     #Check to ensure that the end of the message always has host_alias_handle
     if f"@{hostname}:" not in message:
         message = message + "\n" + host_alias_handle
-
     return message
-
-
-def setup():
-    # Load environment variables from the .env file
-    load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"))
-
-    # Set the OpenAI API key
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-
-    if not openai.api_key:
-        raise ValueError("OPENAI_API_KEY is not set or not loaded from the .env file.")
-    
-    # config = dotenv_values(".env")
-    # openai.api_key = config["OPENAI_API_KEY"]
-
 
 def last_login_random_ip():
     today = datetime.now()
@@ -288,18 +274,7 @@ def last_login_random_ip():
     random_ip = ".".join(map(str, (random.randint(0, 255) 
                             for _ in range(4))))
     return last_login, random_ip
-
-def prompt_setup():
-    prompt = ""
-    with open(os.path.join(BASE_DIR, "personalitySSH.yml"), 'r', encoding="utf-8") as file:
-        identity = yaml.safe_load(file)
-
-    personality = identity['personality']
-
-    prompt = personality['prompt']
-
-    return prompt
-
+#Communicate with LLM
 def llm_response(messages):
     res = openai.chat.completions.create(
                 model="gpt-4o-mini",
@@ -307,11 +282,10 @@ def llm_response(messages):
                 temperature = 0.0,
                 max_tokens = 800
             )
-
     return res.choices[0].message.content
 
 def main():
-    #### Variable setup
+    #### Variable setup, global variables that are gonna change values
     global is_pre_handle
     global pre_handle_message
     global host_alias_handle
@@ -322,10 +296,20 @@ def main():
     ssh_connection = os.getenv("SSH_CONNECTION", "")
     username_att_ip(ssh_connection)
     file_path = session_logs.create_logfile(attacker_ip)
-    setup()
+    
+    # Load environment variables from the .env file
+    load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"))
+    # Set the OpenAI API key, from .env file. 
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    # Check if it is API key
+    if not openai.api_key:
+        raise ValueError("OPENAI_API_KEY is not set or not loaded from the .env file.")
+
     last_login, random_ip = last_login_random_ip()
     
-    prompt = prompt_setup()
+    with open(os.path.join(BASE_DIR, "personalitySSH.yml"), 'r', encoding="utf-8") as file:
+        personality = yaml.safe_load(file)
+    prompt = personality['personality']['prompt']
 
     parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
     parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
@@ -380,7 +364,7 @@ def main():
             #Check for any mistakes in the generated response
             message_content = plugin_post_handler(msg)
             
-
+            #Update LLM input
             message = {"content": message_content, "role": 'assistant'}                        
             messages.append(message)
             
@@ -396,8 +380,7 @@ def main():
 
 
             #Check for multiple cmd executions
-            multiCmds = split_commands(user_input)
-            if checkMultiCmd(multiCmds):
+            if checkMultiCmd(user_input):
                 pre_handle_message = multiCommandExecution(multiCmds)
                 is_pre_handle = True
             else:
@@ -406,7 +389,7 @@ def main():
                 #Prehandle any specific main command, that we want to handle ourselves
                 plugin_pre_handler(main_command)
 
-
+            #Update LLM input
             messages.append({"content": user_input, "role": 'user'}  )  
 
             # Log the IP address to logs.txt
