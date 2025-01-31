@@ -126,19 +126,21 @@ def multiCommandExecution(command_with_operators):
     final_output += "\n" + host_alias_handle
     return final_output
 
-#Prehandle, check if there is specific command handling needed. Otherwise
+#Prehandle, check if there is specific command handling needed. Otherwise if no specific handling needed the LLM handles it.
 def plugin_pre_handler(cmd):
     global is_pre_handle
     global pre_handle_message
     global messages
     global is_sudo
-    if len(full_command) > 400:
+    #Max length of user input, 
+    if len(full_command) > 800:
             pre_handle_message = "Permission denied\n" + host_alias_handle
-            session_logs.log_to_files("system:User tried to execute command with length more than 400\n",file_path)
+            session_logs.log_to_files("system:User tried to execute command with length more than 800\n",file_path)
             is_pre_handle = True
             return
+    #Match the main command, the first input token
     match cmd:
-        case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)):
+        case _ if bool(re.match(r'\w*[A-Z]\w*', main_command)): #
             if '||' in full_command or '&&' in full_command or ';' in full_command:
                 return
             pre_handle_message = ""+main_command + ": command not found\n" + host_alias_handle
@@ -146,6 +148,11 @@ def plugin_pre_handler(cmd):
             time.sleep(0.2)
         case "sudo" if is_sudo == False:
             if len(args) == 0:
+                time.sleep(0.2)
+                with open(os.path.join(BASE_DIR, "sudomessage.txt"), 'r', encoding="utf-8") as message_file:
+                    sudo_message = message_file.read()
+                pre_handle_message = ""+sudo_message +host_alias_handle
+                is_pre_handle = True
                 return
             #If check for multi cmd executions
             if is_multi_cmd:
@@ -165,6 +172,13 @@ def plugin_pre_handler(cmd):
                 session_logs.log_to_files("system:Sudo privilege not given to user\n",file_path)
 
         case "sudo" if is_sudo == True:
+            if len(args) == 0:
+                time.sleep(0.2)
+                with open(os.path.join(BASE_DIR, "sudomessage.txt"), 'r', encoding="utf-8") as message_file:
+                    sudo_message = message_file.read()
+                pre_handle_message = ""+sudo_message +host_alias_handle
+                is_pre_handle = True
+                return
             ##Remove sudo prefix and then check if there is any matches
             plugin_pre_handler(args[0])
         case "exit":
