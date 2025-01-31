@@ -1,11 +1,11 @@
 
 import os
 
-
+#Creates a file using filename if it does not already exist, which is an IP address if not run locally, then returns the file_path
 def create_logfile(filename):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     if filename == "":
-        filename = "local_number1"
+        filename = "local_test"
     file_path = os.path.join(BASE_DIR,"logs", filename+".txt")
 
     if not os.path.exists(file_path):
@@ -14,16 +14,14 @@ def create_logfile(filename):
     return file_path
     
 
+#Takes the content in the logs and creates a list of messages
 def create_history(file_path):
     messages = []
     hostname = ""
-
-    # Check if the file exists
     if not os.path.exists(file_path):
         print(f"File {file_path} does not exist.")
         return messages
 
-    # Read and parse the file
     with open(file_path, 'r', encoding="utf-8") as file:
         lines = file.readlines()
 
@@ -31,6 +29,7 @@ def create_history(file_path):
     current_content = ""
     start_message = False
 
+    #Goes through each line of the logs
     for line in lines:
 
         parts = line.split(":::")
@@ -38,7 +37,7 @@ def create_history(file_path):
         if "user:::" in line or "assistant:::" in line:
             current_role = parts[0].strip()
             # There are two ::: seperators, the content is between the two seperators
-            if len(parts) == 3:
+            if len(parts) >= 3:
                 current_message = {"content": parts[1], "role": current_role}
                 messages.append(current_message)
             # There is one ::: seperator, meaning the content continues on the next lines
@@ -46,13 +45,13 @@ def create_history(file_path):
                 current_content = current_content + parts[1]
                 start_message = True
 
-        #If no user or assistant, then it is multiple lines of content
+        #If start message then there is a multiline message
         elif start_message:
             #There is no ::: in this line 
             if len(parts) == 1:
                 current_content = current_content + parts[0]
-            #There is one :::, meaning it is the end of the content
-            elif len(parts) == 2:
+            #There is one ::: or more(), meaning it is the end of the message
+            elif len(parts) >= 2:
                 current_content = current_content + parts[0]
                 if current_role == "assistant" and hostname == "" and '@' in parts[0]:
                     hostname = parts[0].split('@')[1].split(':')[0]
@@ -60,6 +59,7 @@ def create_history(file_path):
                 messages.append(current_message)
                 current_content = ""
                 start_message = False
+        #System content, if the program needs to log something specific
         elif "system:::" in line:
             if len(parts) >= 2:
                 current_message = {"content": line.split(":::")[1], "role":"system"}
@@ -67,6 +67,7 @@ def create_history(file_path):
 
     return messages, hostname
 
+#Writes to the log with the logs_content
 def log_to_files(logs_content,file_path):
     logs = open(file_path, "a+", encoding="utf-8")
     logs.write(logs_content)
