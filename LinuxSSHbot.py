@@ -170,7 +170,6 @@ def plugin_pre_handler(cmd):
                 pre_handle_message = "\n"+ host_alias_handle
                 is_pre_handle = True
                 session_logs.log_to_files("system:Sudo privilege not given to user\n",file_path)
-
         case "sudo" if is_sudo == True:
             if len(args) == 0:
                 time.sleep(0.2)
@@ -179,10 +178,10 @@ def plugin_pre_handler(cmd):
                 pre_handle_message = ""+sudo_message +host_alias_handle
                 is_pre_handle = True
                 return
-            ##Remove sudo prefix and then check if there is any matches
+            ##Remove sudo prefix and then check if there is any matches on the main command
             plugin_pre_handler(args[0])
         case "exit":
-            session_logs.log_to_files("system::: Logout:" + f"{datetime.now().replace(microsecond=0)}" + " from " + attacker_ip + ":::\n", file_path)
+            session_logs.log_to_files("system::: Logout:" + f"{datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Y")}" + " from " + attacker_ip + ":::\n", file_path)
             sys.exit()
             # os.system("exit")
         case "whoami":
@@ -193,7 +192,7 @@ def plugin_pre_handler(cmd):
             pre_handle_message = host_alias_handle.split('@')[1].split(':')[0] + "\n"+ host_alias_handle
             is_pre_handle = True
             time.sleep(0.2)
-        case "date":
+        case "date": # Give correct date and time
             now_utc = datetime.now(timezone.utc)
             formatted_time = now_utc.strftime("%a %b %d %H:%M:%S UTC %Y")
             pre_handle_message = ""+ formatted_time + "\n" + host_alias_handle
@@ -205,7 +204,7 @@ def plugin_pre_handler(cmd):
             is_pre_handle = True
             message = {"content": "Ping command executed", "role": 'assistant'}                        
             messages.append(message)
-        case "":
+        case "": #No command, immediately go to next line.
             pre_handle_message = host_alias_handle
             is_pre_handle = True
             time.sleep(0.1)
@@ -281,13 +280,6 @@ def plugin_post_handler(message):
         message = message + "\n" + host_alias_handle
     return message
 
-def last_login_random_ip():
-    today = datetime.now()
-    random_seconds = random.uniform(0, 5 * 24 * 60 * 60)  # 5 days in seconds
-    last_login = (today - timedelta(seconds=random_seconds)).replace(microsecond=0)
-    random_ip = ".".join(map(str, (random.randint(0, 255) 
-                            for _ in range(4))))
-    return last_login, random_ip
 #Communicate with LLM
 def llm_response(messages):
     res = openai.chat.completions.create(
@@ -318,9 +310,8 @@ def main():
     # Check if it is API key
     if not openai.api_key:
         raise ValueError("OPENAI_API_KEY is not set or not loaded from the .env file.")
-
-    last_login, random_ip = last_login_random_ip()
     
+    #Personality input to LLM
     with open(os.path.join(BASE_DIR, "personalitySSH.yml"), 'r', encoding="utf-8") as file:
         personality = yaml.safe_load(file)
     prompt = personality['personality']['prompt']
@@ -331,30 +322,32 @@ def main():
                         f"\nBased on these examples make something of your own (with username: {username} and hostname: {hostname}) to be a starting message. Always start the communication in this way and make sure your output ends with '$'\n" + 
                         "Ignore date-time in <> after user input. This is not your concern.\n"
                         )
-
-    args = parser.parse_args()
-    initial_prompt = args.personality
+    initial_prompt = parser.parse_args().personality
     messages = [{"role": "system", "content": initial_prompt}]
+
+
     history, history_hostname = session_logs.create_history(file_path)
     messages.extend(history)
-
-    now_utc = datetime.now(timezone.utc)
-    formatted_time = now_utc.strftime("%a %b %d %H:%M:%S %Y")
-
+    #Time, a last login time that is a bit off the current time and create a random ip.
+    time_now = datetime.now(timezone.utc)
+    adjusted_time = time_now - timedelta(hours=1, minutes=-random.randint(10, 59))
+    last_login = adjusted_time.strftime("%a %b %d %H:%M:%S %Y")
+    random_ip = ".".join(map(str, (random.randint(0, 255) 
+                            for _ in range(4))))
+    #Add ubuntu banner as the connection message
     with open(os.path.join(BASE_DIR, "connection_message.txt"), 'r', encoding="utf-8") as message_file:
-        connection_file = message_file.read()
-    connection_message = connection_file + f"\nLast login: {formatted_time} from {random_ip}"
+        banner_file = message_file.read()
+    corrected_banner = banner_file.replace('timedate',time_now.strftime("%a %b %d %H:%M:%S UTC %Y"))
+    connection_message = corrected_banner + f"\nLast login: {last_login} from {random_ip}"
     
-
     ## set hostname to the hostname in history if there was one.
     if len(history_hostname) > 0:
         hostname = history_hostname
     
-    #Use the last login message from the history
+    #Use the users last login instead of a random one.
     if len(history) > 0:
         if "Logout" in messages[-1]["content"]:
-            connection_message = f"{connection_file}\nLast login: " + messages[-1]["content"].split("Logout:")[1]
-
+            connection_message = f"{corrected_banner}\nLast login: " + messages[-1]["content"].split("Logout:")[1]
 
     ## Starting message
     pre_handle_message = ""+connection_message + f"\n{username}@{hostname}:~$ "
@@ -363,10 +356,9 @@ def main():
     ##Extract the user, host handle
     host_alias_handle = pre_handle_message.splitlines()[-1]
 
+
+
     while True:
-
-
-        
         try:
             if (is_pre_handle):
                 msg = pre_handle_message
@@ -381,17 +373,14 @@ def main():
             #Update LLM input
             message = {"content": message_content, "role": 'assistant'}                        
             messages.append(message)
-            
 
             #Logging content to logs.txt
-
             content_input = "assistant:::" + message_content + ":::" + "\n"
             #content_input = "assistant:::" + messages[len(messages) - 1]["content"]+ ":::" + "\n"
             session_logs.log_to_files(content_input,file_path)
 
             # This is where the message is outputted to the user as well as waiting for the user response.
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
-
 
             #Check for multiple cmd executions
             if checkMultiCmd(user_input):
