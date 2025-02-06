@@ -86,8 +86,7 @@ def remove_last_line(input_string):
         lines = lines[:-1] 
     return '\n'.join(lines)
 #Check if there is multiple commands
-def checkMultiCmd(user_input):
-    multi_cmds = split_commands(user_input)
+def checkMultiCmd(multi_cmds):
     global is_multi_cmd
     if len(multi_cmds) > 1:
         exist_pre_handle = False
@@ -384,8 +383,9 @@ def main():
             user_input = readline_input(f'{message["content"]}'.strip() + " ")
 
             #Check for multiple cmd executions
-            if checkMultiCmd(user_input):
-                pre_handle_message = multiCommandExecution(multiCmds)
+            multi_cmds = split_commands(user_input)
+            if checkMultiCmd(multi_cmds):
+                pre_handle_message = multiCommandExecution(multi_cmds)
                 is_pre_handle = True
             else:
                 #Split the user commands into main_command, args
