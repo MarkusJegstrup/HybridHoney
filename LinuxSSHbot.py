@@ -74,7 +74,8 @@ def handle_cmd(cmd):
     main_command = parts[0]
     args = parts[1:]
 
-#Seperates command, where seperator is: ';' '||' '&&'
+#Seperates command into multiple commands, where seperator is: ';' '||' '&&'
+#outputs [(cmd,seperator),(cmd,seperator),..]
 def split_commands(command):
     pattern = r"(.*?)(;|&&|\|\||$)"
     matches = re.findall(pattern,command)
@@ -198,11 +199,15 @@ def plugin_pre_handler(cmd):
             is_pre_handle = True
             time.sleep(0.2)
         case "ping":
-            os.system(f"{full_command}")
-            pre_handle_message = host_alias_handle
-            is_pre_handle = True
-            message = {"content": "Ping command executed", "role": 'assistant'}                        
-            messages.append(message)
+            #Allows most common option flags, a main argument, and then further flags 
+            pattern = r"^ping(?:\s+(?:-[anqv]|\-(c|i|I|s|t|w|W)\s+\S+))*\s+(\S+)(?:\s+(?:-[anqv]|\-(c|i|I|s|t|w|W)\s+\S+))*$"
+            match = re.match(pattern, full_command)
+            if match:
+                os.system(f"{full_command}")
+                pre_handle_message = host_alias_handle
+                is_pre_handle = True
+                message = {"content": "Ping command executed", "role": 'assistant'}                        
+                messages.append(message)
         case "": #No command, immediately go to next line.
             pre_handle_message = host_alias_handle
             is_pre_handle = True
@@ -348,9 +353,10 @@ def main():
     if len(history) > 0:
         if "Logout" in messages[-1]["content"]:
             connection_message = f"{corrected_banner}\nLast login: " + messages[-1]["content"].split("Logout:")[1]
-
+    #Printing banner, to not put it into logs
+    print(connection_message)
     ## Starting message
-    pre_handle_message = ""+connection_message + f"\n{username}@{hostname}:~$ "
+    pre_handle_message = "" + f"\n{username}@{hostname}:~$ "
     is_pre_handle = True
 
     ##Extract the user, host handle
