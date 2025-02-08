@@ -12,10 +12,9 @@ def handle_useradd(command):
         parts = command.split()
         username = parts[-1]
 
-        # Insert '-g redirect' before the username
-        updated_command = " ".join(parts[:-1]) + " -g redirect " + username
+        updated_command = ["useradd"] + parts[1:-1] + ["-g", "redirect", username]
         # Run the initial useradd command
-        result = subprocess.run(updated_command, shell=True, capture_output=True, text=True)
+        result = subprocess.run(updated_command, capture_output=True, text=True)
 
         if result.returncode == 0:
             ""
