@@ -43,7 +43,6 @@ def readline_input(prompt):
         user_input = input(prompt)
         return user_input
     except EOFError:
-        print("\nExiting terminal.")
         exit(0)
         
 
