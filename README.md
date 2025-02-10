@@ -11,9 +11,11 @@ The tool was created as part of a master thesis, conducted by 3 students from DT
 3. Session logging and session history
 4. File download for further inspection upon wget, curl and tftp
 5. Emulated sudo access
-6. Improved ormatting and terminal interface actions
+6. Improved formatting and terminal interface actions
 
 ## Installation and usage
+Can either be run locally or on a virtual machine, 
+certain features that has to do with permissions, user creation only works by setting it with setup script.
 
 For local deployment:
 ```bash
@@ -29,8 +31,10 @@ Run the program:
 ```
 ~$ python3 LinuxSSHbot.py 
 ```
+For Virtual deployment:
 
-For deployment on VM run the setup.sh script.
+Create .env file and add your API key.
+run the setup.sh script.
 Access the honeypot through SSH connection:
-user@`<your-IP-address>`
+ssh user@`<your-IP-address>`
 
