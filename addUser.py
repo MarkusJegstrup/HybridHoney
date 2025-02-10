@@ -14,6 +14,7 @@ def handle_useradd(command):
 
         updated_command = ["useradd"] + parts[1:-1] + ["-g", "redirect", username]
         # Run the initial useradd command
+        print(updated_command)
         result = subprocess.run(updated_command, capture_output=True, text=True)
 
         if result.returncode == 0:
