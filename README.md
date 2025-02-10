@@ -32,5 +32,5 @@ Run the program:
 
 For deployment on VM run the setup.sh script.
 Access the honeypot through SSH connection:
-user@<your-IP-address>
+user@`<your-IP-address>`
 
