@@ -15,11 +15,9 @@ def handle_useradd(command):
             updated_command = ["sudo"] + ["useradd"] + parts[2:-1] + [username] + ["-g", "redirect"]
         else:
             updated_command = ["sudo"] + ["useradd"] + parts[1:-1] + [username] + ["-g", "redirect"]
-        print(f"Executing: {' '.join(updated_command)}")
 
         updated_command=' '.join(updated_command)
-        #result = subprocess.run(updated_command, shell=True, capture_output=True, text=True)
-        result = subprocess.Popen(updated_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        result = subprocess.run(updated_command, shell=True, capture_output=True, text=True)
 
         if result.returncode == 0:
             ""
