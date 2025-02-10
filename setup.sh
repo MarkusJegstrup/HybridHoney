@@ -19,7 +19,7 @@ EOF
 
 sudo systemctl restart ssh
 
->echo fix program permissions
+echo fix program permissions
 sudo chmod 755 /home/$SUDO_USER
 sudo chmod 755 /home/$SUDO_USER/HybridHoney
 sudo chmod 666 logs.txt
