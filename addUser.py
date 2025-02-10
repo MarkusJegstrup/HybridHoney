@@ -17,9 +17,9 @@ def handle_useradd(command):
         result = subprocess.run(updated_command, capture_output=True, text=True)
 
         if result.returncode == 0:
-            ""
+            "b"
         else:
-            ""
+            "a"
             return
 
     except Exception as e:
