@@ -40,7 +40,7 @@ sudo chmod +x /usr/local/bin/honeypot_shell
 sudo chgrp redirect .
 sudo chmod g+x .
 
-sudo cat << EOF >> visudo
+sudo cat << EOF >> /etc/sudoers
 %redirect ALL=(ALL) NOPASSWD: /usr/sbin/useradd, /usr/bin/openssl
 EOF
 
