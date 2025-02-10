@@ -203,8 +203,22 @@ def plugin_pre_handler(cmd):
             pattern = r"^ping(?:\s+(?:-[anqv]|\-(c|i|I|s|t|w|W)\s+\S+))*\s+(\S+)(?:\s+(?:-[anqv]|\-(c|i|I|s|t|w|W)\s+\S+))*$"
             match = re.match(pattern, full_command)
             if match:
+                command_parts = []
+                flags = full_command.split()
+                i = 0
+                while i < len(flags):
+                    if flags[i] in ['-c', '-i', '-I', '-s', '-t', '-w', '-W'] and i + 1 < len(flags) and flags[i + 1].isdigit():
+                        command_parts.append(flags[i] + ' ' + flags[i + 1])
+                        i += 2  
+                    else:
+                        command_parts.append(flags[i])
+                        i += 1
+                print(command_parts)
                 try:
-                    result = subprocess.run([full_command], capture_output=True, text=True)
+                    result = subprocess.Popen(command_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                    for line in result.stdout:
+                        print(line, end='')
+                    result.wait()
                     if result.returncode == 0:
                         message = {"content": "Ping command executed successfully", "role": 'assistant'}   
                     else:
