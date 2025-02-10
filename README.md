@@ -31,10 +31,9 @@ Run the program:
 ```
 ~$ python3 LinuxSSHbot.py 
 ```
-For Virtual deployment:
-
-Create .env file and add your API key.
-run the setup.sh script.
-Access the honeypot through SSH connection:
+For Virtual deployment:    
+Create .env file and add your API key.    
+run the setup.sh script.    
+Access the honeypot through SSH connection:      
 ssh user@`<your-IP-address>`
 
