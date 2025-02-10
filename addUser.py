@@ -11,9 +11,11 @@ def handle_useradd(command):
         if not re.match(r"^[a-zA-Z0-9_-]+$", username):
             print(f"Error: Invalid username '{username}'.")
             return
-
-        updated_command = ["useradd"] + parts[1:-1] + ["-g", "redirect", username]
+        if command.startswith("sudo"):
+            updated_command = ["useradd"] + parts[2:-1] + ["-g", "redirect", username]
         # Run the initial useradd command
+        else:
+            updated_command = ["useradd"] + parts[1:-1] + ["-g", "redirect", username]
         print(updated_command)
         result = subprocess.run(updated_command, capture_output=True, text=True)
 
