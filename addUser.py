@@ -21,10 +21,9 @@ def handle_useradd(command):
         result = subprocess.run(updated_command, shell=True, capture_output=True, text=True)
 
         if result.returncode == 0:
-            print(f"useradd: user successfully created.")
-            print(f"useradd: user '{username}' successfully created.")
+            ""
         else:
-            print("Permission denied.")
+            ""
             return
 
     except Exception as e:
