@@ -213,7 +213,6 @@ def plugin_pre_handler(cmd):
                     else:
                         command_parts.append(flags[i])
                         i += 1
-                print(command_parts)
                 try:
                     result = subprocess.Popen(command_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                     for line in result.stdout:
@@ -287,6 +286,10 @@ def plugin_pre_handler(cmd):
             addUser.handle_useradd(full_command)
             is_pre_handle = True
             pre_handle_message=""
+        case "usermod":
+            if is_sudo:
+                is_pre_handle = True
+                pre_handle_message=""
 
                 
 def plugin_post_handler(message):
