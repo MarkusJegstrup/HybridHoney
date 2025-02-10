@@ -33,7 +33,7 @@ Run the program:
 ```
 For Virtual deployment:    
 Create .env file and add your API key.    
-run the setup.sh script.    
+run the setup.sh script with sudo privileges: "sudo ./setup.sh".    
 Access the honeypot through SSH connection:      
 ssh user@`<your-IP-address>`
 
