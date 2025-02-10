@@ -18,7 +18,7 @@ Can either be run locally or on a virtual machine,
 certain features that has to do with permissions, user creation only works by setting it with setup script.
 
 With
-Generally clone the project and run the commands in the HybridHoney folder
+Generally clone the project and run the commands in the HybridHoney directory
 
 For local deployment:
 ```bash
@@ -34,9 +34,13 @@ Run the program:
 ```
 ~$ python3 LinuxSSHbot.py 
 ```
-For Virtual deployment:    
-Create .env file and add your API key.    
-run the setup.sh script with sudo privileges: "sudo ./setup.sh".    
+For Virtual deployment:
+Make sure you are in HybridHoney directory
+Create .env file and add your API key. 
+Make setup.sh an executable:
+"chmod+x setup.sh"
+run the setup.sh script with sudo privileges: 
+"sudo ./setup.sh".    
 Access the honeypot through SSH connection:      
-ssh user@`<your-IP-address>`
+ssh userA@`<your-IP-address>`
 
