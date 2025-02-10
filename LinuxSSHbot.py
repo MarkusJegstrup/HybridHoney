@@ -7,6 +7,7 @@ import yaml
 import time
 import random
 import os
+import subprocess
 import sudoPass
 import session_logs
 import addUser
@@ -202,7 +203,14 @@ def plugin_pre_handler(cmd):
             pattern = r"^ping(?:\s+(?:-[anqv]|\-(c|i|I|s|t|w|W)\s+\S+))*\s+(\S+)(?:\s+(?:-[anqv]|\-(c|i|I|s|t|w|W)\s+\S+))*$"
             match = re.match(pattern, full_command)
             if match:
-                os.system(f"{full_command}")
+                try:
+                    result = subprocess.run([full_command], capture_output=True, text=True)
+                    if result.returncode == 0:
+                        message = {"content": "Ping command executed successfully", "role": 'assistant'}   
+                    else:
+                        message = {"content": "Ping command executed unsuccessfully", "role": 'assistant'}
+                except Exception as e:
+                    ""
                 pre_handle_message = host_alias_handle
                 is_pre_handle = True
                 message = {"content": "Ping command executed", "role": 'assistant'}                        
@@ -320,8 +328,8 @@ def main():
         personality = yaml.safe_load(file)
     prompt = personality['personality']['prompt']
 
-    parser = argparse.ArgumentParser(description = "Simple command line with GPT-3.5-turbo")
-    parser.add_argument("--personality", type=str, help="A brief summary of chatbot's personality", 
+    parser = argparse.ArgumentParser(description = "The personality of HybridHoney")
+    parser.add_argument("--personality", type=str, help="Added as the first input to the LLM", 
                         default= prompt + 
                         f"\nBased on these examples make something of your own (with username: {username} and hostname: {hostname}) to be a starting message. Always start the communication in this way and make sure your output ends with '$'\n" + 
                         "Ignore date-time in <> after user input. This is not your concern.\n"
