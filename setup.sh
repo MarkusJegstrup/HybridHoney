@@ -19,13 +19,11 @@ EOF
 
 sudo systemctl restart ssh
 
-echo fix program permissions
+>echo fix program permissions
 sudo chmod 755 /home/$SUDO_USER
-sudo chmod 755 /home/$SUDO_USER/LLMHoney
+sudo chmod 755 /home/$SUDO_USER/HybridHoney
 sudo chmod 666 logs.txt
-sudo chmod 777 home/$SUDO_USER/LLMHoney/downloads
-sudo chmod 766 home/$SUDO_USER/LLMHoney/downloads/dlog.txt
-sudo chmod 777 /home/$SUDO_USER/LLMHoney/logs
+sudo chmod 777 /home/$SUDO_USER/HybridHoney/logs
 sudo chgrp -R redirect .
 sudo chmod -R g+rwx .
 
@@ -36,7 +34,7 @@ touch /usr/local/bin/honeypot_shell
 sudo chmod 644 /usr/local/bin/honeypot_shell
 sudo cat << EOF >> /usr/local/bin/honeypot_shell
 #!/bin/bash
-/usr/bin/python3 /home/$SUDO_USER/LLMHoney/LinuxSSHbot.py
+/usr/bin/python3 /home/$SUDO_USER/HybridHoney/LinuxSSHbot.py
 EOF
 sudo chmod +x /usr/local/bin/honeypot_shell
 sudo chgrp redirect .
