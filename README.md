@@ -17,6 +17,9 @@ The tool was created as part of a master thesis, conducted by 3 students from DT
 Can either be run locally or on a virtual machine, 
 certain features that has to do with permissions, user creation only works by setting it with setup script.
 
+With
+Generally clone the project and run the commands in the HybridHoney folder
+
 For local deployment:
 ```bash
 ~$ # Install requirements
