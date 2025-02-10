@@ -3,7 +3,6 @@ import subprocess
 def handle_useradd(command):
     """Intercept and handle the `useradd` command."""
     try:
-        print("hello")
         # Ensure the command has required flags
         if "-m" not in command or "-p" not in command:
             print("useradd: invalid syntax")
@@ -18,9 +17,9 @@ def handle_useradd(command):
         result = subprocess.run(updated_command, capture_output=True, text=True)
 
         if result.returncode == 0:
-            "b"
+            ""
         else:
-            "a"
+            ""
             return
 
     except Exception as e:
