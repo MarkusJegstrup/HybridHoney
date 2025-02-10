@@ -43,6 +43,6 @@ sudo cat << EOF >> visudo
 %redirect ALL=(ALL) NOPASSWD: /usr/sbin/useradd, /usr/bin/openssl
 EOF
 
-echo Add passwordless user admin and put them in the group redirect:
-sudo useradd -m -g redirect admin
-sudo passwd -d admin
+echo Add passwordless user and put them in the group redirect:
+sudo useradd -m -g redirect user
+sudo passwd -d user
